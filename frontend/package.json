@@ -18,7 +18,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run post-build",  
+    "post-build": "/usr/local/bin/python3 build-script.py && rm -Rf ../backend/src/payload && rm -f ../backend/src/react.hpp && mv react-server/* ../backend/src/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
