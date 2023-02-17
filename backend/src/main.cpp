@@ -10,8 +10,11 @@
 HIDkeyboard keyboard;
 
 void typeString() {
-    Serial1.println("test");
-    server.send(200, "text/plain", "this works as well");
+    String string = server.arg(0);
+    Serial1.println(string);
+    keyboard.sendString(string);
+    server.send(200, "text/plain", string.c_str());
+
 }
 
 void setup() {
