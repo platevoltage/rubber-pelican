@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 function App() {
   const [textBox, setTextBox] = useState("");
+  const [json, setJson] = useState<any>([]);
 
   const inputStyle = {
     height: "100px",
@@ -12,7 +13,22 @@ function App() {
   }
 
   function handleSubmit() {
-    return fetch(`http://test.local/duckyscript?string=${textBox}`);
+    const lines = textBox.split("\n");
+    const _json = [];
+    for (let line of lines) {
+      line = line.trim();
+      const instruction = line.slice(0, line.indexOf(" "));
+      const value = line.slice(line.indexOf(" ")+1)
+      const lineObject = {};
+      Object.defineProperty(lineObject, instruction, {value, enumerable: true});
+      _json.push(lineObject);
+
+    }
+    console.log(JSON.stringify(_json));
+    setJson(_json);
+
+
+    return fetch(`http://test.local/duckyscript?string=${JSON.stringify(_json)}`);
   }
 
   return (
@@ -31,7 +47,7 @@ function App() {
         <button onClick={handleSubmit}>Send</button>
      
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          {JSON.stringify(json)}
         </p>
         <a
           className="App-link"
