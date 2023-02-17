@@ -6,21 +6,27 @@ import { useState } from 'react';
 function App() {
   const [textBox, setTextBox] = useState("");
 
+  const inputStyle = {
+    height: "100px",
+    width: "1000px"
+  }
+
   function handleSubmit() {
-    return fetch(`http://test.local/typestring?string=${textBox}`);
+    return fetch(`http://test.local/duckyscript?string=${textBox}`);
   }
 
   return (
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <input
+        <textarea
                 value={textBox}
                 name="strip-length"
                 onChange={(e) => {setTextBox(e.target.value)}}
-                type="text"
+                // type="text"
                 placeholder=""
-                // style={inputStyle}
+                // height="40"
+                style={inputStyle}
         />
         <button onClick={handleSubmit}>Send</button>
      

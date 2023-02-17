@@ -36,7 +36,7 @@ void handleNotFound() {
 }
 
 
-void serverStart(void(*typeString)()) {
+void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
 
     WiFi.setAutoReconnect(true);
     WiFi.persistent(true);
@@ -104,6 +104,7 @@ void serverStart(void(*typeString)()) {
 
 
     server.on(F("/typestring"), *typeString);
+    server.on(F("/duckyscript"), *interpretDuckyScript);
 
 
     server.onNotFound(handleNotFound);

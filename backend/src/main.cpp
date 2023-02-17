@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include "hidkeyboard.h"
 #include "server.hpp"
 
@@ -9,12 +10,38 @@
 
 HIDkeyboard keyboard;
 
+
 void typeString() {
     sendHeaders();
     String string = server.arg(0);
-    Serial1.println(string);
-    keyboard.sendString(string);
+    // Serial1.println(string);
+    // keyboard.sendString(string);
     server.send(200, "text/plain", string.c_str());
+
+}
+
+void interpretDuckyScript() {
+  sendHeaders();
+  String string = server.arg(0);
+  Serial1.println(string);
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, string);
+  size_t size = doc.size();
+
+  for (int i = 0; i < size; i++) {
+    if (doc[i].containsKey("STRING")) {
+      const char* data = doc[i]["STRING"];
+      Serial1.print(data);
+    }
+    else if (doc[i].containsKey("STRINGLN")) {
+      const char* data = doc[i]["STRINGLN"];
+      Serial1.println(data);
+    }
+
+
+  }
+
+  server.send(200, "text/plain", string.c_str());
 
 }
 
@@ -22,7 +49,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial1.begin(BAUD, SERIAL_8N1, RXPIN, TXPIN);
   keyboard.begin();
-  serverStart(typeString);
+  serverStart(typeString, interpretDuckyScript);
+  // interpretDuckyScript();
 }
 
 void loop() {
@@ -30,7 +58,8 @@ void loop() {
   webClientTimer(0);
   yield() ;
   // keyboard.sendChar('a');
-  // delay(1000);a
+  // delay(1000);
+  // interpretDuckyScript(F("[{\"STRING\":\"test string no return    \"},{\"STRINGLN\":\"test string with linebreak\"}]"));
 }
 
 
