@@ -3,6 +3,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
+#include "react.hpp"
 
 WebServer server(80);
 
@@ -77,6 +78,29 @@ void serverStart(void(*typeString)()) {
       Serial1.println(F("MDNS responder started"));
       Serial1.println(bonjourName);
     }
+
+        server.on(F("/"), []() {
+      server.send(200, "text/html", _index_html);
+    });
+
+    //-----begin generated paths
+
+
+    server.on(F(MANIFEST_JSON_PATH), []() {
+      server.send_P(200, "text/json", _manifest_json);
+    });
+    server.on(F(MAIN_JS_PATH), []() {
+      server.send_P(200, "text/css", _main_css);
+    });
+    server.on(F(MAIN_CSS_PATH), []() {
+      server.send_P(200, "text/javascript", _main_js);
+    });
+    server.on(F(CHUNK_JS_PATH), []() {
+      server.send_P(200, "text/javascript", _chunk_js);
+    });
+    server.on(F(INDEX_HTML_PATH), []() {
+      server.send_P(200, "text/html", _index_html);
+    });
 
 
     server.on(F("/typestring"), *typeString);
