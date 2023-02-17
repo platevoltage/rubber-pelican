@@ -9,11 +9,16 @@
 
 HIDkeyboard keyboard;
 
+void typeString() {
+    Serial1.println("test");
+    server.send(200, "text/plain", "this works as well");
+}
+
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(BAUD, SERIAL_8N1, RXPIN, TXPIN);
   keyboard.begin();
-  serverStart();
+  serverStart(typeString);
 }
 
 void loop() {

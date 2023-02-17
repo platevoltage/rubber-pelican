@@ -35,7 +35,7 @@ void handleNotFound() {
 }
 
 
-void serverStart() {
+void serverStart(void(*typeString)()) {
 
     WiFi.setAutoReconnect(true);
     WiFi.persistent(true);
@@ -87,12 +87,8 @@ void serverStart() {
 
     //-----end generated paths
 
-    // server.on(F("/current"), *getCurrentConfig);
+    server.on(F("/typestring"), *typeString);
 
-    server.on(F("/current"), [](){
-        Serial1.println("test");
-        server.send(200, "text/plain", "this works as well");
-    });
 
     server.onNotFound(handleNotFound);
     server.enableCORS(true);
