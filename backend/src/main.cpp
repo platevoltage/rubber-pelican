@@ -10,6 +10,7 @@
 HIDkeyboard keyboard;
 
 void typeString() {
+    sendHeaders();
     String string = server.arg(0);
     Serial1.println(string);
     keyboard.sendString(string);

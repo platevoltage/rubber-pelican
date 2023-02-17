@@ -79,14 +79,6 @@ void serverStart(void(*typeString)()) {
     }
 
 
-    //-----begin generated paths
-
-
-
-
-
-    //-----end generated paths
-
     server.on(F("/typestring"), *typeString);
 
 
