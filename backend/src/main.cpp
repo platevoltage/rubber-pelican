@@ -77,58 +77,62 @@ bool compare(String equation) {
       break;
     }
   }
-  String leftString = equation.substring(0, comparatorIndex);
-  String rightString = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length());
-  double left = eval(leftString);
-  double right = eval(rightString);
-  Serial1.println(left);
-  Serial1.println(comparators[comparatorSelected]);
-  Serial1.println(right);
   bool result = true;
-  switch (comparatorSelected) {
-    case 0: {
-      result = (left >= right);
-      break;
+  if (comparatorIndex > -1) {
+
+    String leftString = equation.substring(0, comparatorIndex);
+    String rightString = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length());
+    double left = eval(leftString);
+    double right = eval(rightString);
+    Serial1.println(left);
+    Serial1.println(comparators[comparatorSelected]);
+    Serial1.println(right);
+    switch (comparatorSelected) {
+      case 0: {
+        result = (left >= right);
+        break;
+      }
+      case 1: {
+        result = (left <= right);
+        break;
+      }
+      case 2: {
+        result = (left == right);
+        break;
+      }
+      case 3: {
+        result = (left != right);
+        break;
+      }
+      case 4: {
+        result = (left < right);
+        break;
+      }
+      case 5: {
+        result = (left > right);
+        break;
+      }
+      default: result = false;
     }
-    case 1: {
-      result = (left <= right);
-      break;
-    }
-    case 2: {
-      result = (left == right);
-      break;
-    }
-    case 3: {
-      result = (left != right);
-      break;
-    }
-    case 4: {
-      result = (left < right);
-      break;
-    }
-    case 5: {
-      result = (left > right);
-      break;
-    }
-    default: result = false;
+  } else {
+    Serial.println(equation);
+    result = eval(equation);
   }
   return result;
 }
 
-String replaceVariables(String input, DuckyVariable var[10], int varCount) {
-  String output;
+String replaceVariables(String string, DuckyVariable var[10], int varCount) {
   for (int i = 0; i < varCount; i++) {
-    if (input.indexOf(var[i].variableName) > -1) {
+    if (string.indexOf(var[i].variableName) > -1) {
       Serial1.print("replace variable - ");
       Serial1.println(var[i].variableName);
       
-      input.replace(var[i].variableName, String(var[i].value) );
-      output = input;
+      string.replace(var[i].variableName, String(var[i].value) );
     }
   }
   Serial1.print("replace variable result - ");
-  Serial1.println(output);
-  return output;
+  Serial1.println(string);
+  return string;
 }
 
 void interpretDuckyScript() {
