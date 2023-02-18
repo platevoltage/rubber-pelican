@@ -10,4 +10,6 @@ textarea {
     height: 100px;
     color: #ffffff;
     background-color: #000000;
+    font-family: 'Roboto Mono', 'Droid Sans Mono', 'Lucida Console', Monaco, monospace;
+
 }

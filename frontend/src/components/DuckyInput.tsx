@@ -37,6 +37,7 @@ function DuckyInput() {
                 onChange={(e) => {setTextBox(e.target.value)}}
                 // type="text"
                 placeholder=""
+                spellCheck={false}
                 // height="40"
             />
             <button onClick={handleSubmit}>Send</button>
