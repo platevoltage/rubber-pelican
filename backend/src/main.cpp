@@ -59,15 +59,42 @@ bool eval(String equation) {
       break;
     }
   }
-  String left = equation.substring(0, comparatorIndex);
-  left.trim();
-  String right = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length());
-  right.trim();
+  int left = equation.substring(0, comparatorIndex).toInt();
+  // left.trim();
+  int right = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length()).toInt();
+  // right.trim();
   Serial1.println(left);
   Serial1.println(comparators[comparatorSelected]);
   Serial1.println(right);
-
-  return true;
+  bool result = true;
+  switch (comparatorSelected) {
+    case 0: {
+      result = (left >= right);
+      break;
+    }
+    case 1: {
+      result = (left <= right);
+      break;
+    }
+    case 2: {
+      result = (left == right);
+      break;
+    }
+    case 3: {
+      result = (left != right);
+      break;
+    }
+    case 4: {
+      result = (left < right);
+      break;
+    }
+    case 5: {
+      result = (left > right);
+      break;
+    }
+    default: result = false;
+  }
+  return result;
 }
 
 void interpretDuckyScript() {
@@ -112,7 +139,7 @@ void interpretDuckyScript() {
     }
     else if (doc[i].containsKey("WHILE")) {
       String codeLine = doc[i]["WHILE"];
-      eval(codeLine);
+      Serial1.println( eval(codeLine) );
 
     }
   }
