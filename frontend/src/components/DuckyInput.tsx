@@ -26,10 +26,19 @@ function DuckyInput() {
         }
         setJson(_json);
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            return fetch(`http://test.local/duckyscript?string=${JSON.stringify(_json)}`);
+            console.log(JSON.stringify(_json));
+            return fetch(`http://test.local/duckyscript`, {
+                headers: {'Content-Type': 'text/plain'},
+                method: 'POST',
+                body: JSON.stringify(_json)
+            });
         }
         else {
-            return fetch(`/duckyscript?string=${JSON.stringify(_json)}`);
+            return fetch(`/duckyscript`, {
+                headers: {'Content-Type': 'text/plain'},
+                method: 'POST',
+                body: JSON.stringify(_json)
+            });
         }
     }
 

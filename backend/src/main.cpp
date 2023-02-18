@@ -117,7 +117,7 @@ bool compare(String equation) {
 
 void interpretDuckyScript() {
   sendHeaders();
-  String string = server.arg(0);
+  String string = server.arg("plain");
   Serial1.println(string);
   DynamicJsonDocument doc(1024);
   deserializeJson(doc, string);
