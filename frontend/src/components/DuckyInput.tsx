@@ -17,10 +17,15 @@ function DuckyInput() {
         const _json = [];
         for (let line of lines) {
             line = line.trim();
-            const instruction = line.slice(0, line.indexOf(" "));
-            const value = line.slice(line.indexOf(" ")+1)
             const lineObject = {};
-            Object.defineProperty(lineObject, instruction, {value, enumerable: true});
+            if (line.indexOf(" ") > -1) {
+                const instruction = line.slice(0, line.indexOf(" "));
+                const value = line.slice(line.indexOf(" ")+1)
+                Object.defineProperty(lineObject, instruction, {value, enumerable: true});
+            } else {
+                const value = 0;
+                Object.defineProperty(lineObject, line, {value, enumerable: true});
+            }
             _json.push(lineObject);
         }
         return _json;
