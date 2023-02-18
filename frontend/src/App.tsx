@@ -13,7 +13,7 @@ function App() {
   }
 
   function handleSubmit() {
-    const lines = textBox.split("\n");
+    const lines = textBox.trim().split("\n");
     const _json = [];
     for (let line of lines) {
       line = line.trim();
