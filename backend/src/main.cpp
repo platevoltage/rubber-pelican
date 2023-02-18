@@ -15,6 +15,7 @@ typedef struct {
   int value;
 } DuckyVariable;
 
+
 String getValue(String data, char separator, int index)
 {
     int found = 0;
@@ -40,6 +41,35 @@ void typeString() {
 
 }
 
+bool eval(String equation) {
+  size_t comparators_t = 6;
+  String comparators[] = {">=", "<=", "==", "!=", "<", ">"}; //longer ones must go first
+  int comparatorSelected = -1;
+  int comparatorIndex = -1;
+  equation.trim();
+  if (equation[0] == '(') equation.remove(0,1);
+  if (equation[equation.length()-1] == ')') equation.remove(equation.length()-1,1);
+  equation.trim();
+  for (int i=0; i < comparators_t; i++) {
+    int _comparatorIndex = equation.indexOf(comparators[i]);
+    if (_comparatorIndex > 0) {
+      Serial1.println(comparators[i]);
+      comparatorSelected = i;
+      comparatorIndex = _comparatorIndex;
+      break;
+    }
+  }
+  String left = equation.substring(0, comparatorIndex);
+  left.trim();
+  String right = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length());
+  right.trim();
+  Serial1.println(left);
+  Serial1.println(comparators[comparatorSelected]);
+  Serial1.println(right);
+
+  return true;
+}
+
 void interpretDuckyScript() {
   sendHeaders();
   String string = server.arg(0);
@@ -50,7 +80,6 @@ void interpretDuckyScript() {
 
   DuckyVariable var[10];
   int varCount = 0;
-
 
 
   for (int i = 0; i < size; i++) {
@@ -80,6 +109,11 @@ void interpretDuckyScript() {
       Serial1.println( var[varCount].variableName );
       Serial1.println( var[varCount].value );
       varCount++;
+    }
+    else if (doc[i].containsKey("WHILE")) {
+      String codeLine = doc[i]["WHILE"];
+      eval(codeLine);
+
     }
   }
 
