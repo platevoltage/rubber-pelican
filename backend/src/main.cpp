@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include <tinyexpr.h>
 #include "hidkeyboard.h"
 #include "server.hpp"
 
@@ -16,8 +17,7 @@ typedef struct {
 } DuckyVariable;
 
 
-String getValue(String data, char separator, int index)
-{
+String getValue(String data, char separator, int index) {
     int found = 0;
     int strIndex[] = { 0, -1 };
     int maxIndex = data.length() - 1;
@@ -40,8 +40,26 @@ void typeString() {
     server.send(200, "text/plain", string.c_str());
 
 }
+double eval(String equation) {
+      Serial1.print("> ");
+      Serial1.println(equation);
+      int error;
+      double result = te_interp(equation.c_str(), &error);
 
-bool eval(String equation) {
+      if (error) {
+        Serial1.print(" ");
+        for (int i = 0; i < error; i++) {
+          Serial1.print(" ");
+        }
+        Serial1.println("↑");
+        Serial1.println("I didn't understand this part.");
+      } else {
+        Serial1.printf(" = %.10g\n", result);
+      }
+      return result;
+}
+
+bool compare(String equation) {
   size_t comparators_t = 6;
   String comparators[] = {">=", "<=", "==", "!=", "<", ">"}; //longer ones must go first
   int comparatorSelected = -1;
@@ -59,10 +77,10 @@ bool eval(String equation) {
       break;
     }
   }
-  int left = equation.substring(0, comparatorIndex).toInt();
-  // left.trim();
-  int right = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length()).toInt();
-  // right.trim();
+  String leftString = equation.substring(0, comparatorIndex);
+  String rightString = equation.substring(comparatorIndex+comparators[comparatorSelected].length(), equation.length());
+  double left = eval(leftString);
+  double right = eval(rightString);
   Serial1.println(left);
   Serial1.println(comparators[comparatorSelected]);
   Serial1.println(right);
@@ -139,8 +157,7 @@ void interpretDuckyScript() {
     }
     else if (doc[i].containsKey("WHILE")) {
       String codeLine = doc[i]["WHILE"];
-      Serial1.println( eval(codeLine) );
-
+      Serial1.println( compare(codeLine) );
     }
   }
 
