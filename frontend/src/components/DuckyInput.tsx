@@ -8,12 +8,10 @@ function DuckyInput() {
     const [textBox, setTextBox] = useState("");
     const [json, setJson] = useState<any>([]);
 
-    const inputStyle = {
-        height: "100px",
-        width: "1000px"
-    }
 
     function codeBlockToJson(lines: string[]) {
+        let newBlock = false;
+        const block = [];
         const _json = [];
         for (let line of lines) {
             line = line.trim();
@@ -26,7 +24,21 @@ function DuckyInput() {
                 const value = 0;
                 Object.defineProperty(lineObject, line, {value, enumerable: true});
             }
-            _json.push(lineObject);
+            if (newBlock) {
+                block.push(line);
+            } else {
+                _json.push(lineObject);
+            }
+            if ("WHILE" in lineObject) {
+                newBlock = true;
+            }
+            if ("ENDWHILE" in lineObject) {
+                newBlock = false;
+                block.pop();
+                const value = codeBlockToJson(block);
+                Object.defineProperty(_json[_json.length -1], "block", { value , enumerable: true}); 
+            }
+            
         }
         return _json;
     }
