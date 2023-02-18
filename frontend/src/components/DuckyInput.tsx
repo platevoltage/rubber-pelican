@@ -13,8 +13,7 @@ function DuckyInput() {
         width: "1000px"
     }
 
-    function handleSubmit() {
-        const lines = textBox.trim().split("\n");
+    function codeBlockToJson(lines: string[]) {
         const _json = [];
         for (let line of lines) {
             line = line.trim();
@@ -24,6 +23,13 @@ function DuckyInput() {
             Object.defineProperty(lineObject, instruction, {value, enumerable: true});
             _json.push(lineObject);
         }
+        return _json;
+    }
+
+    function handleSubmit() {
+        const lines = textBox.trim().split("\n");
+        const _json = (codeBlockToJson(lines));
+
         setJson(_json);
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             console.log(JSON.stringify(_json));
@@ -54,6 +60,7 @@ function DuckyInput() {
                 // height="40"
             />
             <button onClick={handleSubmit}>Send</button>
+            <pre>{JSON.stringify(json, null , 2)}</pre>
         </div>
     )
 }
