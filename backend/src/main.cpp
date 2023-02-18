@@ -30,12 +30,21 @@ void interpretDuckyScript() {
 
   for (int i = 0; i < size; i++) {
     if (doc[i].containsKey("STRING")) {
-      const char* data = doc[i]["STRING"];
+      String data = doc[i]["STRING"];
       Serial1.print(data);
+      keyboard.sendString(data);
     }
     else if (doc[i].containsKey("STRINGLN")) {
-      const char* data = doc[i]["STRINGLN"];
+      String data = doc[i]["STRINGLN"];
       Serial1.println(data);
+      keyboard.sendString(data);
+      keyboard.sendChar('\n');
+    }
+    else if (doc[i].containsKey("DELAY")) {
+      int data = doc[i]["DELAY"];
+      Serial1.println(data);
+      delay(data);
+
     }
 
 
