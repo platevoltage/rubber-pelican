@@ -1,0 +1,13 @@
+.DuckyInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+textarea {
+    width: 1000px;
+    height: 100px;
+    color: #ffffff;
+    background-color: #000000;
+}
