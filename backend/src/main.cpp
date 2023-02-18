@@ -115,6 +115,22 @@ bool compare(String equation) {
   return result;
 }
 
+String replaceVariables(String input, DuckyVariable var[10], int varCount) {
+  String output;
+  for (int i = 0; i < varCount; i++) {
+    if (input.indexOf(var[i].variableName) > -1) {
+      Serial1.print("replace variable - ");
+      Serial1.println(var[i].variableName);
+      
+      input.replace(var[i].variableName, String(var[i].value) );
+      output = input;
+    }
+  }
+  Serial1.print("replace variable result - ");
+  Serial1.println(output);
+  return output;
+}
+
 void interpretDuckyScript() {
   sendHeaders();
   String string = server.arg("plain");
@@ -130,19 +146,22 @@ void interpretDuckyScript() {
   for (int i = 0; i < size; i++) {
     if (doc[i].containsKey("STRING")) {
       String data = doc[i]["STRING"];
+      data = replaceVariables(data, var, varCount);
       Serial1.print(data);
       keyboard.sendString(data);
     }
     else if (doc[i].containsKey("STRINGLN")) {
       String data = doc[i]["STRINGLN"];
+      data = replaceVariables(data, var, varCount);
       Serial1.println(data);
       keyboard.sendString(data);
       keyboard.sendChar('\n');
     }
     else if (doc[i].containsKey("DELAY")) {
-      int data = doc[i]["DELAY"];
+      String data = doc[i]["DELAY"];
+      data = replaceVariables(data, var, varCount);
       Serial1.println(data);
-      delay(data);
+      delay(data.toInt());
 
     }
     else if (doc[i].containsKey("VAR")) {
@@ -157,6 +176,8 @@ void interpretDuckyScript() {
     }
     else if (doc[i].containsKey("WHILE")) {
       String codeLine = doc[i]["WHILE"];
+      codeLine = replaceVariables(codeLine, var, varCount);
+      // Serial1.println(codeLine);
       Serial1.println( compare(codeLine) );
     }
   }
