@@ -25,8 +25,12 @@ function DuckyInput() {
             _json.push(lineObject);
         }
         setJson(_json);
-
-        return fetch(`http://test.local/duckyscript?string=${JSON.stringify(_json)}`);
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            return fetch(`http://test.local/duckyscript?string=${JSON.stringify(_json)}`);
+        }
+        else {
+            return fetch(`/duckyscript?string=${JSON.stringify(_json)}`);
+        }
     }
 
     return (
