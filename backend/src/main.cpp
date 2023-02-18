@@ -10,6 +10,26 @@
 
 HIDkeyboard keyboard;
 
+typedef struct {
+  String variableName;
+  int value;
+} DuckyVariable;
+
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
 
 void typeString() {
     sendHeaders();
@@ -27,6 +47,11 @@ void interpretDuckyScript() {
   DynamicJsonDocument doc(1024);
   deserializeJson(doc, string);
   size_t size = doc.size();
+
+  DuckyVariable var[10];
+  int varCount = 0;
+
+
 
   for (int i = 0; i < size; i++) {
     if (doc[i].containsKey("STRING")) {
@@ -46,8 +71,16 @@ void interpretDuckyScript() {
       delay(data);
 
     }
+    else if (doc[i].containsKey("VAR")) {
+      String codeLine = doc[i]["VAR"];
+      var[varCount].variableName = getValue(codeLine, '=', 0);
+      var[varCount].variableName.trim();
+      var[varCount].value = getValue(codeLine, '=', 1).toInt();
 
-
+      Serial1.println( var[varCount].variableName );
+      Serial1.println( var[varCount].value );
+      varCount++;
+    }
   }
 
   server.send(200, "text/plain", string.c_str());
