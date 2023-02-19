@@ -41,6 +41,7 @@ function DuckyInput() {
             }
             
         }
+
         return _json;
     }
 
@@ -50,7 +51,7 @@ function DuckyInput() {
 
         setJson(_json);
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            console.log(JSON.stringify(_json));
+            // console.log(JSON.stringify(_json));
             return fetch(`http://test.local/duckyscript`, {
                 headers: {'Content-Type': 'text/plain'},
                 method: 'POST',
