@@ -140,81 +140,82 @@ String replaceVariables(String string, DuckyVariable var[10], int varCount) {
   return string;
 }
 
-String * splitByLine(String string, int * size) {
+DuckyCommand * splitByLine(String string, int * size) {
   int _size = 0;
-  String * lines = new String[100];
-  while (string.length() > 0) {                                       // loop until the input string is empty
-    lines[_size] = string.substring(0, string.indexOf('\n'));     // extract the first line and store it in the array
-    lines[_size].trim();
+  DuckyCommand * commands = new DuckyCommand[100];
+  while (string.length() > 0) {   
+    String line;                                    // loop until the input string is empty
+    line = string.substring(0, string.indexOf('\n'));     // extract the first line and store it in the array
+    line.trim();
+    commands[_size].instruction = line.substring(0, string.indexOf(' '));  
+    commands[_size].parameter = line.substring(string.indexOf(' ')+1);  
     string = string.substring(string.indexOf('\n') + 1);              // remove the first line from the input string                                
-    if (lines[_size].length() > 0) _size++;                   // increment the index of the lines array unless the line is blank    
+    if (line.length() > 0) {
+      _size++;    // increment the index of the lines array unless the line is blank  
+    }                   
   }
   *size = _size;
-  return lines;
+  return commands;
 }
 
 void interpretDuckyScript() {
   sendHeaders();
   String string = server.arg("plain") + '\n';
   Serial1.println(string);
-  int lines_t;
-  String * lines = splitByLine(string, &lines_t); ;
+  int commands_t;
+  DuckyCommand * commands = splitByLine(string, &commands_t); ;
 
 
-  for (int i = 0; i < lines_t; i++) {
+  for (int i = 0; i < commands_t; i++) {
     Serial1.print("Line ");
     Serial1.print(i + 1);
     Serial1.print(": ");
-    Serial1.println(lines[i]);
+    Serial1.print(commands[i].instruction);
+    Serial1.print(" () ");
+    Serial1.println(commands[i].parameter);
   }
 
-  // DynamicJsonDocument doc(1024);
-  // deserializeJson(doc, string);
-  // size_t size = doc.size();
 
-  // DuckyVariable var[10];
-  // int varCount = 0;
+  DuckyVariable var[10];
+  int varCount = 0;
 
 
-  // for (int i = 0; i < size; i++) {
-  //   if (doc[i].containsKey("STRING")) {
-  //     String data = doc[i]["STRING"];
-  //     data = replaceVariables(data, var, varCount);
-  //     Serial1.print(data);
-  //     keyboard.sendString(data);
-  //   }
-  //   else if (doc[i].containsKey("STRINGLN")) {
-  //     String data = doc[i]["STRINGLN"];
-  //     data = replaceVariables(data, var, varCount);
-  //     Serial1.println(data);
-  //     keyboard.sendString(data);
-  //     keyboard.sendChar('\n');
-  //   }
-  //   else if (doc[i].containsKey("DELAY")) {
-  //     String data = doc[i]["DELAY"];
-  //     data = replaceVariables(data, var, varCount);
-  //     Serial1.println(data);
-  //     delay(data.toInt());
 
-  //   }
-  //   else if (doc[i].containsKey("VAR")) {
-  //     String codeLine = doc[i]["VAR"];
-  //     var[varCount].variableName = getValue(codeLine, '=', 0);
-  //     var[varCount].variableName.trim();
-  //     var[varCount].value = getValue(codeLine, '=', 1).toInt();
 
-  //     Serial1.println( var[varCount].variableName );
-  //     Serial1.println( var[varCount].value );
-  //     varCount++;
-  //   }
-  //   else if (doc[i].containsKey("WHILE")) {
-  //     String codeLine = doc[i]["WHILE"];
-  //     codeLine = replaceVariables(codeLine, var, varCount);
-  //     // Serial1.println(codeLine);
-  //     Serial1.println( compare(codeLine) );
-  //   }
-  // }
-  delete[] lines;
+  for (int i = 0; i < commands_t; i++) {
+    if (commands[i].instruction.equals("STRING")) {
+      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+      Serial1.println(commands[i].parameter);
+      // keyboard.sendString(commands[i].parameter);
+    }
+    else if (commands[i].instruction.equals("STRINGLN")) {
+      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+      Serial1.println(commands[i].parameter);
+      // keyboard.sendString(commands[i].parameter);
+      // keyboard.sendChar('\n');
+    }
+    else if (commands[i].instruction.equals("DELAY")) {
+      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+      Serial1.println(commands[i].parameter);
+      delay(commands[i].parameter.toInt());
+
+    }
+    else if (commands[i].instruction.equals("VAR")) {
+      var[varCount].variableName = getValue(commands[i].parameter, '=', 0);
+      var[varCount].variableName.trim();
+      var[varCount].value = getValue(commands[i].parameter, '=', 1).toInt();
+
+      Serial1.println( var[varCount].variableName );
+      Serial1.println( var[varCount].value );
+      varCount++;
+    }
+    else if (commands[i].instruction.equals("WHILE")) {
+      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+      // Serial1.println(codeLine);
+      Serial1.println( compare(commands[i].parameter) );
+    }
+  }
+  delete[] commands;
   server.send(200, "text/plain", string.c_str());
 
 }
