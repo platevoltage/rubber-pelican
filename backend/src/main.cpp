@@ -113,11 +113,19 @@ bool compare(String equation) {
 
 String replaceVariables(String string, DuckyVariable var[10], int varCount) {
   for (int i = 0; i < varCount; i++) {
-    if (string.indexOf(var[i].variableName) > -1) {
+    int variableIndex = string.indexOf(var[i].variableName);
+    if ( variableIndex > -1 
+      && (string[var[i].variableName.length() + variableIndex ] == ' ' 
+      || var[i].variableName.length() + variableIndex == string.length() 
+    )) {
       // Serial1.print("replace variable - ");
       // Serial1.println(var[i].variableName);
-      
+      Serial1.print("------");
+      Serial1.println(var[i].variableName.length() + variableIndex);
+
       string.replace(var[i].variableName, String(var[i].value) );
+      
+      
     }
   }
   // Serial1.print("replace variable result - ");
@@ -178,7 +186,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
         bool varAlreadyDeclared = false;
         for (int j = 0; j < varCount; j++) {
           if (var[j].variableName == commands[i].instruction) {
-            var[j].value =  commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();
+            var[j].value =  eval( commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1) );
             varAlreadyDeclared = true;
             break;
           }
@@ -199,9 +207,6 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
         inBlock = true;
         blockStart = i;
         condition = commands[i].parameter;
-        // if ( compare(commands[i].parameter) ) {
-        //   inBlock = true;
-        // }
       }
     }
     else if (commands[i].instruction.equals("ENDWHILE")) {
