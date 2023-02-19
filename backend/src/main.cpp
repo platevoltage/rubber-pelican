@@ -168,6 +168,7 @@ void interpretDuckyScript() {
 
 
   for (int i = 0; i < commands_t; i++) {
+
     if (commands[i].instruction.equals("STRING")) {
       commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
       Serial1.println(commands[i].parameter);
@@ -196,7 +197,6 @@ void interpretDuckyScript() {
     }
     else if (commands[i].instruction.equals("WHILE")) {
       commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-      // Serial1.println(codeLine);
       Serial1.println( compare(commands[i].parameter) );
     }
   }
