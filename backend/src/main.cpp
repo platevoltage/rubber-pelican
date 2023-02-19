@@ -151,47 +151,40 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
   DuckyCommand commandBuffer[100];
 
 
-  int varLength = 10;
-  DuckyVariable var[varLength];
+  DuckyVariable var[10];
+  int varCount = 0;
 
 
   for (int i = 0; i < commands_t; i++) {
     if (!inBlock) {
       if (commands[i].instruction.equals("STRING")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, 10);
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
         // keyboard.sendString(commands[i].parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, 10);
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
         // keyboard.sendString(commands[i].parameter);
         // keyboard.sendChar('\n');
       }
       else if (commands[i].instruction.equals("DELAY")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, 10);
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
         delay(commands[i].parameter.toInt());
 
       }
       else if (commands[i].instruction.equals("VAR")) {
-        int j = 0;
-        while (j < varLength) {
-          if (var[j].variableName.equals("")) {
-            var[j].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
-            var[j].variableName.trim();
-            var[j].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
+        var[varCount].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
+        var[varCount].variableName.trim();
+        var[varCount].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
 
-            Serial1.println( var[j].variableName );
-            Serial1.println( var[j].value );
-            break;
-          }
-          j++;
-        }
-
+        Serial1.println( var[varCount].variableName );
+        Serial1.println( var[varCount].value );
+        varCount++;
       }
       else if (commands[i].instruction.equals("WHILE")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, 10);
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println( compare(commands[i].parameter) );
         inBlock = true;
         blockStart = i;
