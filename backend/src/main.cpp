@@ -22,21 +22,6 @@ typedef struct {
 } DuckyCommand;
 
 
-String getValue(String data, char separator, int index) {
-    int found = 0;
-    int strIndex[] = { 0, -1 };
-    int maxIndex = data.length() - 1;
-
-    for (int i = 0; i <= maxIndex && found <= index; i++) {
-        if (data.charAt(i) == separator || i == maxIndex) {
-            found++;
-            strIndex[0] = strIndex[1] + 1;
-            strIndex[1] = (i == maxIndex) ? i+1 : i;
-        }
-    }
-    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
-
 void typeString() {
     sendHeaders();
     String string = server.arg(0);
@@ -201,9 +186,9 @@ void interpretDuckyScript() {
 
     }
     else if (commands[i].instruction.equals("VAR")) {
-      var[varCount].variableName = getValue(commands[i].parameter, '=', 0);
+      var[varCount].variableName = commands[i].parameter.substring(0, string.indexOf('='));  
       var[varCount].variableName.trim();
-      var[varCount].value = getValue(commands[i].parameter, '=', 1).toInt();
+      var[varCount].value = commands[i].parameter.substring(string.indexOf('=')+1).toInt();  
 
       Serial1.println( var[varCount].variableName );
       Serial1.println( var[varCount].value );
