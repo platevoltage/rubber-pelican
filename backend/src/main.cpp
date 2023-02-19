@@ -143,14 +143,66 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
+void duckyBlock(DuckyCommand commands[], size_t commands_t) {
+  bool inBlock = false;
+  int commandBuffer_t = 0;
+  DuckyCommand commandBuffer[100];
+
+
+  DuckyVariable var[10];
+  int varCount = 0;
+
+
+  for (int i = 0; i < commands_t; i++) {
+    if (!inBlock) {
+      if (commands[i].instruction.equals("STRING")) {
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        Serial1.println(commands[i].parameter);
+        // keyboard.sendString(commands[i].parameter);
+      }
+      else if (commands[i].instruction.equals("STRINGLN")) {
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        Serial1.println(commands[i].parameter);
+        // keyboard.sendString(commands[i].parameter);
+        // keyboard.sendChar('\n');
+      }
+      else if (commands[i].instruction.equals("DELAY")) {
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        Serial1.println(commands[i].parameter);
+        delay(commands[i].parameter.toInt());
+
+      }
+      else if (commands[i].instruction.equals("VAR")) {
+        var[varCount].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
+        var[varCount].variableName.trim();
+        var[varCount].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
+
+        Serial1.println( var[varCount].variableName );
+        Serial1.println( var[varCount].value );
+        varCount++;
+      }
+      else if (commands[i].instruction.equals("WHILE")) {
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        Serial1.println( compare(commands[i].parameter) );
+        if ( compare(commands[i].parameter) ) {
+          inBlock = true;
+        }
+      }
+    }
+    else if (commands[i].instruction.equals("ENDWHILE")) {
+      inBlock = true;
+    }
+    else {
+      // commandBuffer[commandBuffer_t] = 
+    }
+  }
+  delete[] commands;
+}
 void interpretDuckyScript() {
   sendHeaders();
-  String string = server.arg("plain") + '\n';
-  Serial1.println(string);
-  int commands_t;
-  DuckyCommand * commands = splitByLine(string, &commands_t); ;
-
-
+  Serial1.println(server.arg("plain") + '\n');
+  int commands_t = 0;
+  DuckyCommand * commands = splitByLine(server.arg("plain") + '\n', &commands_t); ;
   for (int i = 0; i < commands_t; i++) {
     Serial1.print("Line ");
     Serial1.print(i + 1);
@@ -159,50 +211,8 @@ void interpretDuckyScript() {
     Serial1.print(" () ");
     Serial1.println(commands[i].parameter);
   }
-
-
-  DuckyVariable var[10];
-  int varCount = 0;
-
-
-
-
-  for (int i = 0; i < commands_t; i++) {
-
-    if (commands[i].instruction.equals("STRING")) {
-      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-      Serial1.println(commands[i].parameter);
-      // keyboard.sendString(commands[i].parameter);
-    }
-    else if (commands[i].instruction.equals("STRINGLN")) {
-      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-      Serial1.println(commands[i].parameter);
-      // keyboard.sendString(commands[i].parameter);
-      // keyboard.sendChar('\n');
-    }
-    else if (commands[i].instruction.equals("DELAY")) {
-      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-      Serial1.println(commands[i].parameter);
-      delay(commands[i].parameter.toInt());
-
-    }
-    else if (commands[i].instruction.equals("VAR")) {
-      var[varCount].variableName = commands[i].parameter.substring(0, string.indexOf('='));  
-      var[varCount].variableName.trim();
-      var[varCount].value = commands[i].parameter.substring(string.indexOf('=')+1).toInt();  
-
-      Serial1.println( var[varCount].variableName );
-      Serial1.println( var[varCount].value );
-      varCount++;
-    }
-    else if (commands[i].instruction.equals("WHILE")) {
-      commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-      Serial1.println( compare(commands[i].parameter) );
-    }
-  }
-  delete[] commands;
-  server.send(200, "text/plain", string.c_str());
-
+  duckyBlock(commands, commands_t);
+  server.send(200, "text/plain", server.arg("plain").c_str());
 }
 
 void setup() {
