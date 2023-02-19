@@ -145,7 +145,9 @@ DuckyCommand * splitByLine(String string, int * size) {
 
 void duckyBlock(DuckyCommand commands[], size_t commands_t) {
   bool inBlock = false;
+  int blockStart = 0;
   int commandBuffer_t = 0;
+  String condition;
   DuckyCommand commandBuffer[100];
 
 
@@ -184,16 +186,24 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
       else if (commands[i].instruction.equals("WHILE")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println( compare(commands[i].parameter) );
-        if ( compare(commands[i].parameter) ) {
-          inBlock = true;
-        }
+        inBlock = true;
+        blockStart = i;
+        condition = commands[i].parameter;
+        // if ( compare(commands[i].parameter) ) {
+        //   inBlock = true;
+        // }
       }
     }
     else if (commands[i].instruction.equals("ENDWHILE")) {
-      inBlock = true;
+      inBlock = false;
+      if ( compare( condition ) ) {
+        duckyBlock(commandBuffer, commandBuffer_t);
+        i = blockStart;
+      }
     }
     else {
-      // commandBuffer[commandBuffer_t] = 
+      commandBuffer[commandBuffer_t] = commands[i];
+      commandBuffer_t++;
     }
   }
   delete[] commands;
