@@ -11,8 +11,8 @@ function DuckyInput() {
 
     function codeBlockToJson(lines: string[]) {
         let newBlock = false;
-        const block = [];
-        const _json = [];
+        let block = [];
+        let _json = [];
         for (let line of lines) {
             line = line.trim();
             const lineObject = {};
@@ -33,9 +33,10 @@ function DuckyInput() {
                 newBlock = true;
             }
             if ("ENDWHILE" in lineObject) {
+                // block.pop();
                 newBlock = false;
-                block.pop();
                 const value = codeBlockToJson(block);
+                block = [];
                 Object.defineProperty(_json[_json.length -1], "block", { value , enumerable: true}); 
             }
             
