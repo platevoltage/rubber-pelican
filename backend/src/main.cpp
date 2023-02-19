@@ -114,14 +114,14 @@ bool compare(String equation) {
 String replaceVariables(String string, DuckyVariable var[10], int varCount) {
   for (int i = 0; i < varCount; i++) {
     if (string.indexOf(var[i].variableName) > -1) {
-      Serial1.print("replace variable - ");
-      Serial1.println(var[i].variableName);
+      // Serial1.print("replace variable - ");
+      // Serial1.println(var[i].variableName);
       
       string.replace(var[i].variableName, String(var[i].value) );
     }
   }
-  Serial1.print("replace variable result - ");
-  Serial1.println(string);
+  // Serial1.print("replace variable result - ");
+  // Serial1.println(string);
   return string;
 }
 
@@ -175,13 +175,23 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
 
       }
       else if (commands[i].instruction.equals("VAR")) {
-        var[varCount].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
-        var[varCount].variableName.trim();
-        var[varCount].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
+        bool varAlreadyDeclared = false;
+        for (int j = 0; j < varCount; j++) {
+          if (var[j].variableName == commands[i].instruction) {
+            var[j].value =  commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();
+            varAlreadyDeclared = true;
+            break;
+          }
+        }
+        if (!varAlreadyDeclared) {
+          var[varCount].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
+          var[varCount].variableName.trim();
+          var[varCount].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
 
-        Serial1.println( var[varCount].variableName );
-        Serial1.println( var[varCount].value );
-        varCount++;
+          Serial1.println( var[varCount].variableName );
+          Serial1.println( var[varCount].value );
+          varCount++;
+        }
       }
       else if (commands[i].instruction.equals("WHILE")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
