@@ -55,14 +55,14 @@ function DuckyInput() {
             return fetch(`http://test.local/duckyscript`, {
                 headers: {'Content-Type': 'text/plain'},
                 method: 'POST',
-                body: JSON.stringify(_json)
+                body: textBox
             });
         }
         else {
             return fetch(`/duckyscript`, {
                 headers: {'Content-Type': 'text/plain'},
                 method: 'POST',
-                body: JSON.stringify(_json)
+                body: textBox
             });
         }
     }
@@ -79,7 +79,7 @@ function DuckyInput() {
                 // height="40"
             />
             <button onClick={handleSubmit}>Send</button>
-            <pre>{JSON.stringify(json, null , 2)}</pre>
+            {/* <pre>{JSON.stringify(json, null , 2)}</pre> */}
         </div>
     )
 }
