@@ -11,21 +11,21 @@ function DuckyInput() {
 
     function codeBlockToJson(lines: string[]) {
         let newBlock = false;
-        let block = [];
-        let _json = [];
+        let block = []; //holds lines that come after a while loop
+        let _json = []; //will be returned at the end
         for (let line of lines) {
             line = line.trim();
             const lineObject = {};
             if (line.indexOf(" ") > -1) {
-                const instruction = line.slice(0, line.indexOf(" "));
-                const value = line.slice(line.indexOf(" ")+1)
-                Object.defineProperty(lineObject, instruction, {value, enumerable: true});
+                const instruction = line.slice(0, line.indexOf(" ")); //get instruction
+                const value = line.slice(line.indexOf(" ")+1); //everything after instruction
+                Object.defineProperty(lineObject, instruction, {value, enumerable: true}); //creates key/value pair from 2 vars
             } else {
                 const value = 0;
-                Object.defineProperty(lineObject, line, {value, enumerable: true});
+                Object.defineProperty(lineObject, line, {value, enumerable: true}); //if no value, makes value 0
             }
             if (newBlock) {
-                block.push(line);
+                block.push(line); //if we are inside a block, it puts lines in block array
             } else {
                 _json.push(lineObject);
             }
