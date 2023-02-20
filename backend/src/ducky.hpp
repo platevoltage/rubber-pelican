@@ -150,12 +150,12 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboa
       if (commands[i].instruction.equals("STRING")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
-        (*printToKeyboard)(commands[i].parameter);
+        printToKeyboard(commands[i].parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
-        (*printToKeyboard)(commands[i].parameter + '\n');
+        printToKeyboard(commands[i].parameter + '\n');
       }
       else if (commands[i].instruction.equals("DELAY")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
