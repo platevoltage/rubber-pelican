@@ -8,7 +8,7 @@
 #include "ducky.h"
 #include "react.h"
 #include "keyboard.h"
-
+#include "config.h"
 
 
 

@@ -15,7 +15,6 @@ void setup() {
 
   initializeKeyboard();
   xTaskCreate(serverTask, "Server Task", 10000, NULL, 1, NULL); //webserver gets it's own task
-  // serverTask(NULL);
 
 }
 

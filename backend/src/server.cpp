@@ -58,7 +58,8 @@ void interpretDuckyScript(void *parameter) {
     Serial1.println(commands[i].parameter);
   }
 
-  duckyBlock(commands, commands_t, keyboardCallBack);
+  DuckyCallbacks callbacks = {keyboardCallback, delayCallback}; //contains our callbacks
+  duckyBlock(commands, commands_t, callbacks);
 
   Serial1.print("---- ");
   Serial1.println(ESP.getFreeHeap());

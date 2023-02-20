@@ -124,7 +124,7 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
-void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboard)(String)) {
+void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks) {
   bool inBlock = false;
   int blockStart = 0;
   int commandBuffer_t = 0;
@@ -141,17 +141,18 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboa
       if (commands[i].instruction.equals("STRING")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
-        printToKeyboard(commands[i].parameter);
+        callbacks.keyboard(commands[i].parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
-        printToKeyboard(commands[i].parameter + '\n');
+        callbacks.keyboard(commands[i].parameter + '\n');
       }
       else if (commands[i].instruction.equals("DELAY")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
-        delay(commands[i].parameter.toInt());
+        callbacks.delay(commands[i].parameter.toInt());
+        // delay(5000);
 
       }
       else if (commands[i].instruction.equals("VAR")) {
@@ -184,7 +185,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboa
     else if (commands[i].instruction.equals("ENDWHILE")) {
       inBlock = false;
       if ( compare( condition ) ) {
-        duckyBlock(commandBuffer, commandBuffer_t, printToKeyboard);
+        duckyBlock(commandBuffer, commandBuffer_t, callbacks);
         i = blockStart;
       }
     }
