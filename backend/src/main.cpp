@@ -10,7 +10,13 @@
 #define RXPIN 33         // GPIO 33 => RX for Serial1
 #define TXPIN 35         // GPIO 35 => TX for Serial1
 
-// HIDkeyboard keyboard;
+HIDkeyboard keyboard;
+
+void keyboardCallBack(String string) {  //duckyBlock uses this function to to decided what happens when a keyboard action is called
+
+  keyboard.sendString(string);
+
+}
 
 
 void typeString() {
@@ -26,7 +32,7 @@ void interpretDuckyScript() {
   sendHeaders();
   Serial1.println(server.arg("plain") + '\n');
   int commands_t = 0;
-  DuckyCommand * commands = splitByLine(server.arg("plain") + '\n', &commands_t); ;
+  DuckyCommand * commands = splitByLine(server.arg("plain") + '\n', &commands_t);
   for (int i = 0; i < commands_t; i++) {
     Serial1.print("Line ");
     Serial1.print(i + 1);
@@ -35,14 +41,14 @@ void interpretDuckyScript() {
     Serial1.print(" () ");
     Serial1.println(commands[i].parameter);
   }
-  duckyBlock(commands, commands_t);
+  duckyBlock(commands, commands_t, keyboardCallBack);
   server.send(200, "text/plain", server.arg("plain").c_str());
 }
 
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(BAUD, SERIAL_8N1, RXPIN, TXPIN);
-  // keyboard.begin();
+  keyboard.begin();
   serverStart(typeString, interpretDuckyScript);
   // interpretDuckyScript();
 }
@@ -50,7 +56,5 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   webClientTimer(0);
-  yield() ;
+  yield();
 }
-
-

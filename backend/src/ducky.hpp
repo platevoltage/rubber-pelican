@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <tinyexpr.h>
+#include "hidkeyboard.h"
 
 typedef struct {
   String variableName;
@@ -132,7 +133,7 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
-void duckyBlock(DuckyCommand commands[], size_t commands_t) {
+void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboard)(String)) {
   bool inBlock = false;
   int blockStart = 0;
   int commandBuffer_t = 0;
@@ -150,10 +151,12 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
         // keyboard.sendString(commands[i].parameter);
+        (*printToKeyboard)(commands[i].parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
         Serial1.println(commands[i].parameter);
+        (*printToKeyboard)(commands[i].parameter + '\n');
         // keyboard.sendString(commands[i].parameter);
         // keyboard.sendChar('\n');
       }
@@ -193,7 +196,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t) {
     else if (commands[i].instruction.equals("ENDWHILE")) {
       inBlock = false;
       if ( compare( condition ) ) {
-        duckyBlock(commandBuffer, commandBuffer_t);
+        duckyBlock(commandBuffer, commandBuffer_t, printToKeyboard);
         i = blockStart;
       }
     }
