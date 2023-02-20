@@ -14,7 +14,7 @@ wifiChunk = "\n"
 restPathChunk = "\n"
 
 def createIno():
-    destinationFile = open("react-server/react.hpp", "a")
+    destinationFile = open("react-server/react.h", "a")
     templateChunks = ["", ""]
     templateChunks[0] += fileDirectoryChunk + wifiChunk
     templateChunks[1] += restPathChunk

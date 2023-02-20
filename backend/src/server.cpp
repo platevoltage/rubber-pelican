@@ -1,12 +1,7 @@
 
-#include <WiFiClient.h>
-#include <WiFi.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
-#include "react.hpp"
+#include "server.h"
 
 WebServer server(80);
-
 
 #define STASSID "Can't stop the signal, Mal"
 #define STAPSK "youcanttaketheskyfromme"
@@ -15,6 +10,15 @@ WebServer server(80);
 static String ssid = STASSID;
 static String password = STAPSK;
 static String bonjourName = BONJOURNAME;
+
+
+void sendHeaders() {
+  server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
+  server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+}
+
 
 void handleNotFound() {
   // digitalWrite(LED_BUILTIN, 1);
@@ -36,7 +40,48 @@ void handleNotFound() {
 }
 
 
-void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
+void interpretDuckyScript(void *parameter) {
+
+  // const char *param = (const char*)parameter;
+  String string = String((const char*)parameter);
+
+  // sendHeaders();
+  Serial1.println(string);
+  int commands_t = 0;
+  DuckyCommand * commands = splitByLine(string + '\n', &commands_t);
+  for (int i = 0; i < commands_t; i++) {
+    Serial1.print("Line ");
+    Serial1.print(i + 1);
+    Serial1.print(": ");
+    Serial1.print(commands[i].instruction);
+    Serial1.print(" () ");
+    Serial1.println(commands[i].parameter);
+  }
+
+  duckyBlock(commands, commands_t, keyboardCallBack);
+
+  Serial1.print("---- ");
+  Serial1.println(ESP.getFreeHeap());
+  server.send(200, "text/plain", string);
+  vTaskDelete(NULL);
+}
+
+
+void startInterpretDuckyScript() {
+  sendHeaders();
+  String body = server.arg("plain");
+  int len = body.length() + 1;
+  char *buf = new char[len];
+  body.toCharArray(buf, len);
+
+  Serial1.println(body);
+  Serial1.println(buf);
+  xTaskCreate(interpretDuckyScript, "myTask", 10000, (void*)buf, 1, NULL); // pass the address of param as pvParameters
+  
+}
+
+
+void serverStart() {
 
     WiFi.setAutoReconnect(true);
     WiFi.persistent(true);
@@ -103,8 +148,8 @@ void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
     });
 
 
-    server.on(F("/typestring"), *typeString);
-    server.on(F("/duckyscript"), *interpretDuckyScript);
+    // server.on(F("/typestring"), *typeString);
+    server.on(F("/duckyscript"), startInterpretDuckyScript);
 
 
     server.onNotFound(handleNotFound);
@@ -114,24 +159,15 @@ void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
 
 }
 
+void serverTask(void *pvParameters) {
+  serverStart();
 
-void sendHeaders() {
-  server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
-  server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
-  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  while (true) {
+    server.handleClient();
+    delay(1);
+  }
 }
 
 
 
-
-static unsigned long webClientPreviousMillis = 0;
-void webClientTimer(uint16_t speed) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - webClientPreviousMillis >= speed) {
-      webClientPreviousMillis = currentMillis;
-      server.handleClient();
-      yield();
-    }
-}
 
