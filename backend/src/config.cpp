@@ -7,5 +7,8 @@ void keyboardCallback(String string) {
 }
 
 void delayCallback(int milliseconds) {
-    delay(milliseconds);
+    Serial1.print("DELAY - ");
+    Serial1.println(milliseconds);
+    // delay(milliseconds);
+    vTaskDelay(pdMS_TO_TICKS(milliseconds));
 }
