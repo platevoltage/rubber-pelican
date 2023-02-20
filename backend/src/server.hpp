@@ -4,6 +4,8 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include "react.hpp"
+#include "ducky.hpp"
+#include "keyboard.hpp"
 
 WebServer server(80);
 
@@ -15,6 +17,15 @@ WebServer server(80);
 static String ssid = STASSID;
 static String password = STAPSK;
 static String bonjourName = BONJOURNAME;
+
+
+void sendHeaders() {
+  server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
+  server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+}
+
 
 void handleNotFound() {
   // digitalWrite(LED_BUILTIN, 1);
@@ -35,8 +46,25 @@ void handleNotFound() {
   // digitalWrite(LED_BUILTIN, 0);
 }
 
+void interpretDuckyScript() {
+  sendHeaders();
+  Serial1.println(server.arg("plain") + '\n');
+  int commands_t = 0;
+  DuckyCommand * commands = splitByLine(server.arg("plain") + '\n', &commands_t);
+  for (int i = 0; i < commands_t; i++) {
+    Serial1.print("Line ");
+    Serial1.print(i + 1);
+    Serial1.print(": ");
+    Serial1.print(commands[i].instruction);
+    Serial1.print(" () ");
+    Serial1.println(commands[i].parameter);
+  }
+  duckyBlock(commands, commands_t, keyboardCallBack);
+  server.send(200, "text/plain", server.arg("plain").c_str());
+}
 
-void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
+
+void serverStart() {
 
     WiFi.setAutoReconnect(true);
     WiFi.persistent(true);
@@ -103,8 +131,8 @@ void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
     });
 
 
-    server.on(F("/typestring"), *typeString);
-    server.on(F("/duckyscript"), *interpretDuckyScript);
+    // server.on(F("/typestring"), *typeString);
+    server.on(F("/duckyscript"), interpretDuckyScript);
 
 
     server.onNotFound(handleNotFound);
@@ -114,24 +142,15 @@ void serverStart(void(*typeString)(), void(*interpretDuckyScript)()) {
 
 }
 
+void serverTask(void *pvParameters) {
+  serverStart();
 
-void sendHeaders() {
-  server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
-  server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
-  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  while (true) {
+    server.handleClient();
+    delay(1);
+  }
 }
 
 
 
-
-static unsigned long webClientPreviousMillis = 0;
-void webClientTimer(uint16_t speed) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - webClientPreviousMillis >= speed) {
-      webClientPreviousMillis = currentMillis;
-      server.handleClient();
-      yield();
-    }
-}
 
