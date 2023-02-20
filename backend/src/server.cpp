@@ -1,14 +1,7 @@
 
-#include <WiFiClient.h>
-#include <WiFi.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
-#include "react.hpp"
-#include "ducky.hpp"
-#include "keyboard.hpp"
+#include "server.h"
 
 WebServer server(80);
-
 
 #define STASSID "Can't stop the signal, Mal"
 #define STAPSK "youcanttaketheskyfromme"

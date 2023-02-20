@@ -11,3 +11,5 @@
 #define MAIN_CSS_PATH "/rubber-pelican/static/js/main.ee1aaa60.js"
 #define CHUNK_JS_PATH "/rubber-pelican/static/js/787.cda612ba.chunk.js"
 #define INDEX_HTML_PATH "/rubber-pelican/index.html"
+
+

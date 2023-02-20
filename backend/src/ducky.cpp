@@ -1,16 +1,7 @@
-#include <Arduino.h>
-#include <tinyexpr.h>
-#include "hidkeyboard.h"
 
-typedef struct {
-  String variableName;
-  int value;
-} DuckyVariable;
+#include "ducky.h"
 
-typedef struct {
-  String instruction;
-  String parameter;
-} DuckyCommand;
+
 
 double eval(String equation) {
       Serial1.print("> ");
@@ -204,3 +195,4 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboa
   }
   delete[] commands;
 }
+
