@@ -1,5 +1,10 @@
 #include <Arduino.h>
 #include "server.h"
+#include <FastLED.h>
+
+#define LED_PIN 8
+#define LED_COUNT 1
+CRGB leds[LED_COUNT];
 
 
 
@@ -15,6 +20,10 @@ void setup() {
 
   initializeKeyboard();
   xTaskCreate(serverTask, "Server Task", 10000, NULL, 1, NULL); //webserver gets it's own task
+  FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, LED_COUNT);
+  FastLED.setBrightness(64);
+  leds[0] = CRGB::Red;
+  FastLED.show();
 
 }
 
