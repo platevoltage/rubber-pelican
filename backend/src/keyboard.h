@@ -3,8 +3,8 @@
 
 #include "hidkeyboard.h"
 
-extern HIDkeyboard keyboard;
-
+// extern HIDkeyboard keyboard;
+void initializeKeyboard();
 void keyboardCallBack(String string); //duckyBlock uses this function to to decided what happens when a 
 
 #endif
