@@ -12,3 +12,10 @@ void delayCallback(int milliseconds) {
     // delay(milliseconds);
     vTaskDelay(pdMS_TO_TICKS(milliseconds));
 }
+
+void ledCallback(uint32_t color) {
+    Serial1.print("LED COLOR - ");
+    Serial1.println(color);
+    changeLEDColor(color);
+
+}

@@ -5,5 +5,7 @@
 
 
 void initializeLED();
+void changeLEDColor(uint32_t color);
+
 
 #endif
