@@ -196,7 +196,4 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, void (*printToKeyboa
   delete[] commands;
 }
 
-void DuckyTask(void *pvParameters) {
-
-}
 
