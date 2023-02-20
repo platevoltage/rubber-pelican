@@ -12,9 +12,10 @@
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(BAUD, SERIAL_8N1, RXPIN, TXPIN);
-  // keyboard.begin();
+
   initializeKeyboard();
-  xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
+  xTaskCreate(serverTask, "Server Task", 10000, NULL, 1, NULL); //webserver gets it's own task
+  // serverTask(NULL);
 
 }
 

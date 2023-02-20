@@ -1,11 +1,11 @@
 #include "keyboard.h"
 
-HIDkeyboard keyboard;
+// HIDkeyboard keyboard;
 
 void initializeKeyboard() {
-  keyboard.begin();
+  // keyboard.begin();
 }
 
 void keyboardCallBack(String string) {  
-  keyboard.sendString(string);
+  // keyboard.sendString(string);
 }

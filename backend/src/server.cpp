@@ -39,11 +39,16 @@ void handleNotFound() {
   // digitalWrite(LED_BUILTIN, 0);
 }
 
-void interpretDuckyScript() {
-  sendHeaders();
-  Serial1.println(server.arg("plain") + '\n');
+
+void interpretDuckyScript(void *parameter) {
+
+  // const char *param = (const char*)parameter;
+  String string = String((const char*)parameter);
+
+  // sendHeaders();
+  Serial1.println(string);
   int commands_t = 0;
-  DuckyCommand * commands = splitByLine(server.arg("plain") + '\n', &commands_t);
+  DuckyCommand * commands = splitByLine(string + '\n', &commands_t);
   for (int i = 0; i < commands_t; i++) {
     Serial1.print("Line ");
     Serial1.print(i + 1);
@@ -52,8 +57,27 @@ void interpretDuckyScript() {
     Serial1.print(" () ");
     Serial1.println(commands[i].parameter);
   }
+
   duckyBlock(commands, commands_t, keyboardCallBack);
-  server.send(200, "text/plain", server.arg("plain").c_str());
+
+  Serial1.print("---- ");
+  Serial1.println(ESP.getFreeHeap());
+  server.send(200, "text/plain", string);
+  vTaskDelete(NULL);
+}
+
+
+void startInterpretDuckyScript() {
+  sendHeaders();
+  String body = server.arg("plain");
+  int len = body.length() + 1;
+  char *buf = new char[len];
+  body.toCharArray(buf, len);
+
+  Serial1.println(body);
+  Serial1.println(buf);
+  xTaskCreate(interpretDuckyScript, "myTask", 10000, (void*)buf, 1, NULL); // pass the address of param as pvParameters
+  
 }
 
 
@@ -125,7 +149,7 @@ void serverStart() {
 
 
     // server.on(F("/typestring"), *typeString);
-    server.on(F("/duckyscript"), interpretDuckyScript);
+    server.on(F("/duckyscript"), startInterpretDuckyScript);
 
 
     server.onNotFound(handleNotFound);
