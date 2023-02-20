@@ -135,8 +135,8 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   DuckyVariable var[10];
   int varCount = 0;
 
-
-  for (int i = 0; i < commands_t; i++) {
+  int i = 0;
+  while( i < commands_t ) {
     if (!inBlock) {
       if (commands[i].instruction.equals("STRING")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
@@ -191,22 +191,30 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         Serial1.println( compare(commands[i].parameter) );
         inBlock = true;
         blockStart = i;
+        Serial1.print("BLOCK START - ");
+        Serial1.println(blockStart);
         condition = commands[i].parameter;
       }
     }
     else if (commands[i].instruction.equals("ENDWHILE")) {
       inBlock = false;
       if ( compare( condition ) ) {
+        Serial1.print("JUMPING BACK TO - ");
+        Serial1.println(blockStart);
+        i = blockStart-1;
+        for (int k = 0; k < commandBuffer_t; k++) {
+          Serial1.println(commandBuffer[k].instruction);
+        }
         duckyBlock(commandBuffer, commandBuffer_t, callbacks);
-        i = blockStart;
       }
     }
     else {
       commandBuffer[commandBuffer_t] = commands[i];
       commandBuffer_t++;
     }
+    i++;
   }
-  delete[] commands;
+  // delete[] commands;
 }
 
 
