@@ -24,7 +24,7 @@ String replaceVariables(String string, DuckyVariable var[10], int varCount);
 
 DuckyCommand * splitByLine(String string, int * size);
 
-void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks);
+void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, DuckyVariable *globalVars = NULL, size_t globalVars_t = 0);
 
 #endif
 

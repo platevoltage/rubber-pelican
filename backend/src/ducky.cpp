@@ -84,7 +84,7 @@ bool compare(String equation) {
   return result;
 }
 
-String replaceVariables(String string, DuckyVariable var[10], int varCount) {
+String replaceVariables(String string, DuckyVariable * var, int varCount) {
   for (int i = 0; i < varCount; i++) {
     int variableIndex = string.indexOf(var[i].variableName);
     if ( variableIndex > -1 
@@ -97,12 +97,10 @@ String replaceVariables(String string, DuckyVariable var[10], int varCount) {
       Serial1.println(var[i].variableName.length() + variableIndex);
 
       string.replace(var[i].variableName, String(var[i].value) );
-      
-      
     }
   }
-  // Serial1.print("replace variable result - ");
-  // Serial1.println(string);
+  Serial1.print("replace variable result - ");
+  Serial1.println(string);
   return string;
 }
 
@@ -124,7 +122,7 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
-void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks) {
+void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, DuckyVariable *globalVars, size_t globalVars_t) {
   bool inBlock = false;
   int blockStart = 0;
   int commandBuffer_t = 0;
@@ -140,16 +138,19 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     if (!inBlock) {
       if (commands[i].instruction.equals("STRING")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
         Serial1.println(commands[i].parameter);
         callbacks.keyboard(commands[i].parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
         Serial1.println(commands[i].parameter);
         callbacks.keyboard(commands[i].parameter + '\n');
       }
       else if (commands[i].instruction.equals("DELAY")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
         Serial1.println(commands[i].parameter);
         callbacks.delay(commands[i].parameter.toInt());
         // delay(5000);
@@ -188,6 +189,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
       else if (commands[i].instruction.equals("WHILE")) {
         commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
         Serial1.println( compare(commands[i].parameter) );
         inBlock = true;
         blockStart = i;
@@ -205,7 +207,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         for (int k = 0; k < commandBuffer_t; k++) {
           Serial1.println(commandBuffer[k].instruction);
         }
-        duckyBlock(commandBuffer, commandBuffer_t, callbacks);
+        duckyBlock(commandBuffer, commandBuffer_t, callbacks, var, varCount);
       }
     }
     else {
