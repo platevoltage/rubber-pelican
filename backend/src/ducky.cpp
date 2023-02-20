@@ -155,6 +155,18 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         // delay(5000);
 
       }
+      else if (commands[i].instruction.equals("LED_R")) {
+        callbacks.ledColor(0xFF0000);
+      }
+      else if (commands[i].instruction.equals("LED_G")) {
+        callbacks.ledColor(0x00FF00);
+      }
+      else if (commands[i].instruction.equals("LED_B")) {
+        callbacks.ledColor(0x0000FF);
+      }
+      else if (commands[i].instruction.equals("LED_OFF")) {
+        callbacks.ledColor(0x000000);
+      }
       else if (commands[i].instruction.equals("VAR")) {
         bool varAlreadyDeclared = false;
         for (int j = 0; j < varCount; j++) {
