@@ -222,8 +222,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         Serial1.print("FREE-HEAP - ");
         Serial1.println(ESP.getFreeHeap());
         duckyBlock(commandBuffer, commandBuffer_t, callbacks, var, varCount);
-      } else {
         commandBuffer_t = 0;
+      } else {
+        
         delete[] commands;
       }
     }
