@@ -47,6 +47,7 @@ void interpretDuckyScript(void *parameter) {
 
   // sendHeaders();
   Serial1.println(string);
+  string.replace("ELSE IF", "ELSE\nIF");
   int commands_t = 0;
   DuckyCommand * commands = splitByLine(string + '\n', &commands_t);
   for (int i = 0; i < commands_t; i++) {
