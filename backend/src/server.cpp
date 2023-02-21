@@ -64,7 +64,6 @@ void interpretDuckyScript(void *parameter) {
 
   server.send(200, "text/plain", string);
   vTaskDelete(NULL);
-  delete[] commands;
 }
 
 
