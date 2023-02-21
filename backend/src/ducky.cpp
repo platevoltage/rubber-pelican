@@ -233,10 +233,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         Serial1.println(ESP.getFreeHeap());
         duckyBlock(commandBuffer, commandBuffer_t, callbacks, var, varCount);
         commandBuffer_t = 0;
-      } else {
-        
-        // delete[] commands;
-      }
+      } 
     }
     else {
       commandBuffer[commandBuffer_t] = commands[i];
