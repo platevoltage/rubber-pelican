@@ -139,7 +139,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   bool inBlock = false;
   int blockStart = 0;
   int commandBuffer_t = 0;
+  int nestedWhile = 0;
   bool condition;
+  bool execute = true;
   DuckyCommand commandBuffer[100];
 
 
@@ -148,20 +150,20 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
 
   int i = 0;
   while( i < commands_t ) {
-    if (!inBlock) {
-      if (commands[i].instruction.equals("STRING")) {
+    // if (nestedWhile == 0) {
+      if (commands[i].instruction.equals("STRING") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
         callbacks.keyboard(parameter);
       }
-      else if (commands[i].instruction.equals("STRINGLN")) {
+      else if (commands[i].instruction.equals("STRINGLN") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
         callbacks.keyboard(parameter + '\n');
       }
-      else if (commands[i].instruction.equals("DELAY")) {
+      else if (commands[i].instruction.equals("DELAY") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
@@ -169,19 +171,19 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.delay(parameter.toInt());
 
       }
-      else if (commands[i].instruction.equals("LED_R")) {
+      else if (commands[i].instruction.equals("LED_R") && execute) {
         callbacks.ledColor(0xFF0000);
       }
-      else if (commands[i].instruction.equals("LED_G")) {
+      else if (commands[i].instruction.equals("LED_G") && execute) {
         callbacks.ledColor(0x00FF00);
       }
-      else if (commands[i].instruction.equals("LED_B")) {
+      else if (commands[i].instruction.equals("LED_B") && execute) {
         callbacks.ledColor(0x0000FF);
       }
-      else if (commands[i].instruction.equals("LED_OFF")) {
+      else if (commands[i].instruction.equals("LED_OFF") && execute) {
         callbacks.ledColor(0x000000);
       }
-      else if (commands[i].instruction[0] == ('$')) {
+      else if (commands[i].instruction[0] == ('$') && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
@@ -189,7 +191,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         updateVariable(commands[i].instruction, newValue, var, varCount);
         updateVariable(commands[i].instruction, newValue, globalVars, globalVars_t);
       }
-      else if (commands[i].instruction.equals("VAR")) {
+      else if (commands[i].instruction.equals("VAR") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
@@ -211,34 +213,28 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
           varCount++;
         }
       }
-      else if (commands[i].instruction.equals("WHILE")) {
+      else if (commands[i].instruction.equals("WHILE") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         parameter = replaceVariables(parameter, globalVars, globalVars_t);
 
         Serial1.println( compare( parameter ) );
-        inBlock = true;
-        blockStart = i;
-        condition = compare( parameter );
-      }
-    }
-    else if (commands[i].instruction.equals("ENDWHILE")) {
-      inBlock = false;
-      if ( condition ) {
-        i = blockStart-1;
-        for (int k = 0; k < commandBuffer_t; k++) {
-          Serial1.println(commandBuffer[k].instruction);
+        // inBlock = true;
+        if (compare ( parameter )) {
+          execute = true;
+        } else {
+          execute = false;
         }
-        Serial1.print("FREE-HEAP - ");
-        Serial1.println(ESP.getFreeHeap());
-        duckyBlock(commandBuffer, commandBuffer_t, callbacks, var, varCount);
-        commandBuffer_t = 0;
-      } 
-    }
-    else {
-      commandBuffer[commandBuffer_t] = commands[i];
-      commandBuffer_t++;
-    }
+        nestedWhile++;
+        blockStart = i;
+        // condition = compare( parameter );
+
+
+      }
+      else if (commands[i].instruction.equals("ENDWHILE")) {
+        if (execute) i = blockStart-1;
+        else execute = true;
+      }
     i++;
   }
   
