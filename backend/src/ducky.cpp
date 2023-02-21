@@ -104,7 +104,7 @@ String replaceVariables(String string, DuckyVariable * var, int varCount) {
   return string;
 }
 
-void updateVariable(String varToBeChanged, int newValue,  DuckyVariable * var, int varCount) {
+void updateVariable(String varToBeChanged, int newValue, DuckyVariable * var, int varCount) {
   for (int i = 0; i < varCount; i++) {
     if ( var[i].variableName == varToBeChanged) {
       var[i].value = newValue;
@@ -235,7 +235,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         commandBuffer_t = 0;
       } else {
         
-        delete[] commands;
+        // delete[] commands;
       }
     }
     else {
