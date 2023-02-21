@@ -218,7 +218,6 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         }
         blockStart[nestedWhile] = i;
         nestedWhile++;
-        // condition = compare( parameter );
       }
       else if (commands[i].instruction.equals("IF") && execute) {
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
@@ -229,9 +228,10 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         } else {
           execute = false;
         }
-        // blockStart[nestedIf] = i;
         nestedIf++;
-        // condition = compare( parameter );
+      }
+      else if (commands[i].instruction.equals("ELSE")) {
+        execute = !execute;
       }
       else if (commands[i].instruction.equals("ENDWHILE")) {
         nestedWhile--;
@@ -242,10 +242,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
       else if (commands[i].instruction.equals("ENDIF")) {
         nestedIf--;
-        // if (execute) i = blockStart[nestedIf]-1;
-        // else {
-          execute = true;
-        // } 
+        execute = true;
       }
     i++;
   }
