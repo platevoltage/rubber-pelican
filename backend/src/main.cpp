@@ -14,7 +14,7 @@ void setup() {
 
   initializeKeyboard();
   initializeLED();
-  xTaskCreate(serverTask, "Server Task", 10000, NULL, 1, NULL); //webserver gets it's own task
+  xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
 
 }
 

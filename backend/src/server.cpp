@@ -76,7 +76,7 @@ void startInterpretDuckyScript() {
 
   Serial1.println(body);
   Serial1.println(buf);
-  xTaskCreate(interpretDuckyScript, "myTask", 10000, (void*)buf, 1, NULL); // pass the address of param as pvParameters
+  xTaskCreate(interpretDuckyScript, "myTask", 10000, (void*)buf, 2, NULL); // pass the address of param as pvParameters
   
 }
 
