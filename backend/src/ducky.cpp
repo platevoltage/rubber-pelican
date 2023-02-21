@@ -140,7 +140,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   int blockStart[10];
   int commandBuffer_t = 0;
   int nestedWhile = 0;
-  int nestedIf = 0;
+  // int nestedIf = 0;
   bool condition;
   bool execute = true;
   DuckyCommand commandBuffer[100];
@@ -228,7 +228,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         } else {
           execute = false;
         }
-        nestedIf++;
+        // nestedIf++;
       }
       else if (commands[i].instruction.equals("ELSE")) {
         execute = !execute;
@@ -241,7 +241,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         } 
       }
       else if (commands[i].instruction.equals("ENDIF")) {
-        nestedIf--;
+        // nestedIf--;
         execute = true;
       }
     i++;
