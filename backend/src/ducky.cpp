@@ -137,7 +137,7 @@ DuckyCommand * splitByLine(String string, int * size) {
 
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, DuckyVariable *globalVars, size_t globalVars_t) {
   bool inBlock = false;
-  int blockStart = 0;
+  int blockStart[10];
   int commandBuffer_t = 0;
   int nestedWhile = 0;
   bool condition;
@@ -225,14 +225,15 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         } else {
           execute = false;
         }
+        blockStart[nestedWhile] = i;
         nestedWhile++;
-        blockStart = i;
         // condition = compare( parameter );
 
 
       }
       else if (commands[i].instruction.equals("ENDWHILE")) {
-        if (execute) i = blockStart-1;
+        nestedWhile--;
+        if (execute) i = blockStart[nestedWhile]-1;
         else execute = true;
       }
     i++;
