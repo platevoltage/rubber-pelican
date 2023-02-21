@@ -179,6 +179,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         int newValue = eval( commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1) );
         // int newValue = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();
         updateVariable(commands[i].instruction, newValue, var, varCount);
+        updateVariable(commands[i].instruction, newValue, globalVars, globalVars_t);
       }
       else if (commands[i].instruction.equals("VAR")) {
         bool varAlreadyDeclared = false;
