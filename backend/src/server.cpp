@@ -61,8 +61,7 @@ void interpretDuckyScript(void *parameter) {
   DuckyCallbacks callbacks = {keyboardCallback, delayCallback, ledCallback}; //contains our callbacks
   duckyBlock(commands, commands_t, callbacks);
 
-  Serial1.print("---- ");
-  Serial1.println(ESP.getFreeHeap());
+
   server.send(200, "text/plain", string);
   vTaskDelete(NULL);
 }

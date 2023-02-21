@@ -91,17 +91,22 @@ String replaceVariables(String string, DuckyVariable * var, int varCount) {
       && (string[var[i].variableName.length() + variableIndex ] == ' ' 
       || var[i].variableName.length() + variableIndex == string.length() 
     )) {
-      // Serial1.print("replace variable - ");
-      // Serial1.println(var[i].variableName);
-      Serial1.print("------");
-      Serial1.println(var[i].variableName.length() + variableIndex);
-
       string.replace(var[i].variableName, String(var[i].value) );
     }
   }
-  Serial1.print("replace variable result - ");
-  Serial1.println(string);
   return string;
+}
+void updateVariable(String varToBeChanged, int newValue,  DuckyVariable * var, int varCount) {
+  for (int i = 0; i < varCount; i++) {
+    if ( var[i].variableName == varToBeChanged) {
+      var[i].value = newValue;
+      Serial1.print("CHANGING VARIABLE ");
+      Serial1.print(varToBeChanged);
+      Serial1.print(" TO - ");
+      Serial1.println(newValue);
+      break;
+    }
+  }
 }
 
 DuckyCommand * splitByLine(String string, int * size) {
@@ -168,6 +173,13 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       else if (commands[i].instruction.equals("LED_OFF")) {
         callbacks.ledColor(0x000000);
       }
+      else if (commands[i].instruction[0] == ('$')) {
+        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
+        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
+        int newValue = eval( commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1) );
+        // int newValue = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();
+        updateVariable(commands[i].instruction, newValue, var, varCount);
+      }
       else if (commands[i].instruction.equals("VAR")) {
         bool varAlreadyDeclared = false;
         for (int j = 0; j < varCount; j++) {
@@ -207,7 +219,11 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         for (int k = 0; k < commandBuffer_t; k++) {
           Serial1.println(commandBuffer[k].instruction);
         }
+        Serial1.print("FREE-HEAP - ");
+        Serial1.println(ESP.getFreeHeap());
         duckyBlock(commandBuffer, commandBuffer_t, callbacks, var, varCount);
+      } else {
+        delete[] commands;
       }
     }
     else {
@@ -216,7 +232,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     }
     i++;
   }
-  // delete[] commands;
+  
 }
 
 
