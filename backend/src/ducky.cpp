@@ -96,6 +96,9 @@ String replaceVariables(String string, DuckyVariable * var, int varCount) {
   }
   return string;
 }
+void handleVariableReplacement() {
+  
+}
 void updateVariable(String varToBeChanged, int newValue,  DuckyVariable * var, int varCount) {
   for (int i = 0; i < varCount; i++) {
     if ( var[i].variableName == varToBeChanged) {
@@ -142,22 +145,25 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   while( i < commands_t ) {
     if (!inBlock) {
       if (commands[i].instruction.equals("STRING")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
-        Serial1.println(commands[i].parameter);
-        callbacks.keyboard(commands[i].parameter);
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
+        Serial1.println(parameter);
+        callbacks.keyboard(parameter);
       }
       else if (commands[i].instruction.equals("STRINGLN")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
-        Serial1.println(commands[i].parameter);
-        callbacks.keyboard(commands[i].parameter + '\n');
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
+        Serial1.println(parameter);
+        callbacks.keyboard(parameter + '\n');
       }
       else if (commands[i].instruction.equals("DELAY")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
-        Serial1.println(commands[i].parameter);
-        callbacks.delay(commands[i].parameter.toInt());
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
+        Serial1.println(parameter);
+        callbacks.delay(parameter.toInt());
         // delay(5000);
 
       }
@@ -174,26 +180,30 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.ledColor(0x000000);
       }
       else if (commands[i].instruction[0] == ('$')) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
-        int newValue = eval( commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1) );
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
+        int newValue = eval( parameter.substring(parameter.indexOf('=')+1) );
         // int newValue = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();
         updateVariable(commands[i].instruction, newValue, var, varCount);
         updateVariable(commands[i].instruction, newValue, globalVars, globalVars_t);
       }
       else if (commands[i].instruction.equals("VAR")) {
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
         bool varAlreadyDeclared = false;
         for (int j = 0; j < varCount; j++) {
           if (var[j].variableName == commands[i].instruction) {
-            var[j].value =  eval( commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1) );
+            var[j].value =  eval( parameter.substring(parameter.indexOf('=')+1) );
             varAlreadyDeclared = true;
             break;
           }
         }
         if (!varAlreadyDeclared) {
-          var[varCount].variableName = commands[i].parameter.substring(0, commands[i].parameter.indexOf('='));  
+          var[varCount].variableName = parameter.substring(0, parameter.indexOf('='));  
           var[varCount].variableName.trim();
-          var[varCount].value = commands[i].parameter.substring(commands[i].parameter.indexOf('=')+1).toInt();  
+          var[varCount].value = parameter.substring(parameter.indexOf('=')+1).toInt();  
 
           Serial1.println( var[varCount].variableName );
           Serial1.println( var[varCount].value );
