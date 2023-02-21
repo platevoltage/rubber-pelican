@@ -131,7 +131,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   bool inBlock = false;
   int blockStart = 0;
   int commandBuffer_t = 0;
-  String condition;
+  bool condition;
   DuckyCommand commandBuffer[100];
 
 
@@ -201,19 +201,21 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         }
       }
       else if (commands[i].instruction.equals("WHILE")) {
-        commands[i].parameter = replaceVariables(commands[i].parameter, var, varCount);
-        commands[i].parameter = replaceVariables(commands[i].parameter, globalVars, globalVars_t);
-        Serial1.println( compare(commands[i].parameter) );
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        parameter = replaceVariables(parameter, globalVars, globalVars_t);
+
+        Serial1.println( compare( parameter ) );
         inBlock = true;
         blockStart = i;
         Serial1.print("BLOCK START - ");
         Serial1.println(blockStart);
-        condition = commands[i].parameter;
+        condition = compare( parameter );
       }
     }
     else if (commands[i].instruction.equals("ENDWHILE")) {
       inBlock = false;
-      if ( compare( condition ) ) {
+      if ( condition ) {
         Serial1.print("JUMPING BACK TO - ");
         Serial1.println(blockStart);
         i = blockStart-1;
