@@ -17,6 +17,39 @@
 #define ENTER 0x28
 #define SPACE 0x2c
 
+#define TAB 0x2b
+#define UPARROW 0x52
+#define DOWNARROW 0x51
+#define LEFTARROW 0x50
+#define RIGHTARROW 0x4f
+#define PAGEUP 0x4b
+#define PAGEDOWN 0x4e
+#define HOME 0x4a
+#define END 0x4d
+#define INSERT 0x49
+#define DELETE 0x4c
+#define BACKSPACE 0x2a
+
+#define PAUSE 0x48
+#define BREAK 0x48
+#define PRINTSCREEN 0x46
+#define MENU 0x76
+#define APP 0x76
+
+#define F1 0x3a
+#define F2 0x3b
+#define F3 0x3c
+#define F4 0x3d
+#define F5 0x3e
+#define F6 0x3f
+#define F7 0x40
+#define F8 0x41
+#define F9 0x42
+#define F10 0x43
+#define F11 0x44
+#define F12 0x45
+
+
 
 
 extern HIDkeyboard keyboard;
