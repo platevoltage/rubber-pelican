@@ -23,9 +23,7 @@ void keyboardCallback(String string) {
 
 void keyboardShortcutCallback(String * modifiers, int size, char keycode) { 
   int modifierValue = 0;
-  // char keycode = command.parameter[0];
-  // int size = 0;
-  // String * modifiers = splitModifiers(command.instruction, &size);
+
   for (int i = 0; i < size; i++) {
     if (modifiers[i].equals("OPTION")) modifierValue += OPTION;
     else if (modifiers[i].equals("ALT")) modifierValue += ALT;
