@@ -37,13 +37,6 @@ void keyboardShortcutCallback(DuckyCommand command) {
 
   keyboard.sendKey(keymap[keycode].usage, modifierValue); 
 
-
-
-
-  // vTaskDelay(pdMS_TO_TICKS(1000));
-
-  // keyboard.sendChar('a');
-
 }
 
 void delayCallback(int milliseconds) {
