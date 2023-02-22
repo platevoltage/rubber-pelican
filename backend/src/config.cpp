@@ -27,9 +27,9 @@ void keyboardShortcutCallback(String * modifiers, int size, char keycode) {
   for (int i = 0; i < size; i++) {
     if (modifiers[i].equals("OPTION")) modifierValue += OPTION;
     else if (modifiers[i].equals("ALT")) modifierValue += ALT;
-    else if (modifiers[i].equals("COMMAND")) modifierValue += COMMAND;
     else if (modifiers[i].equals("CTRL")) modifierValue += CTRL;
     else if (modifiers[i].equals("SHIFT")) modifierValue += SHIFT;
+    else if (modifiers[i].equals("COMMAND") || modifiers[i].equals("WINDOWS") || modifiers[i].equals("GUI")) modifierValue += COMMAND;
   }
   vTaskDelay(pdMS_TO_TICKS(1000));
 

@@ -165,116 +165,113 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
 
   int i = 0;
   while( i < commands_t ) {
-    // if (nestedWhile == 0) {
-      if (commands[i].instruction.equals("STRING") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        callbacks.keyboard(parameter);
+    if (commands[i].instruction.equals("STRING") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      callbacks.keyboard(parameter);
+    }
+    else if (commands[i].instruction.equals("STRINGLN") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      callbacks.keyboard(parameter + '\n');
+    }
+    else if (commands[i].instruction.equals("DELAY") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      Serial1.println(parameter);
+      callbacks.delay(parameter.toInt());
+    }
+    else if (commands[i].instruction.equals("LED_R") && execute) {
+      callbacks.ledColor(0xFF0000);
+    }
+    else if (commands[i].instruction.equals("LED_G") && execute) {
+      callbacks.ledColor(0x00FF00);
+    }
+    else if (commands[i].instruction.equals("LED_B") && execute) {
+      callbacks.ledColor(0x0000FF);
+    }
+    else if (commands[i].instruction.equals("LED_OFF") && execute) {
+      callbacks.ledColor(0x000000);
+    }
+    else if (commands[i].instruction[0] == ('$') && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      int newValue = eval( parameter.substring(parameter.indexOf('=')+1) );
+      updateVariable(commands[i].instruction, newValue, var, varCount);
+    }
+    else if (commands[i].instruction.equals("VAR") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      bool varAlreadyDeclared = false;
+      for (int j = 0; j < varCount; j++) {
+        if (var[j].variableName == commands[i].instruction) {
+          var[j].value =  eval( parameter.substring(parameter.indexOf('=')+1) );
+          varAlreadyDeclared = true;
+          break;
+        }
       }
-      else if (commands[i].instruction.equals("STRINGLN") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        callbacks.keyboard(parameter + '\n');
-      }
-      else if (commands[i].instruction.equals("DELAY") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        Serial1.println(parameter);
-        callbacks.delay(parameter.toInt());
+      if (!varAlreadyDeclared) {
+        var[varCount].variableName = parameter.substring(0, parameter.indexOf('='));  
+        var[varCount].variableName.trim();
+        var[varCount].value = parameter.substring(parameter.indexOf('=')+1).toInt();  
 
+        Serial1.println( var[varCount].variableName );
+        Serial1.println( var[varCount].value );
+        varCount++;
       }
-      else if (commands[i].instruction.equals("LED_R") && execute) {
-        callbacks.ledColor(0xFF0000);
-      }
-      else if (commands[i].instruction.equals("LED_G") && execute) {
-        callbacks.ledColor(0x00FF00);
-      }
-      else if (commands[i].instruction.equals("LED_B") && execute) {
-        callbacks.ledColor(0x0000FF);
-      }
-      else if (commands[i].instruction.equals("LED_OFF") && execute) {
-        callbacks.ledColor(0x000000);
-      }
-      else if (commands[i].instruction[0] == ('$') && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        int newValue = eval( parameter.substring(parameter.indexOf('=')+1) );
-        updateVariable(commands[i].instruction, newValue, var, varCount);
-      }
-      else if (commands[i].instruction.equals("VAR") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        bool varAlreadyDeclared = false;
-        for (int j = 0; j < varCount; j++) {
-          if (var[j].variableName == commands[i].instruction) {
-            var[j].value =  eval( parameter.substring(parameter.indexOf('=')+1) );
-            varAlreadyDeclared = true;
-            break;
-          }
-        }
-        if (!varAlreadyDeclared) {
-          var[varCount].variableName = parameter.substring(0, parameter.indexOf('='));  
-          var[varCount].variableName.trim();
-          var[varCount].value = parameter.substring(parameter.indexOf('=')+1).toInt();  
-
-          Serial1.println( var[varCount].variableName );
-          Serial1.println( var[varCount].value );
-          varCount++;
-        }
-      }
-      else if (commands[i].instruction.equals("WHILE") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        if (compare ( parameter )) {
-          execute = true;
-        } else {
-          execute = false;
-        }
-        blockStart[nestedWhile] = i;
-        nestedWhile++;
-      }
-      else if (commands[i].instruction.equals("IF") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-
-        if (compare ( parameter )) {
-          execute = true;
-        } else {
-          execute = false;
-        }
-        // nestedIf++;
-      }
-      else if (commands[i].instruction.equals("ELSE")) {
-        execute = !execute;
-      }
-      else if (commands[i].instruction.equals("ENDWHILE")) {
-        nestedWhile--;
-        if (execute) i = blockStart[nestedWhile]-1;
-        else {
-          execute = true;
-        } 
-      }
-      else if (commands[i].instruction.equals("ENDIF")) {
-        // nestedIf--;
+    }
+    else if (commands[i].instruction.equals("WHILE") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+      if (compare ( parameter )) {
         execute = true;
+      } else {
+        execute = false;
       }
-      else if (
-        (
-          commands[i].instruction.startsWith("COMMAND") ||
-          commands[i].instruction.startsWith("CTRL") ||
-          commands[i].instruction.startsWith("ALT") ||
-          commands[i].instruction.startsWith("OPTION") ||
-          commands[i].instruction.startsWith("SHIFT")
-        ) && execute
-      ) {
-        // String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        // parameter = replaceVariables(parameter, var, varCount);
-        int modifierValue = 0;
-        char keycode = commands[i].parameter[0];
-        int size = 0;
-        String * modifiers = splitModifiers(commands[i].instruction, &size);
-        callbacks.keyboardShortcut(modifiers, size, keycode);
+      blockStart[nestedWhile] = i;
+      nestedWhile++;
+    }
+    else if (commands[i].instruction.equals("IF") && execute) {
+      String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+      parameter = replaceVariables(parameter, var, varCount);
+
+      if (compare ( parameter )) {
+        execute = true;
+      } else {
+        execute = false;
       }
+    }
+    else if (commands[i].instruction.equals("ELSE")) {
+      execute = !execute;
+    }
+    else if (commands[i].instruction.equals("ENDWHILE")) {
+      nestedWhile--;
+      if (execute) i = blockStart[nestedWhile]-1;
+      else {
+        execute = true;
+      } 
+    }
+    else if (commands[i].instruction.equals("ENDIF")) {
+      execute = true;
+    }
+    else if (
+      (
+        commands[i].instruction.startsWith("COMMAND") ||
+        commands[i].instruction.startsWith("CTRL") ||
+        commands[i].instruction.startsWith("ALT") ||
+        commands[i].instruction.startsWith("OPTION") ||
+        commands[i].instruction.startsWith("SHIFT") ||
+        (commands[i].instruction.startsWith("WINDOWS") && commands[i-1].instruction.startsWith("INJECT_MOD")) ||
+        (commands[i].instruction.startsWith("GUI") && commands[i-1].instruction.startsWith("INJECT_MOD"))
+
+      ) && execute
+    ) {
+      int modifierValue = 0;
+      char keycode = commands[i].parameter[0];
+      int size = 0;
+      String * modifiers = splitModifiers(commands[i].instruction, &size);
+      callbacks.keyboardShortcut(modifiers, size, keycode);
+    }
     i++;
   }
     delete[] commands;
