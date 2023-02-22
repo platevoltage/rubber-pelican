@@ -4,6 +4,9 @@
 #include "hidkeyboard.h"
 #include "hidkeylayout.h"
 //modifier keys
+
+#define NUM_OF_MODS 5
+
 #define MOD_COMMAND 8
 #define MOD_CTRL 1
 #define MOD_OPTION 4
@@ -64,10 +67,12 @@ typedef struct {
 } DuckyKeyMap;
 
 
+
 extern HIDkeyboard keyboard;
 void initializeKeyboard();
 // void callback(String string); //duckyBlock uses this function to to decided what happens when a 
 
-int getKeycode(String keyString);
+int getKeyCode(String keyString);
+int getModCode(String keyString);
 
 #endif

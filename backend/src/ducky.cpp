@@ -116,18 +116,18 @@ void updateVariable(String varToBeChanged, int newValue, DuckyVariable * var, in
     }
   }
 }
-String * splitModifiers(String string, int * size) {
-  string+="-";
-  int _size = 0;
-  String * modifiers = new String[5];
-  while (string.length() > 0) {                                   
-    modifiers[_size] = string.substring(0, string.indexOf('-'));  
-    string = string.substring(string.indexOf('-') + 1);  
-    _size++;
-  }
-  *size = _size;
-  return modifiers;
-}
+// String * splitModifiers(String string, int * size) {
+//   string+="-";
+//   int _size = 0;
+//   String * modifiers = new String[5];
+//   while (string.length() > 0) {                                   
+//     modifiers[_size] = string.substring(0, string.indexOf('-'));  
+//     string = string.substring(string.indexOf('-') + 1);  
+//     _size++;
+//   }
+//   *size = _size;
+//   return modifiers;
+// }
 
 DuckyCommand * splitByLine(String string, int * size) {
   int _size = 0;
@@ -266,11 +266,11 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
 
       ) && execute
     ) {
-      int modifierValue = 0;
+      // int modifierValue = 0;
       // char keycod = commands[i].parameter[0];
-      int size = 0;
-      String * modifiers = splitModifiers(commands[i].instruction, &size);
-      callbacks.keyboardShortcut(modifiers, size, commands[i].parameter);
+      // int size = 0;
+      // String * modifiers = splitModifiers(commands[i].instruction, &size);
+      callbacks.keyboardShortcut(commands[i].instruction, commands[i].parameter);
     }
     i++;
   }

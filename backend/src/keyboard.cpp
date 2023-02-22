@@ -3,6 +3,14 @@
 
 HIDkeyboard keyboard;
 
+DuckyKeyMap duckyModMap[NUM_OF_MODS] = {
+    {"COMMAND", MOD_COMMAND},
+    {"CTRL", MOD_CTRL},
+    {"OPTION", MOD_OPTION},
+    {"ALT", MOD_ALT},
+    {"SHIFT", MOD_SHIFT},
+};
+
 DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"COMMAND", COMMAND},
     {"WINDOWS", WINDOWS},
@@ -53,12 +61,39 @@ void initializeKeyboard() {
   keyboard.begin();
 }
 
-int getKeycode(String keyString) {
+String * splitModifiers(String string, int * size) {
+  string+="-";
+  int _size = 0;
+  String * modifiers = new String[5];
+  while (string.length() > 0) {                                   
+    modifiers[_size] = string.substring(0, string.indexOf('-'));  
+    string = string.substring(string.indexOf('-') + 1);  
+    _size++;
+  }
+  *size = _size;
+  return modifiers;
+}
+
+int getKeyCode(String keyString) {
   for (int i = 0; i < NUM_OF_KEYS; i++) {
     if (keyString == duckyKeyMap[i].name) {
       return duckyKeyMap[i].code;
     }
   }
   return keymap[keyString[0]].usage;
+
+}
+
+int getModCode(String modString) {
+    int size = 0;
+    int modifierValue = 0;
+    String * modifiers = splitModifiers(modString, &size);
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < NUM_OF_MODS; j++) {
+        modifierValue += duckyModMap[i].code;
+        break;
+      }
+    }
+    return modifierValue;
 
 }

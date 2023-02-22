@@ -21,23 +21,23 @@ void keyboardCallback(String string) {
       // keyboard.sendPress(0, 14); //command/option/shift
       // keyboard.sendPress(0, 15); //command/shift/ctrl/option
 
-void keyboardShortcutCallback(String * modifiers, int size, String key) { 
-  int modifierValue = 0;
-  int keyValue = 0;
-  bool printingKey = false;
+void keyboardShortcutCallback(String modifiers, String key) { 
+  // int modifierValue = 0;
+  // int keyValue = 0;
+  // bool printingKey = false;
 
-  for (int i = 0; i < size; i++) {
-    if (modifiers[i].equals("OPTION")) modifierValue += MOD_OPTION;
-    if (modifiers[i].equals("ALT")) modifierValue += MOD_ALT;
-    else if (modifiers[i].equals("CTRL")) modifierValue += MOD_CTRL;
-    else if (modifiers[i].equals("SHIFT")) modifierValue += MOD_SHIFT;
-    else if (modifiers[i].equals("COMMAND")) modifierValue += MOD_COMMAND;
-    else if (modifiers[i].equals("WINDOWS")) modifierValue += MOD_COMMAND;
-    else if (modifiers[i].equals("GUI")) modifierValue += MOD_COMMAND;
-  }
+  // for (int i = 0; i < size; i++) {
+  //   if (modifiers[i].equals("OPTION")) modifierValue += MOD_OPTION;
+  //   if (modifiers[i].equals("ALT")) modifierValue += MOD_ALT;
+  //   else if (modifiers[i].equals("CTRL")) modifierValue += MOD_CTRL;
+  //   else if (modifiers[i].equals("SHIFT")) modifierValue += MOD_SHIFT;
+  //   else if (modifiers[i].equals("COMMAND")) modifierValue += MOD_COMMAND;
+  //   else if (modifiers[i].equals("WINDOWS")) modifierValue += MOD_COMMAND;
+  //   else if (modifiers[i].equals("GUI")) modifierValue += MOD_COMMAND;
+  // }
 
   
-  keyboard.sendKey(getKeycode(key), modifierValue);
+  keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
 
 
 }
