@@ -116,6 +116,18 @@ void updateVariable(String varToBeChanged, int newValue, DuckyVariable * var, in
     }
   }
 }
+String * splitModifiers(String string, int * size) {
+  string+="-";
+  int _size = 0;
+  String * modifiers = new String[5];
+  while (string.length() > 0) {                                   
+    modifiers[_size] = string.substring(0, string.indexOf('-'));  
+    string = string.substring(string.indexOf('-') + 1);  
+    _size++;
+  }
+  *size = _size;
+  return modifiers;
+}
 
 DuckyCommand * splitByLine(String string, int * size) {
   int _size = 0;
@@ -125,7 +137,9 @@ DuckyCommand * splitByLine(String string, int * size) {
     line = string.substring(0, string.indexOf('\n'));     // extract the first line and store it in the array
     line.trim();
     commands[_size].instruction = line.substring(0, string.indexOf(' '));  
-    commands[_size].parameter = line.substring(string.indexOf(' ')+1);  
+    if (string.indexOf(' ') >= 0) {
+      commands[_size].parameter = line.substring(string.indexOf(' ')+1);  
+    } 
     string = string.substring(string.indexOf('\n') + 1);              // remove the first line from the input string                                
     if (line.length() > 0) {
       _size++;    // increment the index of the lines array unless the line is blank  
@@ -243,6 +257,19 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       else if (commands[i].instruction.equals("ENDIF")) {
         // nestedIf--;
         execute = true;
+      }
+      else if (
+        (
+          commands[i].instruction.startsWith("COMMAND") ||
+          commands[i].instruction.startsWith("CTRL") ||
+          commands[i].instruction.startsWith("ALT") ||
+          commands[i].instruction.startsWith("OPTION") ||
+          commands[i].instruction.startsWith("SHIFT")
+        ) && execute
+      ) {
+        // String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        // parameter = replaceVariables(parameter, var, varCount);
+        callbacks.keyboardShortcut(commands[i]);
       }
     i++;
   }
