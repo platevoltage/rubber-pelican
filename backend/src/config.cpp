@@ -21,11 +21,11 @@ void keyboardCallback(String string) {
       // keyboard.sendPress(0, 14); //command/option/shift
       // keyboard.sendPress(0, 15); //command/shift/ctrl/option
 
-void keyboardShortcutCallback(DuckyCommand command) { 
+void keyboardShortcutCallback(String * modifiers, int size, char keycode) { 
   int modifierValue = 0;
-  char keycode = command.parameter[0];
-  int size = 0;
-  String * modifiers = splitModifiers(command.instruction, &size);
+  // char keycode = command.parameter[0];
+  // int size = 0;
+  // String * modifiers = splitModifiers(command.instruction, &size);
   for (int i = 0; i < size; i++) {
     if (modifiers[i].equals("OPTION")) modifierValue += OPTION;
     else if (modifiers[i].equals("ALT")) modifierValue += ALT;
