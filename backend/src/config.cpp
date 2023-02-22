@@ -21,19 +21,28 @@ void keyboardCallback(String string) {
       // keyboard.sendPress(0, 14); //command/option/shift
       // keyboard.sendPress(0, 15); //command/shift/ctrl/option
 
-void keyboardShortcutCallback(String * modifiers, int size, char keycode) { 
+void keyboardShortcutCallback(String * modifiers, int size, String key) { 
   int modifierValue = 0;
+  int keyValue = 0;
+  bool printingKey = false;
 
   for (int i = 0; i < size; i++) {
-    if (modifiers[i].equals("OPTION")) modifierValue += OPTION;
-    else if (modifiers[i].equals("ALT")) modifierValue += ALT;
-    else if (modifiers[i].equals("CTRL")) modifierValue += CTRL;
-    else if (modifiers[i].equals("SHIFT")) modifierValue += SHIFT;
-    else if (modifiers[i].equals("COMMAND") || modifiers[i].equals("WINDOWS") || modifiers[i].equals("GUI")) modifierValue += COMMAND;
+    if (modifiers[i].equals("OPTION") || modifiers[i].equals("ALT")) modifierValue += MOD_OPTION;
+    else if (modifiers[i].equals("CTRL")) modifierValue += MOD_CTRL;
+    else if (modifiers[i].equals("SHIFT")) modifierValue += MOD_SHIFT;
+    else if (modifiers[i].equals("COMMAND") || modifiers[i].equals("WINDOWS") || modifiers[i].equals("GUI")) modifierValue += MOD_COMMAND;
   }
-  vTaskDelay(pdMS_TO_TICKS(1000));
-
-  keyboard.sendKey(keymap[keycode].usage, modifierValue); 
+  if (key.equals("OPTION") || key.equals("ALT")) keyValue = OPTION;
+  else if (key.equals("CTRL")) keyValue = CTRL;
+  else if (key.equals("SHIFT")) keyValue = SHIFT;
+  else if (key.equals("COMMAND") || key.equals("WINDOWS") || key.equals("GUI")) keyValue = COMMAND;
+  else if (key.equals("ESCAPE")) keyValue = ESCAPE;
+  else if (key.equals("ENTER")) keyValue = ENTER;
+  else if (key.equals("SPACE")) keyValue = SPACE;
+  else printingKey = true;
+  
+  if (printingKey) keyboard.sendKey(keymap[ key[0] ].usage, modifierValue);
+  else keyboard.sendKey(keyValue, modifierValue); 
 
 }
 

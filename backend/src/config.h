@@ -18,7 +18,7 @@
 // } DuckyCallbacks;
 
 void keyboardCallback(String string);
-void keyboardShortcutCallback(String * modifiers, int size, char keycode);
+void keyboardShortcutCallback(String * modifiers, int size, String key);
 void delayCallback(int milliseconds);
 void ledCallback(uint32_t color);
 

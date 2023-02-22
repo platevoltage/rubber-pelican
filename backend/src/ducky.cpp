@@ -267,10 +267,10 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       ) && execute
     ) {
       int modifierValue = 0;
-      char keycode = commands[i].parameter[0];
+      // char keycod = commands[i].parameter[0];
       int size = 0;
       String * modifiers = splitModifiers(commands[i].instruction, &size);
-      callbacks.keyboardShortcut(modifiers, size, keycode);
+      callbacks.keyboardShortcut(modifiers, size, commands[i].parameter);
     }
     i++;
   }
