@@ -163,45 +163,71 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   DuckyVariable var[10];
   int varCount = 0;
 
+  size_t instructionsMap0Size = 19;
+  String instructionsMap0[instructionsMap0Size] = { //performed only when execute = true
+    "STRINGLN",
+    "STRING",
+    "DELAY",
+    "LED_R",
+    "LED_G",
+    "LED_B",
+    "LED_OFF",
+    "$",
+    "VAR",
+    "WHILE",
+    "IF",
+    "ELSE",
+    "ENDWHILE",
+    "ENDIF",
+    "COMMAND",
+    "ALT",
+    "SHIFT",
+    "OPTION",
+    "CTRL"
+  };
+
   int i = 0;
   while( i < commands_t ) {
-    // if (nestedWhile == 0) {
-      if (commands[i].instruction.equals("STRING") && execute) {
-        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        parameter = replaceVariables(parameter, var, varCount);
-        callbacks.keyboard(parameter);
+    int instruction;
+    for (int j = 0; j < instructionsMapSize0; j++ ) {
+      if (commands[i].instruction.startsWith(instructionsMap0[j])) {
+        instruction = j;
+        break;
       }
-      else if (commands[i].instruction.equals("STRINGLN") && execute) {
+    }
+    switch (instruction) {
+      case 0: { //STRINGLN
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         callbacks.keyboard(parameter + '\n');
+        break;
       }
-      else if (commands[i].instruction.equals("DELAY") && execute) {
+      case 1: { //STRING
+        String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
+        parameter = replaceVariables(parameter, var, varCount);
+        callbacks.keyboard(parameter);
+        break;
+      }
+      case 2: { //DELAY
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         Serial1.println(parameter);
         callbacks.delay(parameter.toInt());
+        break;
 
       }
-      else if (commands[i].instruction.equals("LED_R") && execute) {
-        callbacks.ledColor(0xFF0000);
-      }
-      else if (commands[i].instruction.equals("LED_G") && execute) {
-        callbacks.ledColor(0x00FF00);
-      }
-      else if (commands[i].instruction.equals("LED_B") && execute) {
-        callbacks.ledColor(0x0000FF);
-      }
-      else if (commands[i].instruction.equals("LED_OFF") && execute) {
-        callbacks.ledColor(0x000000);
-      }
-      else if (commands[i].instruction[0] == ('$') && execute) {
+      case 3: callbacks.ledColor(0xFF0000); break; //LED_R
+      case 4: callbacks.ledColor(0x00FF00); break; //LED_G
+      case 5: callbacks.ledColor(0x0000FF); break; //LED_B
+      case 6: callbacks.ledColor(0x000000); break; //LED_OFF
+      case 7: { //$ (variable)
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         int newValue = eval( parameter.substring(parameter.indexOf('=')+1) );
         updateVariable(commands[i].instruction, newValue, var, varCount);
+        break;
       }
-      else if (commands[i].instruction.equals("VAR") && execute) {
+      case 8: { //VAR
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         bool varAlreadyDeclared = false;
@@ -221,8 +247,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
           Serial1.println( var[varCount].value );
           varCount++;
         }
+        break;
       }
-      else if (commands[i].instruction.equals("WHILE") && execute) {
+      case 9: { //WHILE
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
         if (compare ( parameter )) {
@@ -232,8 +259,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         }
         blockStart[nestedWhile] = i;
         nestedWhile++;
+        break;
       }
-      else if (commands[i].instruction.equals("IF") && execute) {
+      case 10: { //IF
         String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
         parameter = replaceVariables(parameter, var, varCount);
 
@@ -242,39 +270,32 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         } else {
           execute = false;
         }
-        // nestedIf++;
+        break;
       }
-      else if (commands[i].instruction.equals("ELSE")) {
-        execute = !execute;
-      }
-      else if (commands[i].instruction.equals("ENDWHILE")) {
+      case 11: execute = !execute; break; //ELSE
+      case 12: { //ENDWHILE
         nestedWhile--;
         if (execute) i = blockStart[nestedWhile]-1;
         else {
           execute = true;
         } 
+        break;
       }
-      else if (commands[i].instruction.equals("ENDIF")) {
-        // nestedIf--;
-        execute = true;
-      }
-      else if (
-        (
-          commands[i].instruction.startsWith("COMMAND") ||
-          commands[i].instruction.startsWith("CTRL") ||
-          commands[i].instruction.startsWith("ALT") ||
-          commands[i].instruction.startsWith("OPTION") ||
-          commands[i].instruction.startsWith("SHIFT")
-        ) && execute
-      ) {
-        // String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
-        // parameter = replaceVariables(parameter, var, varCount);
+      case 13: execute = true; break; //ENDIF
+      case 14: //COMMAND
+      case 15: //ALT
+      case 16: //SHIFT
+      case 17: //OPTION
+      case 18: { //CTRL
         int modifierValue = 0;
         char keycode = commands[i].parameter[0];
         int size = 0;
         String * modifiers = splitModifiers(commands[i].instruction, &size);
         callbacks.keyboardShortcut(modifiers, size, keycode);
       }
+      break;
+    }
+
     i++;
   }
     delete[] commands;
