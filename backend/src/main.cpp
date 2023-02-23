@@ -1,12 +1,17 @@
 #include <Arduino.h>
 #include "server.h"
 #include "led.h"
+#include "flashdisk.h"
 
 
 #define BAUD 115200       // Any baudrate from 300 to 115200
 #define RXPIN 33         // GPIO 33 => RX for Serial1
 #define TXPIN 35         // GPIO 35 => TX for Serial1
 
+FlashUSB dev;
+FlashUSB dev1;
+char *l1 = "ffat";
+char *l2 = "ffat1";
 
 void setup() {
   // put your setup code here, to run once:
@@ -16,6 +21,15 @@ void setup() {
   initializeKeyboard();
   initializeLED();
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
+    if (dev.init("/fat1", "ffat"))
+    {
+        if (dev.begin())
+        {
+            Serial1.println("MSC lun 1 begin");
+        }
+        else
+            log_e("LUN 1 failed");
+    }
 
 }
 
