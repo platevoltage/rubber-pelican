@@ -6,7 +6,7 @@ void keyboardCallback(String string) {
   Serial1.println(string);
 }
 
-void keyboardShortcutCallback(String modifiers, String key) { 
+void keyboardShortcutCallback(String key, String modifiers) { 
   Serial1.print("KEY ---");
   Serial1.println(key);
   Serial1.print("MOD ---");
