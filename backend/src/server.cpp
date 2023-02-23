@@ -59,7 +59,7 @@ void interpretDuckyScript(void *parameter) {
     Serial1.println(commands[i].parameter);
   }
 
-  DuckyCallbacks callbacks = {keyboardCallback, keyboardShortcutCallback, delayCallback, ledCallback}; //contains our callbacks
+  DuckyCallbacks callbacks = {keyboardCallback, keyboardKeyPressCallback, keyboardShortcutCallback, delayCallback, ledCallback}; //contains our callbacks
   duckyBlock(commands, commands_t, callbacks);
 
 

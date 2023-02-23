@@ -255,7 +255,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       execute = true;
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
-      callbacks.keyboardShortcut(commands[i].instruction, "");
+      callbacks.keyboardKeyPress(commands[i].instruction);
     }
     else if (modExists(commands[i].instruction) && execute) {             //checks for mod keys
       bool inject_mod_enabled = commands[i-1].instruction.equals("INJECT_MOD");

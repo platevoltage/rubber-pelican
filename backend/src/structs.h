@@ -15,6 +15,7 @@ typedef struct {
 
 typedef struct {
     void (*keyboard)(String);
+    void (*keyboardKeyPress)(String);
     void (*keyboardShortcut)(String, String);
     void (*delay)(int);
     void (*ledColor)(uint32_t);

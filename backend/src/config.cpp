@@ -6,6 +6,12 @@ void keyboardCallback(String string) {
   Serial1.println(string);
 }
 
+void keyboardKeyPressCallback(String key) {  
+  Serial1.print("KEY ---");
+  Serial1.println(key);
+  keyboard.sendKey(getKeyCode(key));
+}
+
 void keyboardShortcutCallback(String key, String modifiers) { 
   Serial1.print("KEY ---");
   Serial1.println(key);
@@ -13,6 +19,7 @@ void keyboardShortcutCallback(String key, String modifiers) {
   Serial1.println(modifiers);
   keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
 }
+
 
 void delayCallback(int milliseconds) {
     Serial1.print("DELAY - ");
