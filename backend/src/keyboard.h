@@ -73,6 +73,8 @@ void initializeKeyboard();
 // void callback(String string); //duckyBlock uses this function to to decided what happens when a 
 
 int getKeyCode(String keyString);
-int getModCode(String keyString);
+int getModCode(String modString);
+bool keyExists(String keyString);
+bool modExists(String modString);
 
 #endif

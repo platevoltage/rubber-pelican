@@ -95,5 +95,23 @@ int getModCode(String modString) {
       }
     }
     return modifierValue;
+}
 
+bool keyExists(String keyString) {
+    for (int i = 0; i < NUM_OF_KEYS; i++) {
+      if (keyString == duckyKeyMap[i].name) {
+        return true;
+      }
+    }
+    return false;
+}
+
+bool modExists(String modString) {
+  //still need to handle inject_mod
+    for (int i = 0; i < NUM_OF_KEYS; i++) {
+      if (modString.startsWith( duckyModMap[i].name) ) {
+        return true;
+      }
+    }
+    return false;
 }

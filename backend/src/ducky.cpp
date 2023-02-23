@@ -254,22 +254,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     else if (commands[i].instruction.equals("ENDIF")) {
       execute = true;
     }
-    else if (
-      (
-        commands[i].instruction.startsWith("COMMAND") ||
-        commands[i].instruction.startsWith("CTRL") ||
-        commands[i].instruction.startsWith("ALT") ||
-        commands[i].instruction.startsWith("OPTION") ||
-        commands[i].instruction.startsWith("SHIFT") ||
-        (commands[i].instruction.startsWith("WINDOWS") && commands[i-1].instruction.startsWith("INJECT_MOD")) ||
-        (commands[i].instruction.startsWith("GUI") && commands[i-1].instruction.startsWith("INJECT_MOD"))
-
-      ) && execute
-    ) {
-      // int modifierValue = 0;
-      // char keycod = commands[i].parameter[0];
-      // int size = 0;
-      // String * modifiers = splitModifiers(commands[i].instruction, &size);
+    else if (modExists(commands[i].instruction) && execute) { //checks for mod keys
+      bool inject_mod_enabled = commands[i-1].instruction.equals("INJECT_MOD");
+      // bool inject_mod_enabled = true;
       callbacks.keyboardShortcut(commands[i].instruction, commands[i].parameter);
     }
     i++;
