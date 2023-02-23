@@ -64,7 +64,7 @@
 #define F12 0x45
 #define CAPSLOCK 0x39
 #define NUMLOCK 0x53
-#define SCROLLOCK 0x47
+#define SCROLLLOCK 0x47
 
 typedef struct {
     String name;

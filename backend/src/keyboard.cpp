@@ -59,7 +59,7 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"F12", F12},
     {"CAPSLOCK", CAPSLOCK},
     {"NUMLOCK", NUMLOCK},
-    {"SCROLLLOCK", SCROLLOCK},
+    {"SCROLLLOCK", SCROLLLOCK},
 
 };
 
