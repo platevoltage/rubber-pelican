@@ -7,6 +7,10 @@ void keyboardCallback(String string) {
 }
 
 void keyboardShortcutCallback(String modifiers, String key) { 
+  Serial1.print("KEY ---");
+  Serial1.println(key);
+  Serial1.print("MOD ---");
+  Serial1.println(modifiers);
   keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
 }
 

@@ -90,8 +90,10 @@ int getModCode(String modString) {
     String * modifiers = splitModifiers(modString, &size);
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < NUM_OF_MODS; j++) {
-        modifierValue += duckyModMap[i].code;
-        break;
+        if (duckyModMap[j].name.equals(modifiers[i])) {
+          modifierValue += duckyModMap[j].code;
+          break;
+        }
       }
     }
     return modifierValue;
@@ -108,7 +110,7 @@ bool keyExists(String keyString) {
 
 bool modExists(String modString) {
   //still need to handle inject_mod
-    for (int i = 0; i < NUM_OF_KEYS; i++) {
+    for (int i = 0; i < NUM_OF_MODS; i++) {
       if (modString.startsWith( duckyModMap[i].name) ) {
         return true;
       }

@@ -254,10 +254,13 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     else if (commands[i].instruction.equals("ENDIF")) {
       execute = true;
     }
-    else if (modExists(commands[i].instruction) && execute) { //checks for mod keys
+    else if (modExists(commands[i].instruction) && execute) {             //checks for mod keys
       bool inject_mod_enabled = commands[i-1].instruction.equals("INJECT_MOD");
       // bool inject_mod_enabled = true;
       callbacks.keyboardShortcut(commands[i].instruction, commands[i].parameter);
+    }
+    else if (keyExists(commands[i].instruction) && execute) {  
+      callbacks.keyboardShortcut("", commands[i].instruction);
     }
     i++;
   }
