@@ -1,3 +1,0 @@
-static const char _main_css[] PROGMEM = R"=====(
-body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;margin:0}code{font-family:source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace}.App{background-color:#282c34;color:#fff;font-size:1rem;min-height:100vh}.App,.DuckyInput{align-items:center;display:flex;flex-direction:column;justify-content:center}textarea{background-color:#000;color:#fff;font-family:Roboto Mono,Droid Sans Mono,Lucida Console,Monaco,monospace;height:100px;width:1000px}
-)=====";
