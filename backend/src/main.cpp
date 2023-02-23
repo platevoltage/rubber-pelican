@@ -23,9 +23,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int buttonValue = digitalRead(13);
-     if (buttonValue == LOW){
-      // If button pushed, turn LED on
-      Serial1.println("pushed");
-    }
+  // int buttonValue = digitalRead(13);
+  //    if (buttonValue == LOW){
+  //     // If button pushed, turn LED on
+  //     Serial1.println("pushed");
+  //   }
 }

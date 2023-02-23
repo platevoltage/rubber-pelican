@@ -264,6 +264,19 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.keyboardShortcut(commands[i].parameter, commands[i].instruction);
       }
     }
+    else if (commands[i].instruction.equals("WAIT_FOR_BUTTON_PRESS") && execute) {
+      Serial1.println("WAITING FOR BUTTON PRESS");
+      execute = false;
+      while (!execute) {
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+        if (digitalRead(13)) {
+          while (!execute) {
+            vTaskDelay(1 / portTICK_PERIOD_MS);
+            execute = !digitalRead(13);
+          }
+        }
+      }
+    }
     i++;
   }
     delete[] commands;
