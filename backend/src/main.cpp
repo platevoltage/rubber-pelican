@@ -16,7 +16,7 @@ void setup() {
 
   initializeKeyboard();
   initializeLED();
-  initializeFlash();
+  // initializeFlash();
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
 
 }

@@ -22,6 +22,7 @@ void keyboardKeyPressCallback(String key);
 void keyboardShortcutCallback(String key, String modifiers);
 void delayCallback(int milliseconds);
 void ledCallback(uint32_t color);
+bool buttonCallback();
 
 
 #endif

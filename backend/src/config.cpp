@@ -34,3 +34,20 @@ void ledCallback(uint32_t color) {
     changeLEDColor(color);
 
 }
+
+bool buttonCallback() {
+  //after WAIT_FOR_BUTTON_PRESS, the DuckyScript program gets stuck in an infinite loop until this fuction returns TRUE;
+
+  bool buttonPressed = !digitalRead(13);
+  bool resume = false;
+  vTaskDelay(20 / portTICK_PERIOD_MS);        //this delay acts as a debounce, use delay(20) if you wish
+  if (!buttonPressed) {                       //prevents button listening while button already pressed
+    while (!resume) {
+      buttonPressed = !digitalRead(13);       //listen for button
+      resume = buttonPressed; 
+      vTaskDelay(1 / portTICK_PERIOD_MS);     //add a short delay to yield to other processes
+    }
+  }
+  return resume;                              //returns false until button is pressed
+
+}

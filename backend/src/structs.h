@@ -19,6 +19,7 @@ typedef struct {
     void (*keyboardShortcut)(String, String);
     void (*delay)(int);
     void (*ledColor)(uint32_t);
+    bool (*button)();
 } DuckyCallbacks;
 
 #endif
