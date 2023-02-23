@@ -17,7 +17,7 @@
 
 //regular keys
 
-#define NUM_OF_KEYS 43
+#define NUM_OF_KEYS 46
 
 #define COMMAND 0xE3
 #define WINDOWS 0xE3
@@ -62,6 +62,9 @@
 #define F10 0x43
 #define F11 0x44
 #define F12 0x45
+#define CAPSLOCK 0x39
+#define NUMLOCK 0x53
+#define SCROLLOCK 0x47
 
 typedef struct {
     String name;

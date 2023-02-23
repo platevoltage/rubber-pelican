@@ -56,7 +56,11 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"F9", F9},
     {"F10", F10},
     {"F11", F11},
-    {"F12", F12}
+    {"F12", F12},
+    {"CAPSLOCK", CAPSLOCK},
+    {"NUMLOCK", NUMLOCK},
+    {"SCROLLLOCK", SCROLLOCK},
+
 };
 
 void initializeKeyboard() {
