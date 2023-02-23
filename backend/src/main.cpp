@@ -2,51 +2,13 @@
 #include "server.h"
 #include "led.h"
 #include "flash.h"
-#include <LittleFS.h>
-#include "FS.h"
+#include "_littlefs.h"
 
 #define BAUD 115200       // Any baudrate from 300 to 115200
 #define RXPIN 33         // GPIO 33 => RX for Serial1
 #define TXPIN 35         // GPIO 35 => TX for Serial1
 
 esp_reset_reason_t BootReason = esp_reset_reason();
-
-void writeFile(const char * path, const char * message) {
-  Serial1.printf("Writing file: %s\n", path);
-
-  File file = LittleFS.open(path, "w");
-  if (!file) {
-    Serial1.println("Failed to open file for writing");
-    return;
-  }
-  if (file.print(message)) {
-    Serial1.println("File written");
-  } else {
-    Serial1.println("Write failed");
-  }
-  delay(200); // Make sure the CREATE and LASTWRITE times are different
-  file.close();
-}
-String readFile(const char * path) {
-  Serial1.printf("Reading file: %s\n", path);
-
-  File file = LittleFS.open(path, "r");
-  if (!file) {
-    Serial1.println("Failed to open file for reading");
-  }
-
-  Serial1.print("Read from file: ");
-  String data;
-
-  while (file.available()) {
-    data += file.readString();
-
-    // Serial.write(file.read());
-  }
-  // Serial.println(data);
-  file.close();
-  return data;
-}
 
 void setup() {
   // put your setup code here, to run once:
@@ -105,13 +67,13 @@ void setup() {
       break;
   }
   pinMode(13, INPUT_PULLUP);
-  if(!LittleFS.begin(true)){
-    Serial1.println("LITTLEFS Mount Failed");
-    return;
-  }
+
+  initializeLittleFS();
+  
   writeFile( "/test.txt", "test");
   String message = readFile( "/test.txt");
   Serial1.println(message);
+
   initializeKeyboard();
   initializeLED();
   initializeFlash();
