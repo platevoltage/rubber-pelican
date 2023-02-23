@@ -11,6 +11,7 @@
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(BAUD, SERIAL_8N1, RXPIN, TXPIN);
+  pinMode(13, INPUT_PULLUP);
 
   initializeKeyboard();
   initializeLED();
@@ -20,4 +21,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  int buttonValue = digitalRead(13);
+     if (buttonValue == LOW){
+      // If button pushed, turn LED on
+      Serial1.println("pushed");
+    }
 }
