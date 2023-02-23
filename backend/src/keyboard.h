@@ -5,9 +5,11 @@
 #include "hidkeylayout.h"
 //modifier keys
 
-#define NUM_OF_MODS 5
+#define NUM_OF_MODS 7
 
 #define MOD_COMMAND 8
+#define MOD_WINDOWS 8
+#define MOD_GUI 8
 #define MOD_CTRL 1
 #define MOD_OPTION 4
 #define MOD_ALT 4

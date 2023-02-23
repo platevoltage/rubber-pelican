@@ -5,6 +5,8 @@ HIDkeyboard keyboard;
 
 DuckyKeyMap duckyModMap[NUM_OF_MODS] = {
     {"COMMAND", MOD_COMMAND},
+    {"WINDOWS", MOD_WINDOWS},
+    {"GUI", MOD_GUI},
     {"CTRL", MOD_CTRL},
     {"OPTION", MOD_OPTION},
     {"ALT", MOD_ALT},

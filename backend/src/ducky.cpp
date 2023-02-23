@@ -259,8 +259,14 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     }
     else if (modExists(commands[i].instruction) && execute) {             //checks for mod keys
       bool inject_mod_enabled = commands[i-1].instruction.equals("INJECT_MOD");
-      // bool inject_mod_enabled = true;
-      callbacks.keyboardShortcut(commands[i].parameter, commands[i].instruction);
+      Serial.println(inject_mod_enabled);
+      Serial.println(commands[i].instruction.indexOf("WINDOWS"));
+      Serial.println(commands[i].instruction.indexOf("GUI"));
+      if ((commands[i].instruction.indexOf("WINDOWS") > -1 || commands[i].instruction.indexOf("GUI") > -1) && !inject_mod_enabled) {
+        Serial1.println("WINDOWS or GUI keys used as modifiers requires INJECT_MOD on previous line");
+      } else {
+        callbacks.keyboardShortcut(commands[i].parameter, commands[i].instruction);
+      }
     }
     i++;
   }
