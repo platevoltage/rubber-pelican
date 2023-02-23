@@ -132,13 +132,12 @@ void updateVariable(String varToBeChanged, int newValue, DuckyVariable * var, in
 DuckyCommand * splitByLine(String string, int * size) {
   int _size = 0;
   DuckyCommand * commands = new DuckyCommand[100];
-  while (string.length() > 0) {   
-    String line;                                    // loop until the input string is empty
-    line = string.substring(0, string.indexOf('\n'));     // extract the first line and store it in the array
+  while (string.length() > 0) {   // loop until the input string is empty
+    String line = string.substring(0, string.indexOf('\n'));     // extract the first line and store it in the array
     line.trim();
-    commands[_size].instruction = line.substring(0, string.indexOf(' '));  
+    commands[_size].instruction = line.substring(0, line.indexOf(' '));  
     if (string.indexOf(' ') >= 0) {
-      commands[_size].parameter = line.substring(string.indexOf(' ')+1);  
+      commands[_size].parameter = line.substring(line.indexOf(' ')+1);  
     } 
     string = string.substring(string.indexOf('\n') + 1);              // remove the first line from the input string                                
     if (line.length() > 0) {
