@@ -162,7 +162,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   bool execute = true;
   DuckyVariable var[10];
   int varCount = 0;
-  int i = 0;
+  int i = startOnBlock;
   if (startOnBlock > 0) {
       varCount = varCountStorage;
       nestedWhile = nestedWhileStorage;
@@ -178,7 +178,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     if (commands[i].instruction.equals("STRING") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
-      if (startOnBlock < i) callbacks.keyboard(parameter);
+      callbacks.keyboard(parameter);
     }
     else if (commands[i].instruction.equals("STRINGLN") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
@@ -189,7 +189,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
       Serial1.println(parameter);
-      if (startOnBlock < i) callbacks.delay(parameter.toInt());
+      callbacks.delay(parameter.toInt());
     }
     else if (commands[i].instruction.equals("LED_R") && execute) {
       callbacks.ledColor(0xFF0000);
@@ -265,14 +265,14 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       execute = true;
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
-      if (startOnBlock < i) callbacks.keyboardKeyPress(commands[i].instruction);
+      callbacks.keyboardKeyPress(commands[i].instruction);
     }
     else if (modExists(commands[i].instruction) && execute) {             //checks for mod keys
       bool inject_mod_enabled = commands[i-1].instruction.equals("INJECT_MOD");
       if ((commands[i].instruction.indexOf("WINDOWS") > -1 || commands[i].instruction.indexOf("GUI") > -1) && !inject_mod_enabled) {
         Serial1.println("WINDOWS or GUI keys used as modifiers requires INJECT_MOD on previous line");
       } else {
-        if (startOnBlock < i) callbacks.keyboardShortcut(commands[i].parameter, commands[i].instruction);
+        callbacks.keyboardShortcut(commands[i].parameter, commands[i].instruction);
       }
     }
     else if (commands[i].instruction.equals("WAIT_FOR_BUTTON_PRESS") && execute) {
