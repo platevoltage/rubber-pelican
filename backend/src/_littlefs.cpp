@@ -42,6 +42,6 @@ String readFile(const char * path) {
 void initializeLittleFS() {
     if(!LittleFS.begin(true)){
         Serial1.println("LITTLEFS Mount Failed");
-    return;
-  }
+        return;
+    }
 }

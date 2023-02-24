@@ -1,5 +1,6 @@
 
 #include "server.h"
+#include "_littlefs.h"
 
 WebServer server(80);
 
@@ -71,6 +72,7 @@ void interpretDuckyScript(void *parameter) {
 void startInterpretDuckyScript() {
   sendHeaders();
   String body = server.arg("plain");
+  writeFile( "/ducky.txt", body.c_str());
   int len = body.length() + 1;
   char *buf = new char[len];
   body.toCharArray(buf, len);

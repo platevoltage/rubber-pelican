@@ -69,9 +69,8 @@ void setup() {
   pinMode(13, INPUT_PULLUP);
 
   initializeLittleFS();
-  
-  writeFile( "/test.txt", "test");
-  String message = readFile( "/test.txt");
+
+  String message = readFile( "/ducky.txt");
   Serial1.println(message);
 
   initializeKeyboard();
