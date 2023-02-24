@@ -68,9 +68,17 @@ void interpretDuckyScript(void *parameter) {
   vTaskDelete(NULL);
 }
 
+void continueDuckyScript(String string, int startOnLine) {
+    int len = string.length() + 1;
+    char *buf = new char[len];
+    string.toCharArray(buf, len);
+    xTaskCreate(interpretDuckyScript, "myTask", 10000, &buf, 2, NULL); // pass the address of param as pvParameters
+}
+
 
 void startInterpretDuckyScript() {
   sendHeaders();
+
   String body = server.arg("plain");
   writeFile( "/ducky.txt", body.c_str());
   int len = body.length() + 1;
@@ -163,6 +171,10 @@ void serverStart() {
 }
 
 void serverTask(void *pvParameters) {
+  // String string = readFile( "/ducky.txt");
+  // Serial1.println(string);
+  // int startOnLine = 1;
+  // continueDuckyScript(string, startOnLine);
   serverStart();
 
   while (true) {

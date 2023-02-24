@@ -13,5 +13,6 @@
 
 
 void serverTask(void *pvParameters);
+void continueDuckyScript(String string, int startOnLine);
 
 #endif

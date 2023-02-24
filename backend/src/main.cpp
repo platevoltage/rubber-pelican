@@ -69,14 +69,19 @@ void setup() {
   pinMode(13, INPUT_PULLUP);
 
   initializeLittleFS();
+  
 
-  String message = readFile( "/ducky.txt");
-  Serial1.println(message);
+
 
   initializeKeyboard();
   initializeLED();
   initializeFlash();
+  // String string = readFile( "/ducky.txt");
+  // Serial1.println(string);
+  // int startOnLine = 3;
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
+  // vTaskDelay(20 / portTICK_PERIOD_MS);  
+  // continueDuckyScript(string, startOnLine);
 
 }
 
