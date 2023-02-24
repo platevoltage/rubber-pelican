@@ -70,18 +70,18 @@ void setup() {
 
   initializeLittleFS();
   
+  Serial1.print("STARTONLINE - ");
+  Serial1.println(startOnLineBoot);
 
-
-
-  initializeKeyboard();
+  // initializeKeyboard();
   initializeLED();
-  initializeFlash();
-  // String string = readFile( "/ducky.txt");
+  // initializeFlash();
+  String string = readFile( "/ducky.txt");
   // Serial1.println(string);
   // int startOnLine = 3;
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
-  // vTaskDelay(20 / portTICK_PERIOD_MS);  
-  // continueDuckyScript(string, startOnLine);
+  vTaskDelay(2000 / portTICK_PERIOD_MS);  
+  if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);
 
 }
 

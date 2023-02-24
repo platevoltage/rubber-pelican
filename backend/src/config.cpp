@@ -1,15 +1,15 @@
 #include "config.h"
 
 void keyboardCallback(String string) {  
-  keyboard.sendString(string);
   Serial1.print("PRINTING TO KEYBOARD - ");
   Serial1.println(string);
+  if (keyboardActivated) keyboard.sendString(string);
 }
 
 void keyboardKeyPressCallback(String key) {  
   Serial1.print("KEY ---");
   Serial1.println(key);
-  keyboard.sendKey(getKeyCode(key));
+  if (keyboardActivated) keyboard.sendKey(getKeyCode(key));
 }
 
 void keyboardShortcutCallback(String key, String modifiers) { 
@@ -17,7 +17,7 @@ void keyboardShortcutCallback(String key, String modifiers) {
   Serial1.println(key);
   Serial1.print("MOD ---");
   Serial1.println(modifiers);
-  keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
+  if (keyboardActivated) keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
 }
 
 

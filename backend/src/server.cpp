@@ -39,13 +39,18 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
   // digitalWrite(LED_BUILTIN, 0);
 }
-
+struct TaskParameters {
+  String string;
+  int startOnLine;
+};
 
 void interpretDuckyScript(void *parameter) {
 
   // const char *param = (const char*)parameter;
-  String string = String((const char*)parameter);
-
+  // String string = String((const char*)parameter);
+  TaskParameters* params = (TaskParameters*) parameter;
+  String string = params->string;
+  int startOnLine = params->startOnLine;
   // sendHeaders();
   Serial1.println(string);
   string.replace("ELSE IF", "ELSE\nIF");
@@ -61,18 +66,21 @@ void interpretDuckyScript(void *parameter) {
   }
 
   DuckyCallbacks callbacks = {keyboardCallback, keyboardKeyPressCallback, keyboardShortcutCallback, delayCallback, ledCallback, buttonCallback}; //contains our callbacks
-  duckyBlock(commands, commands_t, callbacks);
+  duckyBlock(commands, commands_t, callbacks, startOnLine);
 
 
   server.send(200, "text/plain", string);
   vTaskDelete(NULL);
 }
 
-void continueDuckyScript(String string, int startOnLine) {
+void resumeDuckyScript(String string, int startOnLine) {
     int len = string.length() + 1;
     char *buf = new char[len];
     string.toCharArray(buf, len);
-    xTaskCreate(interpretDuckyScript, "myTask", 10000, &buf, 2, NULL); // pass the address of param as pvParameters
+    TaskParameters params = {string, startOnLine};
+    Serial1.print("STARTONLINE2 - ");
+    Serial1.println(params.startOnLine);
+    xTaskCreate(interpretDuckyScript, "duckyTask", 10000, &params, 2, NULL); // pass the address of param as pvParameters
 }
 
 
@@ -87,7 +95,8 @@ void startInterpretDuckyScript() {
 
   Serial1.println(body);
   Serial1.println(buf);
-  xTaskCreate(interpretDuckyScript, "myTask", 10000, (void*)buf, 2, NULL); // pass the address of param as pvParameters
+  TaskParameters params = {buf, 0};
+  xTaskCreate(interpretDuckyScript, "duckyTask", 10000, &params, 2, NULL); // pass the address of param as pvParameters
   
 }
 

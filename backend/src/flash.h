@@ -4,7 +4,7 @@
 #include "flashdisk.h"
 
 
-
+extern bool flashActivated;
 void initializeFlash();
 
 

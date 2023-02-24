@@ -74,6 +74,9 @@ typedef struct {
 
 
 extern HIDkeyboard keyboard;
+extern bool keyboardActivated;
+
+
 void initializeKeyboard();
 // void callback(String string); //duckyBlock uses this function to to decided what happens when a 
 
