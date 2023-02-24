@@ -74,7 +74,7 @@ typedef struct {
 
 
 extern HIDkeyboard keyboard;
-extern bool keyboardActivated;
+extern RTC_DATA_ATTR bool keyboardActivated;
 
 
 void initializeKeyboard();

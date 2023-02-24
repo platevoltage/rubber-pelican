@@ -4,7 +4,7 @@
 #include "flashdisk.h"
 
 
-extern bool flashActivated;
+extern RTC_DATA_ATTR bool flashActivated;
 void initializeFlash();
 
 

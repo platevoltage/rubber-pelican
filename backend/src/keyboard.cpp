@@ -2,7 +2,7 @@
 
 
 HIDkeyboard keyboard;
-bool keyboardActivated = false;
+RTC_DATA_ATTR bool keyboardActivated = false;
 
 DuckyKeyMap duckyModMap[NUM_OF_MODS] = {
     {"COMMAND", MOD_COMMAND},
@@ -66,6 +66,8 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
 
 void initializeKeyboard() {
   keyboard.begin();
+  Serial1.println("KEYBOARD STARTED");
+  keyboard.sendString("jhfjsdfsd");
   keyboardActivated = true;
 }
 

@@ -71,9 +71,9 @@ void setup() {
   initializeLittleFS();
   
 
-  // initializeKeyboard();
+  if (keyboardActivated) initializeKeyboard();
+  if (flashActivated) initializeFlash();
   initializeLED();
-  // initializeFlash();
   String string = readFile( "/ducky.txt");
   // Serial1.println(string);
   // int startOnLine = 3;

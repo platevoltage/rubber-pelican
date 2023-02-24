@@ -4,7 +4,7 @@ FlashUSB dev;
 FlashUSB dev1;
 char *l1 = "ffat";
 char *l2 = "ffat1";
-bool flashActivated = false;
+bool RTC_DATA_ATTR flashActivated = false;
 
 void initializeFlash() {
     if (dev.init("/fat1", "ffat"))
