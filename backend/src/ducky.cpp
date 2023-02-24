@@ -150,18 +150,30 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
-
+RTC_DATA_ATTR int blockStartStorage[10];
+RTC_DATA_ATTR int nestedWhileStorage;
+RTC_DATA_ATTR char varNamesStorage[10][30];
+RTC_DATA_ATTR int varValuesStorage[10];
+RTC_DATA_ATTR int varCountStorage = 0;
 
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
-  bool inBlock = false;
   int blockStart[10];
   int nestedWhile = 0;
   bool execute = true;
-
   DuckyVariable var[10];
   int varCount = 0;
-
   int i = 0;
+  if (startOnBlock > 0) {
+      varCount = varCountStorage;
+      nestedWhile = nestedWhileStorage;
+      for (int i = 0; i < 10; i++) {
+        blockStart[i] = blockStartStorage[i];
+      }
+      for (int i = 0; i < varCount; i++) {
+        var[i].variableName = varNamesStorage[i];
+        var[i].value = varValuesStorage[i];
+      }
+  }
   while( i < commands_t ) {
     if (commands[i].instruction.equals("STRING") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
@@ -291,13 +303,22 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
     }
     else if (commands[i].instruction.equals("RESTART") && execute && (startOnBlock < i)) {
+      varCountStorage = varCount;
+      nestedWhileStorage = nestedWhile;
+      for (int i = 0; i < 10; i++) {
+        blockStartStorage[i] = blockStart[i];
+      }
+      for (int i = 0; i < varCount; i++) {
+        strcpy(varNamesStorage[i], var[i].variableName.c_str());
+        varValuesStorage[i] = var[i].value;
+      }
       startOnLineBoot = i+1;
-          esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
-          esp_deep_sleep_start();
+      esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
+      esp_deep_sleep_start();
     }
     i++;
   }
-    startOnLineBoot = 0;
+
     delete[] commands;
 }
 

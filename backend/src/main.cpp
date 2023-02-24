@@ -70,8 +70,6 @@ void setup() {
 
   initializeLittleFS();
   
-  Serial1.print("STARTONLINE - ");
-  Serial1.println(startOnLineBoot);
 
   // initializeKeyboard();
   initializeLED();

@@ -19,6 +19,7 @@
 //   String parameter;
 // } DuckyCommand;
 extern RTC_DATA_ATTR int startOnLineBoot;
+
 double eval(String equation);
 
 bool compare(String equation);
