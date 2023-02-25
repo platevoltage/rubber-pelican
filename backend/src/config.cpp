@@ -1,4 +1,24 @@
 #include "config.h"
+RTC_DATA_ATTR int blockStartStorage[10];
+RTC_DATA_ATTR int nestedWhileStorage;
+RTC_DATA_ATTR char varNamesStorage[10][30];
+RTC_DATA_ATTR int varValuesStorage[10];
+RTC_DATA_ATTR int varCountStorage = 0;
+void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+      varCountStorage = varCount;
+      nestedWhileStorage = nestedWhile;
+      for (int i = 0; i < 10; i++) {
+        blockStartStorage[i] = blockStart[i];
+      }
+      for (int i = 0; i < varCount; i++) {
+        strcpy(varNamesStorage[i], var[i].variableName.c_str());
+        varValuesStorage[i] = var[i].value;
+      }
+      startOnLineBoot = i+1;
+      esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
+      esp_deep_sleep_start();
+}
+
 
 void keyboardCallback(String string) {  
   Serial1.print("PRINTING TO KEYBOARD - ");
@@ -50,4 +70,20 @@ bool buttonCallback() {
   }
   return resume;                              //returns false until button is pressed
 
+}
+
+void enableHIDCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+    keyboardActivated = true;
+    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+}
+
+void enableFlashCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+    flashActivated = true;
+    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+}
+
+void disableUSBCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+    keyboardActivated = false;
+    flashActivated = false;
+    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
 }

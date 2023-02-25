@@ -7,8 +7,15 @@
 #include "keyboard.h"
 #include "structs.h"
 #include "hidkeylayout.h"
+#include <esp_int_wdt.h>
+#include <esp_task_wdt.h>
+#include <esp_system.h>
 
-
+extern RTC_DATA_ATTR int blockStartStorage[10];
+extern RTC_DATA_ATTR int nestedWhileStorage;
+extern RTC_DATA_ATTR char varNamesStorage[10][30];
+extern RTC_DATA_ATTR int varValuesStorage[10];
+extern RTC_DATA_ATTR int varCountStorage;
 
 // typedef struct {
 //     void (*keyboard)(String);
@@ -23,6 +30,8 @@ void keyboardShortcutCallback(String key, String modifiers);
 void delayCallback(int milliseconds);
 void ledCallback(uint32_t color);
 bool buttonCallback();
-
+void enableHIDCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
+void enableFlashCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
+void disableUSBCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
 
 #endif

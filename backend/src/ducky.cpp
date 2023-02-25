@@ -1,8 +1,6 @@
 
 #include "ducky.h"
-#include <esp_int_wdt.h>
-#include <esp_task_wdt.h>
-#include <esp_system.h>
+
 
 
 // RTC_DATA_ATTR int startOnLineBoot = 0;
@@ -154,25 +152,25 @@ DuckyCommand * splitByLine(String string, int * size) {
 }
 
 //storage for variables when the ESP needs to restart
-RTC_DATA_ATTR int blockStartStorage[10];
-RTC_DATA_ATTR int nestedWhileStorage;
-RTC_DATA_ATTR char varNamesStorage[10][30];
-RTC_DATA_ATTR int varValuesStorage[10];
-RTC_DATA_ATTR int varCountStorage = 0;
-void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-      varCountStorage = varCount;
-      nestedWhileStorage = nestedWhile;
-      for (int i = 0; i < 10; i++) {
-        blockStartStorage[i] = blockStart[i];
-      }
-      for (int i = 0; i < varCount; i++) {
-        strcpy(varNamesStorage[i], var[i].variableName.c_str());
-        varValuesStorage[i] = var[i].value;
-      }
-      startOnLineBoot = i+1;
-      esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
-      esp_deep_sleep_start();
-}
+// RTC_DATA_ATTR int blockStartStorage[10];
+// RTC_DATA_ATTR int nestedWhileStorage;
+// RTC_DATA_ATTR char varNamesStorage[10][30];
+// RTC_DATA_ATTR int varValuesStorage[10];
+// RTC_DATA_ATTR int varCountStorage = 0;
+// void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+//       varCountStorage = varCount;
+//       nestedWhileStorage = nestedWhile;
+//       for (int i = 0; i < 10; i++) {
+//         blockStartStorage[i] = blockStart[i];
+//       }
+//       for (int i = 0; i < varCount; i++) {
+//         strcpy(varNamesStorage[i], var[i].variableName.c_str());
+//         varValuesStorage[i] = var[i].value;
+//       }
+//       startOnLineBoot = i+1;
+//       esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
+//       esp_deep_sleep_start();
+// }
 
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
@@ -304,35 +302,15 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     else if (commands[i].instruction.equals("ATTACKMODE") && execute) {
       if (commands[i].parameter.indexOf("OFF") > -1) {
         if (keyboardActivated || flashActivated) {
-          Serial1.println("ATTACKMODE OFF XXXXX");
-          keyboardActivated = false;
-          flashActivated = false;
-          saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+          callbacks.disableUSB(varCount, nestedWhile, blockStart, var, i);
         }
       }
       if (commands[i].parameter.indexOf("HID") > -1 && !keyboardActivated) {
-        keyboardActivated = true;
-        saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+        callbacks.enableHID(varCount, nestedWhile, blockStart, var, i);
       }
       if (commands[i].parameter.indexOf("STORAGE") > -1 && !flashActivated) {
-        flashActivated = true;
-        saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+        callbacks.enableFlash(varCount, nestedWhile, blockStart, var, i);
       }
-    }
-    else if (commands[i].instruction.equals("RESTART") && execute && (startOnBlock < i)) {
-      saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
-      // varCountStorage = varCount;
-      // nestedWhileStorage = nestedWhile;
-      // for (int i = 0; i < 10; i++) {
-      //   blockStartStorage[i] = blockStart[i];
-      // }
-      // for (int i = 0; i < varCount; i++) {
-      //   strcpy(varNamesStorage[i], var[i].variableName.c_str());
-      //   varValuesStorage[i] = var[i].value;
-      // }
-      // startOnLineBoot = i+1;
-      // esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
-      // esp_deep_sleep_start();
     }
     i++;
   }
