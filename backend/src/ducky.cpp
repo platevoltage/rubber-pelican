@@ -302,50 +302,51 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
     }
     else if (commands[i].instruction.equals("ATTACKMODE") && execute) {
+      bool willRestart = false;
       if (commands[i].parameter.indexOf("MAN_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("MAN_")+4;
         String temp = commands[i].parameter.substring(beginningIndex);
-        temp = temp.substring(0, temp.indexOf(" ")) + '\0';
-        for (int i = 0; i < temp.length(); i++) {
-          manufacturer[i] = temp[i];
-        }
+        if (!willRestart) willRestart = callbacks.setUSBProperties(_MAN, temp);
       }
       if (commands[i].parameter.indexOf("PROD_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("PROD_")+5;
         String temp = commands[i].parameter.substring(beginningIndex);
         temp = temp.substring(0, temp.indexOf(" ")) + '\0';
-        for (int i = 0; i < temp.length(); i++) {
-          product[i] = temp[i];
-        }
+        if (!willRestart) willRestart = callbacks.setUSBProperties(_PROD, temp);
       }
       if (commands[i].parameter.indexOf("SERIAL_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("SERIAL_")+7;
         String temp = commands[i].parameter.substring(beginningIndex);
         temp = temp.substring(0, temp.indexOf(" ")) + '\0';
-        for (int i = 0; i < temp.length(); i++) {
-          serial[i] = temp[i];
-        }
+        if (!willRestart) willRestart = callbacks.setUSBProperties(_SERIAL, temp);
       }
       if (commands[i].parameter.indexOf("VID_") > -1) {
         String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("VID_")+4, commands[i].parameter.indexOf("VID_")+8);
         char* hexStringEnd;
-        VID = strtol(temp.c_str(), &hexStringEnd, 16);
+        if (!willRestart) willRestart = callbacks.setUSBProperties(_VID, temp);
       }
       if (commands[i].parameter.indexOf("PID_") > -1) {
         String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("PID_")+4, commands[i].parameter.indexOf("PID_")+8);
         char* hexStringEnd;
-        PID = strtol(temp.c_str(), &hexStringEnd, 16);
+        if (!willRestart) willRestart = callbacks.setUSBProperties(_PID, temp);
       }
       if (commands[i].parameter.indexOf("OFF") > -1) {
-        if (keyboardActivated || flashActivated) {
-          callbacks.disableUSB(varCount, nestedWhile, blockStart, var, i);
-        }
+
+          if (!willRestart) willRestart = callbacks.disableUSB();
+        
       }
-      if (commands[i].parameter.indexOf("HID") > -1 && !keyboardActivated) {
-        callbacks.enableHID(varCount, nestedWhile, blockStart, var, i);
+      if (commands[i].parameter.indexOf("HID") > -1) {
+
+          if (!willRestart) willRestart = callbacks.enableHID();
+ 
       }
-      if (commands[i].parameter.indexOf("STORAGE") > -1 && !flashActivated) {
-        callbacks.enableFlash(varCount, nestedWhile, blockStart, var, i);
+      if (commands[i].parameter.indexOf("STORAGE") > -1) {
+
+          if (!willRestart) willRestart = callbacks.enableFlash();
+        
+      }
+      if (willRestart) {
+        callbacks.restart(varCount, nestedWhile, blockStart, var, i);
       }
     }
     i++;

@@ -20,9 +20,11 @@ typedef struct {
     void (*delay)(int);
     void (*ledColor)(uint32_t);
     bool (*button)();
-    void (*enableHID)(int, int, int[], DuckyVariable[], int);
-    void (*enableFlash)(int, int, int[], DuckyVariable[], int);
-    void (*disableUSB)(int, int, int[], DuckyVariable[], int);
+    bool (*enableHID)();
+    bool (*enableFlash)();
+    bool (*disableUSB)();
+    bool (*setUSBProperties)(int,  String);
+    void (*restart)(int, int, int[], DuckyVariable[], int);
 } DuckyCallbacks;
 
 #endif

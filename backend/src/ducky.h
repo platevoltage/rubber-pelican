@@ -8,6 +8,12 @@
 #include "flash.h"
 #include "_littlefs.h"
 
+#define _VID 0
+#define _PID 1
+#define _MAN 2
+#define _PROD 3
+#define _SERIAL 4
+
 
 // typedef struct {
 //   String variableName;

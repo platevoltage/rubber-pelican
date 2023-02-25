@@ -31,8 +31,10 @@ void keyboardShortcutCallback(String key, String modifiers);
 void delayCallback(int milliseconds);
 void ledCallback(uint32_t color);
 bool buttonCallback();
-void enableHIDCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
-void enableFlashCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
-void disableUSBCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
+bool enableHIDCallback();
+bool enableFlashCallback();
+bool disableUSBCallback();
+bool setUSBPropertiesCallback(int property, String value);
+void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
 
 #endif
