@@ -75,6 +75,8 @@ typedef struct {
 
 extern HIDkeyboard keyboard;
 extern RTC_DATA_ATTR bool keyboardActivated;
+extern RTC_DATA_ATTR uint16_t VID;
+extern RTC_DATA_ATTR uint16_t PID;
 
 
 void initializeKeyboard();

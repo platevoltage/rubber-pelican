@@ -302,6 +302,24 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
     }
     else if (commands[i].instruction.equals("ATTACKMODE") && execute) {
+      if (commands[i].parameter.indexOf("VID_") > -1) {
+        Serial1.print("TEMP - ");
+        String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("VID_")+4, commands[i].parameter.indexOf("VID_")+8);
+        Serial1.println(temp);
+        char* hexStringEnd;
+        VID = strtol(temp.c_str(), &hexStringEnd, 16);
+        Serial1.print("HEX - ");
+        Serial1.println(VID);
+      }
+      if (commands[i].parameter.indexOf("PID_") > -1) {
+        Serial1.print("TEMP - ");
+        String temp2 = commands[i].parameter.substring(commands[i].parameter.indexOf("PID_")+4, commands[i].parameter.indexOf("PID_")+8);
+        Serial1.println(temp2);
+        char* hexStringEnd2;
+        PID = strtol(temp2.c_str(), &hexStringEnd2, 16);
+        Serial1.print("HEX - ");
+        Serial1.println(PID);
+      }
       if (commands[i].parameter.indexOf("OFF") > -1) {
         if (keyboardActivated || flashActivated) {
           callbacks.disableUSB(varCount, nestedWhile, blockStart, var, i);

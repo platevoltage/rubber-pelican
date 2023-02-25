@@ -63,10 +63,12 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"SCROLLLOCK", SCROLLLOCK},
 
 };
+RTC_DATA_ATTR uint16_t VID = 0x05ac;
+RTC_DATA_ATTR uint16_t PID = 0x021e;
 
 void initializeKeyboard() {
   keyboard.setBaseEP(3);
-  keyboard.deviceID(0x05ac,0x024f);
+  keyboard.deviceID(VID,PID);
   keyboard.product("Rubber-Pelican"); // product name
   keyboard.serial("");  // serial number SN
   keyboard.begin();
