@@ -67,6 +67,13 @@ void setup() {
       break;
   }
   pinMode(13, INPUT_PULLUP);
+
+  if (!digitalRead(13)) {
+    mountSystemDrive();
+    return;
+  }
+
+
   randomSeed(millis());
   initializeLittleFS();
   
