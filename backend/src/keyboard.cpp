@@ -65,6 +65,7 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
 };
 
 void initializeKeyboard() {
+  keyboard.setBaseEP(3);
   keyboard.begin();
   Serial1.println("KEYBOARD STARTED");
   keyboard.sendString("jhfjsdfsd");
