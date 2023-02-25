@@ -66,6 +66,9 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
 
 void initializeKeyboard() {
   keyboard.setBaseEP(3);
+  keyboard.deviceID(0x05ac,0x024f);
+  keyboard.product("Rubber-Pelican"); // product name
+  keyboard.serial("");  // serial number SN
   keyboard.begin();
   Serial1.println("KEYBOARD STARTED");
   keyboard.sendString("jhfjsdfsd");
