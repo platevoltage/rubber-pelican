@@ -74,18 +74,74 @@ bool buttonCallback() {
 
 }
 
-void enableHIDCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-    keyboardActivated = true;
-    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+bool enableHIDCallback() {
+  bool willRestart = !keyboardActivated;
+  keyboardActivated = true;
+  return willRestart;
+    // saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
 }
 
-void enableFlashCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-    flashActivated = true;
-    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+bool enableFlashCallback() {
+  bool willRestart = !flashActivated;
+  flashActivated = true;
+  return willRestart;
 }
 
-void disableUSBCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-    keyboardActivated = false;
-    flashActivated = false;
-    saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+bool disableUSBCallback() {
+  bool willRestart = keyboardActivated || flashActivated;
+  keyboardActivated = false;
+  flashActivated = false;
+  return willRestart;
+}
+
+bool setUSBPropertiesCallback(int property, String value) {
+  bool willRestart = false;
+  char* hexStringEnd;
+  uint16_t hex;
+  switch (property) {
+    case _VID: {
+      hex = strtol(value.c_str(), &hexStringEnd, 16);
+      willRestart = ((VID != hex) && keyboardActivated);
+      VID = hex;
+      break;
+    }
+    case _PID: {
+      hex = strtol(value.c_str(), &hexStringEnd, 16);
+      willRestart = ((PID != hex) && keyboardActivated);
+      PID = hex;
+      break;
+    }
+    case _MAN: {
+      for (int i = 0; i < value.length(); i++) {
+        if (manufacturer[i] != value[i]) {
+          willRestart = keyboardActivated;
+          manufacturer[i] = value[i];
+        } 
+      }
+      break;
+    }
+    case _PROD: {
+      for (int i = 0; i < value.length(); i++) {
+        if (product[i] != value[i]) {
+          willRestart = keyboardActivated;
+          product[i] = value[i];
+        } 
+      }
+      break;
+    }
+    case _SERIAL: {
+      for (int i = 0; i < value.length(); i++) {
+        if (serial[i] != value[i]) {
+          willRestart = keyboardActivated;
+          serial[i] = value[i];
+        } 
+      }
+      break;
+    }
+  }
+  return willRestart;
+}
+
+void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+  saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
 }
