@@ -190,6 +190,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         var[i].variableName = varNamesStorage[i];
         var[i].value = varValuesStorage[i];
       }
+      callbacks.delay(100);
   }
   while( i < commands_t ) {
     if (commands[i].instruction.equals("STRING") && execute) {
