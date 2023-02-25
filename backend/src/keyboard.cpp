@@ -13,7 +13,10 @@ DuckyKeyMap duckyModMap[NUM_OF_MODS] = {
     {"ALT", MOD_ALT},
     {"SHIFT", MOD_SHIFT},
 };
-
+int randomLowercase() {
+  int randomNumber = random(97, 123);
+  return char(randomNumber);
+}
 DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"COMMAND", COMMAND},
     {"WINDOWS", WINDOWS},
@@ -61,8 +64,11 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
     {"CAPSLOCK", CAPSLOCK},
     {"NUMLOCK", NUMLOCK},
     {"SCROLLLOCK", SCROLLLOCK},
-
+    {"RANDOM_LOWERCASE_LETTER", randomLowercase()}
 };
+
+
+
 RTC_DATA_ATTR uint16_t VID = 0x05ac;
 RTC_DATA_ATTR uint16_t PID = 0x021e;
 RTC_DATA_ATTR char manufacturer[15] = "GarrettSoft";
@@ -77,7 +83,6 @@ void initializeKeyboard() {
   keyboard.serial(serial);  // serial number SN
   keyboard.begin();
   Serial1.println("KEYBOARD STARTED");
-  keyboard.sendString("jhfjsdfsd");
   keyboardActivated = true;
 }
 

@@ -17,7 +17,7 @@
 
 //regular keys
 
-#define NUM_OF_KEYS 46
+#define NUM_OF_KEYS 47
 
 #define COMMAND 0xE3
 #define WINDOWS 0xE3
@@ -88,5 +88,6 @@ int getKeyCode(String keyString);
 int getModCode(String modString);
 bool keyExists(String keyString);
 bool modExists(String modString);
+bool randomCharExists(String modString);
 
 #endif
