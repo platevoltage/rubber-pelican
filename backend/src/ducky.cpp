@@ -318,6 +318,11 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         int beginningIndex = commands[i].parameter.indexOf("SERIAL_")+7;
         String temp = commands[i].parameter.substring(beginningIndex);
         temp = temp.substring(0, temp.indexOf(" ")) + '\0';
+        if (temp.equals("RANDOM")) {
+          long randomNumber = random(10000000, 99999999);
+          temp = String(randomNumber) + String(randomNumber/2);
+          temp = temp.substring(0, 12);
+        } 
         if (!willRestart) willRestart = callbacks.setUSBProperties(_SERIAL, temp);
       }
       if (commands[i].parameter.indexOf("VID_") > -1) {

@@ -67,7 +67,7 @@ void setup() {
       break;
   }
   pinMode(13, INPUT_PULLUP);
-
+  randomSeed(millis());
   initializeLittleFS();
   
 
