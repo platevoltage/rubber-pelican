@@ -16,6 +16,7 @@ extern RTC_DATA_ATTR int nestedWhileStorage;
 extern RTC_DATA_ATTR char varNamesStorage[10][30];
 extern RTC_DATA_ATTR int varValuesStorage[10];
 extern RTC_DATA_ATTR int varCountStorage;
+extern RTC_DATA_ATTR uint32_t ledColor;
 
 // typedef struct {
 //     void (*keyboard)(String);

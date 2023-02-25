@@ -4,6 +4,7 @@ RTC_DATA_ATTR int nestedWhileStorage;
 RTC_DATA_ATTR char varNamesStorage[10][30];
 RTC_DATA_ATTR int varValuesStorage[10];
 RTC_DATA_ATTR int varCountStorage = 0;
+RTC_DATA_ATTR uint32_t ledColor = 0;
 void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
       varCountStorage = varCount;
       nestedWhileStorage = nestedWhile;
@@ -51,6 +52,7 @@ void delayCallback(int milliseconds) {
 void ledCallback(uint32_t color) {
     Serial1.print("LED COLOR - ");
     Serial1.println(color);
+    ledColor = color;
     changeLEDColor(color);
 
 }

@@ -180,6 +180,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   int varCount = 0;
   int i = startOnBlock;
   if (startOnBlock > 0) {
+      changeLEDColor(ledColor);
       varCount = varCountStorage;
       nestedWhile = nestedWhileStorage;
       for (int i = 0; i < 10; i++) {
