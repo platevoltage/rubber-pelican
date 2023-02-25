@@ -302,23 +302,39 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
     }
     else if (commands[i].instruction.equals("ATTACKMODE") && execute) {
+      if (commands[i].parameter.indexOf("MAN_") > -1) {
+        int beginningIndex = commands[i].parameter.indexOf("MAN_")+4;
+        String temp = commands[i].parameter.substring(beginningIndex);
+        temp = temp.substring(0, temp.indexOf(" ")) + '\0';
+        for (int i = 0; i < temp.length(); i++) {
+          manufacturer[i] = temp[i];
+        }
+      }
+      if (commands[i].parameter.indexOf("PROD_") > -1) {
+        int beginningIndex = commands[i].parameter.indexOf("PROD_")+5;
+        String temp = commands[i].parameter.substring(beginningIndex);
+        temp = temp.substring(0, temp.indexOf(" ")) + '\0';
+        for (int i = 0; i < temp.length(); i++) {
+          product[i] = temp[i];
+        }
+      }
+      if (commands[i].parameter.indexOf("SERIAL_") > -1) {
+        int beginningIndex = commands[i].parameter.indexOf("SERIAL_")+7;
+        String temp = commands[i].parameter.substring(beginningIndex);
+        temp = temp.substring(0, temp.indexOf(" ")) + '\0';
+        for (int i = 0; i < temp.length(); i++) {
+          serial[i] = temp[i];
+        }
+      }
       if (commands[i].parameter.indexOf("VID_") > -1) {
-        Serial1.print("TEMP - ");
         String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("VID_")+4, commands[i].parameter.indexOf("VID_")+8);
-        Serial1.println(temp);
         char* hexStringEnd;
         VID = strtol(temp.c_str(), &hexStringEnd, 16);
-        Serial1.print("HEX - ");
-        Serial1.println(VID);
       }
       if (commands[i].parameter.indexOf("PID_") > -1) {
-        Serial1.print("TEMP - ");
-        String temp2 = commands[i].parameter.substring(commands[i].parameter.indexOf("PID_")+4, commands[i].parameter.indexOf("PID_")+8);
-        Serial1.println(temp2);
-        char* hexStringEnd2;
-        PID = strtol(temp2.c_str(), &hexStringEnd2, 16);
-        Serial1.print("HEX - ");
-        Serial1.println(PID);
+        String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("PID_")+4, commands[i].parameter.indexOf("PID_")+8);
+        char* hexStringEnd;
+        PID = strtol(temp.c_str(), &hexStringEnd, 16);
       }
       if (commands[i].parameter.indexOf("OFF") > -1) {
         if (keyboardActivated || flashActivated) {

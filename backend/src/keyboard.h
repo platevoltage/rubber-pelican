@@ -77,7 +77,9 @@ extern HIDkeyboard keyboard;
 extern RTC_DATA_ATTR bool keyboardActivated;
 extern RTC_DATA_ATTR uint16_t VID;
 extern RTC_DATA_ATTR uint16_t PID;
-
+extern RTC_DATA_ATTR char manufacturer[15];
+extern RTC_DATA_ATTR char product[15];
+extern RTC_DATA_ATTR char serial[15];
 
 void initializeKeyboard();
 // void callback(String string); //duckyBlock uses this function to to decided what happens when a 

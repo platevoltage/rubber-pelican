@@ -65,12 +65,16 @@ DuckyKeyMap duckyKeyMap[NUM_OF_KEYS] = {
 };
 RTC_DATA_ATTR uint16_t VID = 0x05ac;
 RTC_DATA_ATTR uint16_t PID = 0x021e;
+RTC_DATA_ATTR char manufacturer[15] = "GarrettSoft";
+RTC_DATA_ATTR char product[15] = "Rubber-Pelican";
+RTC_DATA_ATTR char serial[15] = "";
 
 void initializeKeyboard() {
   keyboard.setBaseEP(3);
   keyboard.deviceID(VID,PID);
-  keyboard.product("Rubber-Pelican"); // product name
-  keyboard.serial("");  // serial number SN
+  keyboard.manufacturer(manufacturer);
+  keyboard.product(product); // product name
+  keyboard.serial(serial);  // serial number SN
   keyboard.begin();
   Serial1.println("KEYBOARD STARTED");
   keyboard.sendString("jhfjsdfsd");
