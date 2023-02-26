@@ -1,7 +1,6 @@
 #include "keyboard.h"
 
 
-HIDkeyboard keyboard;
 RTC_DATA_ATTR bool keyboardActivated = false;
 
 DuckyKeyMap duckyModMap[NUM_OF_MODS] = {
@@ -69,15 +68,25 @@ RTC_DATA_ATTR char manufacturer[15] = "GarrettSoft";
 RTC_DATA_ATTR char product[15] = "Rubber-Pelican";
 RTC_DATA_ATTR char serial[15] = "";
 
+
+bool CustomHIDkeyboard::sendMultiplePresses(uint8_t keycodes[6]) {
+
+
+    return tud_hid_keyboard_report(report_id, 0, keycodes);
+}
+
+CustomHIDkeyboard keyboard;
+
 void initializeKeyboard() {
   keyboard.setBaseEP(3);
   keyboard.deviceID(VID,PID);
   keyboard.manufacturer(manufacturer);
   keyboard.product(product); // product name
   keyboard.serial(serial);  // serial number SN
+
   keyboard.begin();
+
   Serial1.println("KEYBOARD STARTED");
-  keyboard.sendString("jhfjsdfsd");
   keyboardActivated = true;
 }
 

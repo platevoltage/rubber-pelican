@@ -100,7 +100,6 @@ void setup() {
   }
   
 
-
   String string = readFile( "/ducky.txt");
  
   if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);

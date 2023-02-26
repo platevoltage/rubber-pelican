@@ -175,6 +175,7 @@ DuckyCommand * splitByLine(String string, int * size) {
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
   int nestedWhile = 0;
+  uint8_t heldKeys[6] = {0};
   bool execute = true;
   DuckyVariable var[10];
   int varCount = 0;
@@ -281,6 +282,13 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     }
     else if (commands[i].instruction.equals("ENDIF")) {
       execute = true;
+    }
+    else if (commands[i].instruction.equals("HOLD")) {
+      if (keyExists(commands[i].parameter)) {
+        // callbacks.keyboardKeyHold(commands[i].instruction);
+        heldKeys[0] = getKeyCode(commands[i].parameter);
+        keyboard.sendMultiplePresses(heldKeys);
+      }
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
       callbacks.keyboardKeyPress(commands[i].instruction);

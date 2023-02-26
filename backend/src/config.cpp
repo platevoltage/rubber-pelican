@@ -31,6 +31,14 @@ void keyboardKeyPressCallback(String key) {
   Serial1.print("KEY ---");
   Serial1.println(key);
   keyboard.sendKey(getKeyCode(key));
+
+}
+void keyboardKeyHoldCallback(String key) {  
+  Serial1.print("HOLD ---");
+  Serial1.println(key);
+  uint8_t keyCodes[6] = {0};
+  keyCodes[0] = getKeyCode(key);
+  keyboard.sendMultiplePresses(keyCodes);
 }
 
 void keyboardShortcutCallback(String key, String modifiers) { 

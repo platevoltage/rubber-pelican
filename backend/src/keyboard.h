@@ -71,9 +71,12 @@ typedef struct {
     int code;
 } DuckyKeyMap;
 
-
-
-extern HIDkeyboard keyboard;
+class CustomHIDkeyboard : public HIDkeyboard {
+    public:
+        // CustomHIDkeyboard(uint8_t id = 3);
+        bool sendMultiplePresses(uint8_t keycodes[6]);
+};
+extern CustomHIDkeyboard keyboard;
 extern RTC_DATA_ATTR bool keyboardActivated;
 extern RTC_DATA_ATTR uint16_t VID;
 extern RTC_DATA_ATTR uint16_t PID;
