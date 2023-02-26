@@ -75,11 +75,11 @@ void setup() {
   }
 
   randomSeed(millis());
-  initializeLittleFS();
   
 
   if (keyboardActivated) initializeKeyboard();
   initializeFlash();
+  initializeLittleFS();
 
   String string = readFile( "/ducky.txt");
  

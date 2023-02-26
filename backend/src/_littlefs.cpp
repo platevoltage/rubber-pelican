@@ -3,7 +3,7 @@
 void writeFile(const char * path, const char * message) {
   Serial1.printf("Writing file: %s\n", path);
 
-  File file = LittleFS.open(path, "w");
+  File file = FFat.open(path, "w");
   if (!file) {
     Serial1.println("Failed to open file for writing");
     return;
@@ -21,7 +21,7 @@ void writeFile(const char * path, const char * message) {
 String readFile(const char * path) {
   Serial1.printf("Reading file: %s\n", path);
 
-  File file = LittleFS.open(path, "r");
+  File file = FFat.open(path, "r");
   if (!file) {
     Serial1.println("Failed to open file for reading");
   }
@@ -40,7 +40,7 @@ String readFile(const char * path) {
 }
 
 void initializeLittleFS() {
-    if(!LittleFS.begin(true)){
+    if(!FFat.begin(true, "/fat0", 10, "ffat0")){
         Serial1.println("LITTLEFS Mount Failed");
         return;
     }
