@@ -13,25 +13,21 @@ void initializeFlash() {
     if (dev.init("/fat1", "ffat")) {
         if (!flashActivated) dev.setBaseEP(3); // This is a hack that sets the ID to clash with keyboard when deactivated. Simply not initializing the flash causes the keyboard to not work.
         if (flashActivated || keyboardActivated) {
-        if (dev.begin()) {
-            Serial1.println("MSC lun 1 begin");
-        }
-        else Serial1.println("LUN 1 failed");
+          if (dev.begin()) {
+              Serial1.println("MSC lun 1 begin");
+          }
+          else Serial1.println("LUN 1 failed");
         } 
     }
 }
 
 void mountSystemDrive() {
-    // initializeFlash();
+
     if (dev.init("/fat1", "ffat")) {
-        // if (!flashActivated) dev.setBaseEP(3); // This is a hack that sets the ID to clash with keyboard when deactivated. Simply not initializing the flash causes the keyboard to not work.
-        // if (flashActivated || keyboardActivated) {
         if (dev.begin()) {
             Serial1.println("MSC lun 1 begin");
         }
         else Serial1.println("LUN 1 failed");
-        // }
-    
     }
     if (dev0.init("/fat0", "ffat0")) {
         if (dev0.begin()) {
@@ -101,7 +97,7 @@ String readFile(const char * path) {
 }
 
 void initializeSystemFS() {
-    if(!FFat.begin(true, "/fat0", 10, "ffat0")){
+    if(!FFat.begin(true, "PELICAN", 10, "ffat0")){
         Serial1.println("FAT Mount Failed");
         return;
     }
