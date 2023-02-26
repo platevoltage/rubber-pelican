@@ -4,6 +4,7 @@
 #include "flash.h"
 #include "_littlefs.h"
 
+
 #define BAUD 115200       // Any baudrate from 300 to 115200
 #define RXPIN 33         // GPIO 33 => RX for Serial1
 #define TXPIN 35         // GPIO 35 => TX for Serial1
@@ -66,13 +67,12 @@ void setup() {
       default:
       break;
   }
+  
   pinMode(13, INPUT_PULLUP);
-
-  if (!digitalRead(13)) {
-    mountSystemDrive();
-    return;
+  initializeLED();
+  if (!digitalRead(13) && startOnLineBoot == 0) {   //opens system drive if button pushed on boot
+    mountSystemDrive();                             //execution is halted until button is pushed again and system reboots
   }
-
 
   randomSeed(millis());
   initializeLittleFS();
@@ -80,23 +80,16 @@ void setup() {
 
   if (keyboardActivated) initializeKeyboard();
   initializeFlash();
-  // else dummyFlash();
-  initializeLED();
+
   String string = readFile( "/ducky.txt");
-  // Serial1.println(string);
-  // int startOnLine = 3;
-  // vTaskDelay(20 / portTICK_PERIOD_MS);  
+ 
   if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);
-  // xTaskCreate(initializeFlash, "Flash Task", 50000, NULL, 1, NULL );
+
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // int buttonValue = digitalRead(13);
-  //    if (buttonValue == LOW){
-  //     // If button pushed, turn LED on
-  //     Serial1.println("pushed");
-  //   }
+
 }

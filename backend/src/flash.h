@@ -2,6 +2,8 @@
 #define FLASH_H
 
 #include "flashdisk.h"
+#include "led.h"
+#include "keyboard.h"
 
 
 extern RTC_DATA_ATTR bool flashActivated;
