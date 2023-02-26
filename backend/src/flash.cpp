@@ -1,9 +1,5 @@
 #include "flash.h"
 
-// FlashUSB dev;
-
-// char *l1 = "ffat";
-// char *l2 = "ffat1";
 bool RTC_DATA_ATTR flashActivated = false;
 
 FlashUSB dev;

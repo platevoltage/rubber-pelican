@@ -19,12 +19,6 @@ extern RTC_DATA_ATTR int varCountStorage;
 extern RTC_DATA_ATTR char heldKeysStorage[6][10];
 extern RTC_DATA_ATTR uint32_t ledColor;
 
-// typedef struct {
-//     void (*keyboard)(String);
-//     void (*keyboardShortcut)(DuckyCommand);
-//     void (*delay)(int);
-//     void (*ledColor)(uint32_t);
-// } DuckyCallbacks;
 
 void keyboardCallback(String string);
 void keyboardKeyPressCallback(String key);
