@@ -299,22 +299,14 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         heldKeys[openSlot] = key;
         }
         callbacks.keyboardKeyHold(heldKeys);
-        // uint8_t keycodes[6] = {0};
-        // for (int i = 0; i < 6; i++) {
-        //   keycodes[i] = getKeyCode(heldKeys[i]);
-        // }
-        // keyboard.sendMultiplePresses(keycodes);
-        // vTaskDelay(pdMS_TO_TICKS(1));
-        // }
       }
     }
     else if (commands[i].instruction.equals("RELEASE")) {
-        // uint8_t keycode = getKeyCode(commands[i].parameter);
-        // for (int i = 0; i < 6; i++) {
-        //   if (heldKeys[i] == keycode) heldKeys[i] = 0;
-        // }
-        // keyboard.sendMultiplePresses(heldKeys);
-        // vTaskDelay(pdMS_TO_TICKS(1));
+        String key = commands[i].parameter;
+        for (int i = 0; i < 6; i++) {
+          if (heldKeys[i].equals(key)) heldKeys[i] = "";
+        }
+        callbacks.keyboardKeyHold(heldKeys);
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
       callbacks.keyboardKeyPress(commands[i].instruction);
