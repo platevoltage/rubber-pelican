@@ -284,22 +284,20 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       execute = true;
     }
     else if (commands[i].instruction.equals("HOLD")) {
-      if (keyExists(commands[i].parameter)) {
-        String key = commands[i].parameter;
-        int openSlot = 0;
-        bool alreadyPressed = false;
-        for (int i = 0; i < 6; i++) {
-          if (heldKeys[i].equals(key)) alreadyPressed = true;
-        }
-        for (int i = 0; i < 6; i++) {
-          if (heldKeys[i].equals("")) break;
-          else openSlot++;
-        }
-        if (!alreadyPressed) {
-        heldKeys[openSlot] = key;
-        }
-        callbacks.keyboardKeyHold(heldKeys);
+      String key = commands[i].parameter;
+      int openSlot = 0;
+      bool alreadyPressed = false;
+      for (int i = 0; i < 6; i++) {
+        if (heldKeys[i].equals(key)) alreadyPressed = true;
       }
+      for (int i = 0; i < 6; i++) {
+        if (heldKeys[i].equals("")) break;
+        else openSlot++;
+      }
+      if (!alreadyPressed) {
+      heldKeys[openSlot] = key;
+      }
+      callbacks.keyboardKeyHold(heldKeys);
     }
     else if (commands[i].instruction.equals("RELEASE")) {
         String key = commands[i].parameter;

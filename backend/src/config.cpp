@@ -37,11 +37,16 @@ void keyboardKeyHoldCallback(String keys[6]) {
 
   uint8_t keycodes[6] = {0};
   for (int i = 0; i < 6; i++) {
-    keycodes[i] = getKeyCode(keys[i]);
+    if (keyExists(keys[i])) {
+      keycodes[i] = getKeyCode(keys[i]);
+    } else if (keys[i].length() == 1) {
+      uint8_t keycode = (uint8_t) keys[i][0];
+      keycodes[i] = keymap[keycode].usage;
+    }
   }
   keyboard.sendMultiplePresses(keycodes);
   vTaskDelay(pdMS_TO_TICKS(1));
-  
+
 }
 
 void keyboardShortcutCallback(String key, String modifiers) { 
