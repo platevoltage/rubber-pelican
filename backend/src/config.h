@@ -20,7 +20,7 @@ extern RTC_DATA_ATTR char heldKeysStorage[6][10];
 extern RTC_DATA_ATTR uint32_t ledColor;
 
 
-void keyboardCallback(String string, bool jitter);
+void keyboardCallback(String string, int jitterMax);
 void keyboardKeyPressCallback(String key);
 void keyboardKeyHoldCallback(String keys[6]);
 void keyboardShortcutCallback(String key, String modifiers);
