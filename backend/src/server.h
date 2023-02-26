@@ -9,6 +9,7 @@
 #include "react.h"
 #include "keyboard.h"
 #include "config.h"
+#include "flash.h"
 
 
 

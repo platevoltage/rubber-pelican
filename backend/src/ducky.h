@@ -6,7 +6,7 @@
 #include "config.h"
 #include "structs.h"
 #include "flash.h"
-#include "_littlefs.h"
+
 
 #define _VID 0
 #define _PID 1

@@ -2,8 +2,6 @@
 #include "server.h"
 #include "led.h"
 #include "flash.h"
-#include "_littlefs.h"
-
 
 #define BAUD 115200       // Any baudrate from 300 to 115200
 #define RXPIN 33         // GPIO 33 => RX for Serial1
@@ -75,11 +73,11 @@ void setup() {
   }
 
   randomSeed(millis());
-  initializeLittleFS();
   
 
   if (keyboardActivated) initializeKeyboard();
   initializeFlash();
+  initializeSystemFS();
 
   String string = readFile( "/ducky.txt");
  
