@@ -14,7 +14,7 @@ typedef struct {
 } DuckyCommand;
 
 typedef struct {
-    void (*keyboard)(String);
+    void (*keyboard)(String, bool);
     void (*keyboardKeyPress)(String);
     void (*keyboardKeyHold)(String[]);
     void (*keyboardShortcut)(String, String);

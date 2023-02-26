@@ -202,12 +202,12 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     if (commands[i].instruction.equals("STRING") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
-      callbacks.keyboard(parameter);
+      callbacks.keyboard(parameter, true);
     }
     else if (commands[i].instruction.equals("STRINGLN") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
-      callbacks.keyboard(parameter + '\n');
+      callbacks.keyboard(parameter + '\n', false);
     }
     else if (commands[i].instruction.equals("DELAY") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
