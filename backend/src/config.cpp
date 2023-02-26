@@ -6,6 +6,7 @@ RTC_DATA_ATTR int varValuesStorage[10];
 RTC_DATA_ATTR int varCountStorage = 0;
 RTC_DATA_ATTR char heldKeysStorage[6][10];
 RTC_DATA_ATTR uint32_t ledColor = 0;
+
 void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int startIndex) {
       varCountStorage = varCount;
       nestedWhileStorage = nestedWhile;
@@ -54,27 +55,16 @@ void keyboardKeyHoldCallback(String keys[6]) {
 }
 
 void keyboardShortcutCallback(String key, String modifiers) { 
-  Serial1.print("KEY ---");
-  Serial1.println(key);
-  Serial1.print("MOD ---");
-  Serial1.println(modifiers);
   keyboard.sendKey(getKeyCode(key), getModCode(modifiers));
 }
 
 
 void delayCallback(int milliseconds) {
-    Serial1.print("DELAY - ");
-    Serial1.println(milliseconds);
-    // delay(milliseconds);
     vTaskDelay(pdMS_TO_TICKS(milliseconds));
 }
 
 void ledCallback(uint32_t color) {
-    Serial1.print("LED COLOR - ");
-    Serial1.println(color);
-    ledColor = color;
     changeLEDColor(color);
-
 }
 
 bool buttonCallback() {
@@ -98,7 +88,6 @@ bool enableHIDCallback() {
   bool willRestart = !keyboardActivated;
   keyboardActivated = true;
   return willRestart;
-    // saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
 }
 
 bool enableFlashCallback() {
@@ -162,6 +151,6 @@ bool setUSBPropertiesCallback(int property, String value) {
   return willRestart;
 }
 
-void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int i) {
-  saveStateAndRestart(varCount, nestedWhile, blockStart, var, heldKeys, i);
+void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int startIndex) {
+  saveStateAndRestart(varCount, nestedWhile, blockStart, var, heldKeys, startIndex);
 }
