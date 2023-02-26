@@ -47,7 +47,6 @@ void mountSystemDrive() {
           else if (color < 256) changeLEDColor(0x00FFFF);
           delay(100);
           color+=10;     
-          Serial1.println(color);
         }
         esp_sleep_enable_timer_wakeup(5 * 100000); //restart
         esp_deep_sleep_start();
