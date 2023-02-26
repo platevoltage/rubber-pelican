@@ -4,18 +4,22 @@ RTC_DATA_ATTR int nestedWhileStorage;
 RTC_DATA_ATTR char varNamesStorage[10][30];
 RTC_DATA_ATTR int varValuesStorage[10];
 RTC_DATA_ATTR int varCountStorage = 0;
+RTC_DATA_ATTR char heldKeysStorage[6][10];
 RTC_DATA_ATTR uint32_t ledColor = 0;
-void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
+void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int startIndex) {
       varCountStorage = varCount;
       nestedWhileStorage = nestedWhile;
       for (int i = 0; i < 10; i++) {
         blockStartStorage[i] = blockStart[i];
       }
-      for (int i = 0; i < varCount; i++) {
+      for (int i = 0; i < 10; i++) {
         strcpy(varNamesStorage[i], var[i].variableName.c_str());
         varValuesStorage[i] = var[i].value;
       }
-      startOnLineBoot = i+1;
+      for (int i = 0; i < 6; i++) {
+        strcpy(heldKeysStorage[i], heldKeys[i].c_str());
+      }
+      startOnLineBoot = startIndex+1;
       esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
       esp_deep_sleep_start();
 }
@@ -34,7 +38,7 @@ void keyboardKeyPressCallback(String key) {
 
 }
 void keyboardKeyHoldCallback(String keys[6]) {  
-
+  //also responsible for releasing keys. 
   uint8_t keycodes[6] = {0};
   for (int i = 0; i < 6; i++) {
     if (keyExists(keys[i])) {
@@ -158,6 +162,6 @@ bool setUSBPropertiesCallback(int property, String value) {
   return willRestart;
 }
 
-void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-  saveStateAndRestart(varCount, nestedWhile, blockStart, var, i);
+void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int i) {
+  saveStateAndRestart(varCount, nestedWhile, blockStart, var, heldKeys, i);
 }

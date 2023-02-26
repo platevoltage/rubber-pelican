@@ -25,7 +25,7 @@ typedef struct {
     bool (*enableFlash)();
     bool (*disableUSB)();
     bool (*setUSBProperties)(int,  String);
-    void (*restart)(int, int, int[], DuckyVariable[], int);
+    void (*restart)(int, int, int[], DuckyVariable[], String[], int);
 } DuckyCallbacks;
 
 #endif

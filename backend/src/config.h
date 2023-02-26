@@ -16,6 +16,7 @@ extern RTC_DATA_ATTR int nestedWhileStorage;
 extern RTC_DATA_ATTR char varNamesStorage[10][30];
 extern RTC_DATA_ATTR int varValuesStorage[10];
 extern RTC_DATA_ATTR int varCountStorage;
+extern RTC_DATA_ATTR char heldKeysStorage[6][10];
 extern RTC_DATA_ATTR uint32_t ledColor;
 
 // typedef struct {
@@ -36,6 +37,6 @@ bool enableHIDCallback();
 bool enableFlashCallback();
 bool disableUSBCallback();
 bool setUSBPropertiesCallback(int property, String value);
-void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i);
+void restartCallback(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], String heldKeys[], int startIndex);
 
 #endif
