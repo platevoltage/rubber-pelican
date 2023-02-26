@@ -11,7 +11,9 @@
 #include "config.h"
 #include "flash.h"
 
-
+extern String ssid;
+extern String password;
+extern String bonjourName;
 
 void serverTask(void *pvParameters);
 void resumeDuckyScript(String string, int startOnLine);

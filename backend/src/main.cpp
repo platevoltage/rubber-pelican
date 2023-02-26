@@ -2,6 +2,7 @@
 #include "server.h"
 #include "led.h"
 #include "flash.h"
+#include "ducky.h"
 
 #define BAUD 115200       // Any baudrate from 300 to 115200
 #define RXPIN 33         // GPIO 33 => RX for Serial1
@@ -78,6 +79,27 @@ void setup() {
   if (keyboardActivated) initializeKeyboard();
   initializeFlash();
   initializeSystemFS();
+
+  String preferences = readFile( "/preferences.txt"); 
+  int size;
+  DuckyCommand * prefs = splitByLine(preferences, &size) ;
+  for (int i = 0; i < size; i++) {
+    if (prefs[i].instruction.equals("SSID")) {
+      ssid = prefs[i].parameter;
+    }
+    else if (prefs[i].instruction.equals("PASSWORD")) {
+      password = prefs[i].parameter;
+    }
+    else if (prefs[i].instruction.equals("BONJOUR")) {
+      bonjourName = prefs[i].parameter;
+    }
+    Serial1.print("prefs--");
+    Serial1.print(prefs[i].instruction);
+    Serial1.print(" ");
+    Serial1.println(prefs[i].parameter);
+  }
+  
+
 
   String string = readFile( "/ducky.txt");
  

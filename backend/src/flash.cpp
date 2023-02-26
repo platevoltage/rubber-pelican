@@ -97,7 +97,7 @@ String readFile(const char * path) {
 }
 
 void initializeSystemFS() {
-    if(!FFat.begin(true, "PELICAN", 10, "ffat0")){
+    if(!FFat.begin(true, "/fat0", 10, "ffat0")){
         Serial1.println("FAT Mount Failed");
         return;
     }

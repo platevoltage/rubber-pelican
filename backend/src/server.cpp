@@ -8,9 +8,9 @@ WebServer server(80);
 #define STAPSK "youcanttaketheskyfromme"
 #define BONJOURNAME "test"
 
-static String ssid = STASSID;
-static String password = STAPSK;
-static String bonjourName = BONJOURNAME;
+String ssid = "";
+String password = "";
+String bonjourName = "rubber-pelican";
 
 
 void sendHeaders() {
