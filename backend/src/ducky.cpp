@@ -286,8 +286,15 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     else if (commands[i].instruction.equals("HOLD")) {
       if (keyExists(commands[i].parameter)) {
         // callbacks.keyboardKeyHold(commands[i].instruction);
-        heldKeys[0] = getKeyCode(commands[i].parameter);
+        // keyboard.sendRelease();
+        int openSlot = 0;
+        for (int i = 0; i < 6; i++) {
+          if (heldKeys[i] == 0) break;
+          else openSlot++;
+        }
+        heldKeys[openSlot] = getKeyCode(commands[i].parameter);
         keyboard.sendMultiplePresses(heldKeys);
+        vTaskDelay(pdMS_TO_TICKS(1));
       }
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
