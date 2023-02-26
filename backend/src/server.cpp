@@ -65,7 +65,7 @@ void interpretDuckyScript(void *parameter) {
     Serial1.println(commands[i].parameter);
   }
 
-  DuckyCallbacks callbacks = {keyboardCallback, keyboardKeyPressCallback, keyboardShortcutCallback, delayCallback, ledCallback, buttonCallback, enableHIDCallback, enableFlashCallback, disableUSBCallback, setUSBPropertiesCallback, restartCallback}; //contains our callbacks
+  DuckyCallbacks callbacks = {keyboardCallback, keyboardKeyPressCallback, keyboardKeyHoldCallback, keyboardShortcutCallback, delayCallback, ledCallback, buttonCallback, enableHIDCallback, enableFlashCallback, disableUSBCallback, setUSBPropertiesCallback, restartCallback}; //contains our callbacks
   duckyBlock(commands, commands_t, callbacks, startOnLine);
 
 

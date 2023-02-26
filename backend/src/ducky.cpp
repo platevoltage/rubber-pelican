@@ -175,7 +175,7 @@ DuckyCommand * splitByLine(String string, int * size) {
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
   int nestedWhile = 0;
-  uint8_t heldKeys[6] = {0};
+  String heldKeys[6] = {""};
   bool execute = true;
   DuckyVariable var[10];
   int varCount = 0;
@@ -285,30 +285,36 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     }
     else if (commands[i].instruction.equals("HOLD")) {
       if (keyExists(commands[i].parameter)) {
-        uint8_t keycode = getKeyCode(commands[i].parameter);
+        String key = commands[i].parameter;
         int openSlot = 0;
         bool alreadyPressed = false;
         for (int i = 0; i < 6; i++) {
-          if (heldKeys[i] == keycode) alreadyPressed = true;
+          if (heldKeys[i].equals(key)) alreadyPressed = true;
         }
         for (int i = 0; i < 6; i++) {
-          if (heldKeys[i] == 0) break;
+          if (heldKeys[i].equals("")) break;
           else openSlot++;
         }
         if (!alreadyPressed) {
-        heldKeys[openSlot] = keycode;
-        keyboard.sendMultiplePresses(heldKeys);
-        vTaskDelay(pdMS_TO_TICKS(1));
+        heldKeys[openSlot] = key;
         }
+        callbacks.keyboardKeyHold(heldKeys);
+        // uint8_t keycodes[6] = {0};
+        // for (int i = 0; i < 6; i++) {
+        //   keycodes[i] = getKeyCode(heldKeys[i]);
+        // }
+        // keyboard.sendMultiplePresses(keycodes);
+        // vTaskDelay(pdMS_TO_TICKS(1));
+        // }
       }
     }
     else if (commands[i].instruction.equals("RELEASE")) {
-        uint8_t keycode = getKeyCode(commands[i].parameter);
-        for (int i = 0; i < 6; i++) {
-          if (heldKeys[i] == keycode) heldKeys[i] = 0;
-        }
-        keyboard.sendMultiplePresses(heldKeys);
-        vTaskDelay(pdMS_TO_TICKS(1));
+        // uint8_t keycode = getKeyCode(commands[i].parameter);
+        // for (int i = 0; i < 6; i++) {
+        //   if (heldKeys[i] == keycode) heldKeys[i] = 0;
+        // }
+        // keyboard.sendMultiplePresses(heldKeys);
+        // vTaskDelay(pdMS_TO_TICKS(1));
     }
     else if (keyExists(commands[i].instruction) && commands[i].parameter.length() == 0 && execute) {  //handles non printing keys
       callbacks.keyboardKeyPress(commands[i].instruction);

@@ -27,6 +27,7 @@ extern RTC_DATA_ATTR uint32_t ledColor;
 
 void keyboardCallback(String string);
 void keyboardKeyPressCallback(String key);
+void keyboardKeyHoldCallback(String keys[6]);
 void keyboardShortcutCallback(String key, String modifiers);
 void delayCallback(int milliseconds);
 void ledCallback(uint32_t color);

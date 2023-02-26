@@ -33,12 +33,15 @@ void keyboardKeyPressCallback(String key) {
   keyboard.sendKey(getKeyCode(key));
 
 }
-void keyboardKeyHoldCallback(String key) {  
-  Serial1.print("HOLD ---");
-  Serial1.println(key);
-  uint8_t keyCodes[6] = {0};
-  keyCodes[0] = getKeyCode(key);
-  keyboard.sendMultiplePresses(keyCodes);
+void keyboardKeyHoldCallback(String keys[6]) {  
+
+  uint8_t keycodes[6] = {0};
+  for (int i = 0; i < 6; i++) {
+    keycodes[i] = getKeyCode(keys[i]);
+  }
+  keyboard.sendMultiplePresses(keycodes);
+  vTaskDelay(pdMS_TO_TICKS(1));
+  
 }
 
 void keyboardShortcutCallback(String key, String modifiers) { 
