@@ -191,7 +191,12 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         var[i].variableName = varNamesStorage[i];
         var[i].value = varValuesStorage[i];
       }
-      callbacks.delay(100);
+      for (int i = 0; i < 6; i++) {
+        heldKeys[i] = heldKeysStorage[i];
+
+      }
+      callbacks.delay(200);
+      callbacks.keyboardKeyHold(heldKeys);
   }
   while( i < commands_t ) {
     if (commands[i].instruction.equals("STRING") && execute) {
@@ -375,7 +380,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         
       }
       if (willRestart) {
-        callbacks.restart(varCount, nestedWhile, blockStart, var, i);
+        callbacks.restart(varCount, nestedWhile, blockStart, var, heldKeys, i);
       }
     }
     i++;
