@@ -178,7 +178,9 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   String heldKeys[6] = {""};
   bool execute = true;
   DuckyVariable var[10];
-  int varCount = 0;
+  var[0] = {"$_JITTER_ENABLED", 0};
+  var[1] = {"$_JITTER_MAX", 20};
+  int varCount = 2; //2 vars already defined above
   int i = startOnBlock;
   if (startOnBlock > 0) {
       changeLEDColor(ledColor);
@@ -202,12 +204,28 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     if (commands[i].instruction.equals("STRING") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
-      callbacks.keyboard(parameter, 200);
+      int jitter = 0;
+      for (int i = 0; i < varCount; i++) {
+        if (var[i].variableName.equals("$_JITTER_MAX")) jitter = var[i].value;
+        if (var[i].variableName.equals("$_JITTER_ENABLED") && var[i].value == 0) {
+          jitter = 0;
+          break;
+        }
+      }
+      callbacks.keyboard(parameter, jitter);
     }
     else if (commands[i].instruction.equals("STRINGLN") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
-      callbacks.keyboard(parameter + '\n', 10);
+      int jitter = 0;
+      for (int i = 0; i < varCount; i++) {
+        if (var[i].variableName.equals("$_JITTER_MAX")) jitter = var[i].value;
+        if (var[i].variableName.equals("$_JITTER_ENABLED") && var[i].value == 0) {
+          jitter = 0;
+          break;
+        }
+      }
+      callbacks.keyboard(parameter + '\n', jitter);
     }
     else if (commands[i].instruction.equals("DELAY") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
