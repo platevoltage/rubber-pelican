@@ -313,15 +313,17 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       if (!execute) execute = true;
       else i = functionPlaceholder;
     }
+    else if (commands[i].instruction.equals("RETURN") && execute) {
+      i = functionPlaceholder;
+    }
     else if (commands[i].instruction.endsWith("()") && execute) {
       functionPlaceholder = i;
-      for (int j = i; j >= 0; j--) {
+      for (int j = i; j >= 0; j--) { //search for function definition
         if (commands[j].instruction.equals("FUNCTION") && commands[j].parameter == commands[i].instruction) {
           Serial1.print("FOUND FUNCTION ");
           Serial1.print(commands[i].instruction);
           Serial1.print(" AT LINE ");
           Serial1.println(j);
-
           i = j;
           break;
         }
