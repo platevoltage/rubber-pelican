@@ -75,14 +75,15 @@ void setup() {
 
   randomSeed(millis());
   
-
   if (keyboardActivated) initializeKeyboard();
   initializeFlash();
   initializeSystemFS();
 
+  //read preferences
   String preferences = readFile( "/preferences.txt"); 
   int size;
   DuckyCommand * prefs = splitByLine(preferences, &size) ;
+
   for (int i = 0; i < size; i++) {
     if (prefs[i].instruction.equals("SSID")) {
       ssid = prefs[i].parameter;
@@ -93,14 +94,9 @@ void setup() {
     else if (prefs[i].instruction.equals("BONJOUR")) {
       bonjourName = prefs[i].parameter;
     }
-    Serial1.print("prefs--");
-    Serial1.print(prefs[i].instruction);
-    Serial1.print(" ");
-    Serial1.println(prefs[i].parameter);
   }
   
-
-  String string = readFile( "/ducky.txt");
+  String string = readFile( "/.cache.txt");
  
   if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);
 

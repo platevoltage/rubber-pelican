@@ -13,6 +13,7 @@ void initializeFlash();
 void mountSystemDrive();
 void writeFile(const char * path, const char * message);
 String readFile(const char * path);
+void deleteFile(const char * path);
 void initializeSystemFS();
 
 

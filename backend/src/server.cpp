@@ -103,7 +103,7 @@ void startInterpretDuckyScript() {
   sendHeaders();
 
   String body = server.arg("plain");
-  writeFile( "/ducky.txt", body.c_str());
+  writeFile( "/.cache.txt", body.c_str());
   int len = body.length() + 1;
   char *buf = new char[len];
   body.toCharArray(buf, len);

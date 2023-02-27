@@ -52,9 +52,17 @@ void mountSystemDrive() {
     // }
 }
 
+void deleteFile(const char * path) {
+    Serial.printf("Deleting file: %s\r\n", path);
+    if(FFat.remove(path)){
+        Serial.println("- file deleted");
+    } else {
+        Serial.println("- delete failed");
+    }
+}
+
 void writeFile(const char * path, const char * message) {
   Serial1.printf("Writing file: %s\n", path);
-
   File file = FFat.open(path, "w");
   if (!file) {
     Serial1.println("Failed to open file for writing");
@@ -72,21 +80,16 @@ void writeFile(const char * path, const char * message) {
 
 String readFile(const char * path) {
   Serial1.printf("Reading file: %s\n", path);
-
   File file = FFat.open(path, "r");
   if (!file) {
     Serial1.println("Failed to open file for reading");
   }
-
   Serial1.print("Read from file: ");
   String data;
 
   while (file.available()) {
     data += file.readString();
-
-    // Serial.write(file.read());
   }
-  // Serial.println(data);
   file.close();
   return data;
 }
