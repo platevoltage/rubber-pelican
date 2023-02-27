@@ -70,12 +70,26 @@ RTC_DATA_ATTR char serial[15] = "";
 
 
 bool CustomHIDkeyboard::sendMultiplePresses(uint8_t keycodes[6]) {
-
-
+  TUD_HID_REPORT_DESC_KEYBOARD();
     return tud_hid_keyboard_report(report_id, 0, keycodes);
 }
 
 CustomHIDkeyboard keyboard;
+bool numLock = false;
+bool capsLock = false;
+bool scrollLock = false;
+
+class KeyboardHIDCallbacks : public HIDCallbacks {
+  void onData(uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
+    if (report_id == 3 && report_type == 2) {
+    Serial1.printf("ID: %d, type: %d, size: %d\n", report_id, (int)report_type, bufsize);
+    Serial1.println(buffer[0], BIN);
+    numLock = (buffer[0] & 0b00000001);
+    capsLock = (buffer[0] & 0b00000010);
+    scrollLock = (buffer[0] & 0b00000100);
+    }
+  }
+};
 
 void initializeKeyboard() {
   keyboard.setBaseEP(3);
@@ -85,6 +99,7 @@ void initializeKeyboard() {
   keyboard.serial(serial);  // serial number SN
 
   keyboard.begin();
+  keyboard.setCallbacks(new KeyboardHIDCallbacks());
 
   Serial1.println("KEYBOARD STARTED");
   keyboardActivated = true;

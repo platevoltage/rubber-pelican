@@ -1,4 +1,5 @@
 #include "config.h"
+
 RTC_DATA_ATTR int blockStartStorage[10];
 RTC_DATA_ATTR int nestedWhileStorage;
 RTC_DATA_ATTR char varNamesStorage[10][30];
@@ -42,7 +43,6 @@ void keyboardKeyPressCallback(String key) {
   Serial1.print("KEY ---");
   Serial1.println(key);
   keyboard.sendKey(getKeyCode(key));
-
 }
 void keyboardKeyHoldCallback(String keys[6]) {  
   //also responsible for releasing keys. 
