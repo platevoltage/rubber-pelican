@@ -1,9 +1,5 @@
-
 #include "ducky.h"
 
-
-
-// RTC_DATA_ATTR int startOnLineBoot = 0;
 RTC_DATA_ATTR int startOnLineBoot = 0;
 
 double eval(String equation) {
@@ -119,18 +115,6 @@ void updateVariable(String varToBeChanged, int newValue, DuckyVariable * var, in
     }
   }
 }
-// String * splitModifiers(String string, int * size) {
-//   string+="-";
-//   int _size = 0;
-//   String * modifiers = new String[5];
-//   while (string.length() > 0) {                                   
-//     modifiers[_size] = string.substring(0, string.indexOf('-'));  
-//     string = string.substring(string.indexOf('-') + 1);  
-//     _size++;
-//   }
-//   *size = _size;
-//   return modifiers;
-// }
 
 DuckyCommand * splitByLine(String string, int * size) {
   int _size = 0;
@@ -148,29 +132,29 @@ DuckyCommand * splitByLine(String string, int * size) {
     }                   
   }
   *size = _size;
+
+  //find and replace
+  DuckyConstant constants[100];
+  int count = 0;
+  for (int i = 0; i < _size; i++) {
+    if (commands[i].instruction.equals("DEFINE") && commands[i].parameter.length()) {
+      String name = commands[i].parameter.substring(0, commands[i].parameter.indexOf(' '));
+      String value = commands[i].parameter.substring(commands[i].parameter.indexOf(' ')+1);
+      constants[count].variableName = name;
+      constants[count].value = value;
+      count++;
+    }
+  }
+  for (int i = 0; i < _size; i++) {
+    for (int j = 0; j < count; j++) {
+      if (commands[i].parameter.indexOf( constants[j].variableName ) > -1) {
+        commands[i].parameter.replace(constants[j].variableName, constants[j].value);
+      }
+    }
+  }
+
   return commands;
 }
-
-//storage for variables when the ESP needs to restart
-// RTC_DATA_ATTR int blockStartStorage[10];
-// RTC_DATA_ATTR int nestedWhileStorage;
-// RTC_DATA_ATTR char varNamesStorage[10][30];
-// RTC_DATA_ATTR int varValuesStorage[10];
-// RTC_DATA_ATTR int varCountStorage = 0;
-// void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyVariable var[], int i) {
-//       varCountStorage = varCount;
-//       nestedWhileStorage = nestedWhile;
-//       for (int i = 0; i < 10; i++) {
-//         blockStartStorage[i] = blockStart[i];
-//       }
-//       for (int i = 0; i < varCount; i++) {
-//         strcpy(varNamesStorage[i], var[i].variableName.c_str());
-//         varValuesStorage[i] = var[i].value;
-//       }
-//       startOnLineBoot = i+1;
-//       esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
-//       esp_deep_sleep_start();
-// }
 
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
@@ -467,8 +451,8 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.restart(varCount, nestedWhile, blockStart, var, heldKeys, i);
       }
     }
-    else if (commands[i].instruction.equals("REM")) {
-    }
+    else if (commands[i].instruction.equals("REM")) {}
+    else if (commands[i].instruction.equals("DEFINE")) {}
     else {
       Serial1.print("COMMAND NOT FOUND - ");
       Serial1.print(commands[i].instruction);

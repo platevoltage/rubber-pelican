@@ -9,6 +9,11 @@ typedef struct {
 } DuckyVariable;
 
 typedef struct {
+  String variableName;
+  String value;
+} DuckyConstant;
+
+typedef struct {
   String instruction;
   String parameter;
 } DuckyCommand;

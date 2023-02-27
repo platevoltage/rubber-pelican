@@ -104,7 +104,7 @@ void setup() {
  
   if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);
 
-  xTaskCreatePinnedToCore(serverTask, "Server Task", 100000, NULL, 1, NULL, 1); //webserver gets it's own task
+  xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
 
 }
 
