@@ -96,9 +96,10 @@ void setup() {
     }
   }
   
-  String string = readFile( "/.cache.txt");
- 
-  if(startOnLineBoot>0) resumeDuckyScript(string, startOnLineBoot);
+  String cache = readFile( "/.cache.txt");
+  String inject = readFile( "/inject.txt");
+  if(startOnLineBoot>0) resumeDuckyScript(cache, startOnLineBoot);
+  else if (inject.length() > 0) resumeDuckyScript(inject, 0);
 
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
 

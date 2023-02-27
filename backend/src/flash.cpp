@@ -83,6 +83,7 @@ String readFile(const char * path) {
   File file = FFat.open(path, "r");
   if (!file) {
     Serial1.println("Failed to open file for reading");
+    return "";
   }
   Serial1.print("Read from file: ");
   String data;
