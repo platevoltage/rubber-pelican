@@ -175,6 +175,7 @@ DuckyCommand * splitByLine(String string, int * size) {
 void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
   int nestedWhile = 0;
+  int functionPlaceholder = -1;
   String heldKeys[6] = {""};
   bool execute = true;
   DuckyVariable var[10];
@@ -305,7 +306,30 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
     else if (commands[i].instruction.equals("ENDIF")) {
       execute = true;
     }
-    else if (commands[i].instruction.equals("HOLD")) {
+    else if (commands[i].instruction.equals("FUNCTION")) {
+      execute = false;
+    }
+    else if (commands[i].instruction.equals("END_FUNCTION")) {
+      if (!execute) execute = true;
+      else i = functionPlaceholder;
+    }
+    else if (commands[i].instruction.endsWith("()") && execute) {
+      functionPlaceholder = i;
+      for (int j = i; j >= 0; j--) {
+        if (commands[j].instruction.equals("FUNCTION") && commands[j].parameter == commands[i].instruction) {
+          Serial1.print("FOUND FUNCTION ");
+          Serial1.print(commands[i].instruction);
+          Serial1.print(" AT LINE ");
+          Serial1.println(j);
+
+          i = j;
+          break;
+        }
+      }
+    }
+
+
+    else if (commands[i].instruction.equals("HOLD") && execute) {
       String key = commands[i].parameter;
       int openSlot = 0;
       bool alreadyPressed = false;
@@ -321,7 +345,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       }
       callbacks.keyboardKeyHold(heldKeys);
     }
-    else if (commands[i].instruction.equals("RELEASE")) {
+    else if (commands[i].instruction.equals("RELEASE") && execute) {
         String key = commands[i].parameter;
         for (int i = 0; i < 6; i++) {
           if (heldKeys[i].equals(key)) heldKeys[i] = "";
@@ -430,6 +454,11 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.restart(varCount, nestedWhile, blockStart, var, heldKeys, i);
       }
     }
+    Serial1.print("CURRENT LINE - ");
+    Serial1.print(i);
+    Serial1.print(" - EXECUTE ");
+    Serial1.println(execute);
+
     i++;
   }
 

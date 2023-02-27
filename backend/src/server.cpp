@@ -73,6 +73,21 @@ void interpretDuckyScript(void *parameter) {
   vTaskDelete(NULL);
 }
 
+void handleFileUpload() {
+  HTTPUpload& upload = server.upload();
+  Serial1.println(upload.status);
+  if (upload.status == UPLOAD_FILE_START) {
+    // Start file upload
+    Serial1.printf("Starting file upload: %s\n", upload.filename.c_str());
+  } else if (upload.status == UPLOAD_FILE_WRITE) {
+    // Write data to file
+    Serial1.printf("Writing file data: %d bytes\n", upload.currentSize);
+  } else if (upload.status == UPLOAD_FILE_END) {
+    // End file upload
+    Serial1.printf("Finished file upload: %s, size: %d\n", upload.filename.c_str(), upload.totalSize);
+  }
+}
+
 void resumeDuckyScript(String string, int startOnLine) {
     int len = string.length() + 1;
     char *buf = new char[len];
@@ -169,7 +184,8 @@ void serverStart() {
 
 
     // server.on(F("/typestring"), *typeString);
-    server.on(F("/duckyscript"), startInterpretDuckyScript);
+    server.on(F("/duckyscript"), HTTP_POST, startInterpretDuckyScript);
+    server.on(F("/upload"), HTTP_POST, handleFileUpload);
 
 
     server.onNotFound(handleNotFound);
