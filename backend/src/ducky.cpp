@@ -467,6 +467,14 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         callbacks.restart(varCount, nestedWhile, blockStart, var, heldKeys, i);
       }
     }
+    else if (commands[i].instruction.equals("REM")) {
+    }
+    else {
+      Serial1.print("COMMAND NOT FOUND - ");
+      Serial1.print(commands[i].instruction);
+      Serial1.print(" ");
+      Serial1.println(commands[i].parameter);
+    }
     Serial1.print("CURRENT LINE - ");
     Serial1.print(i);
     Serial1.print(" - EXECUTE ");
