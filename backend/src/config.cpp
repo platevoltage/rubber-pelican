@@ -29,15 +29,13 @@ void saveStateAndRestart(int varCount, int nestedWhile, int blockStart[], DuckyV
 void keyboardCallback(String string, int jitterMax) {  
   Serial1.print("PRINTING TO KEYBOARD - ");
   Serial1.println(string);
-  // if (!jitter) keyboard.sendString(string);
-  // else {
-    for (int i = 0; i < string.length(); i++) {
-      keyboard.sendChar(string[i]);
-      int randomNum = random(1, jitterMax);
-      Serial1.println(randomNum);
-      vTaskDelay(pdMS_TO_TICKS(randomNum));
-    }
-  // }
+  for (int i = 0; i < string.length(); i++) {
+    keyboard.sendChar(string[i]);
+    int randomNum = random(1, jitterMax);
+    Serial1.println(randomNum);
+    vTaskDelay(pdMS_TO_TICKS(randomNum));
+  }
+
 }
 
 void keyboardKeyPressCallback(String key) {  
