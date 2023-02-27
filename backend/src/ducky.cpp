@@ -176,6 +176,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
   int blockStart[10];
   int nestedWhile = 0;
   int functionPlaceholder = -1;
+  int functionReturnValue = 0;
   String heldKeys[6] = {""};
   bool execute = true;
   DuckyVariable var[10];
@@ -314,6 +315,16 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       else i = functionPlaceholder;
     }
     else if (commands[i].instruction.equals("RETURN") && execute) {
+      
+      String parameter = commands[i].parameter;
+      parameter = replaceVariables(parameter, var, varCount);
+      functionReturnValue = eval(parameter);
+      Serial1.print("XXX - ");
+      Serial1.print(commands[i].instruction);
+      Serial1.print(" ");
+      Serial1.println(commands[i].parameter);
+      Serial1.print("RETURN VALUE - ");
+      Serial1.println(functionReturnValue);
       i = functionPlaceholder;
     }
     else if (commands[i].instruction.endsWith("()") && execute) {
