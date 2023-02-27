@@ -84,6 +84,10 @@ extern RTC_DATA_ATTR char manufacturer[15];
 extern RTC_DATA_ATTR char product[15];
 extern RTC_DATA_ATTR char serial[15];
 
+extern bool numLock;
+extern bool capsLock;
+extern bool scrollLock;
+
 void initializeKeyboard();
 // void callback(String string); //duckyBlock uses this function to to decided what happens when a 
 
@@ -91,5 +95,8 @@ int getKeyCode(String keyString);
 int getModCode(String modString);
 bool keyExists(String keyString);
 bool modExists(String modString);
+bool getNumLockStatus();
+bool getScrollLockStatus();
+bool getCapsLockStatus();
 
 #endif

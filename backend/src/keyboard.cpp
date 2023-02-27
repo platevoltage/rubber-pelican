@@ -67,29 +67,39 @@ RTC_DATA_ATTR uint16_t PID = 0x021e;
 RTC_DATA_ATTR char manufacturer[15] = "GarrettSoft";
 RTC_DATA_ATTR char product[15] = "Rubber-Pelican";
 RTC_DATA_ATTR char serial[15] = "";
-
-
-bool CustomHIDkeyboard::sendMultiplePresses(uint8_t keycodes[6]) {
-  TUD_HID_REPORT_DESC_KEYBOARD();
-    return tud_hid_keyboard_report(report_id, 0, keycodes);
-}
-
-CustomHIDkeyboard keyboard;
 bool numLock = false;
 bool capsLock = false;
 bool scrollLock = false;
 
+
+bool CustomHIDkeyboard::sendMultiplePresses(uint8_t keycodes[6]) {
+  TUD_HID_REPORT_DESC_KEYBOARD();
+  return tud_hid_keyboard_report(report_id, 0, keycodes);
+}
+
+CustomHIDkeyboard keyboard;
+
 class KeyboardHIDCallbacks : public HIDCallbacks {
   void onData(uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
     if (report_id == 3 && report_type == 2) {
-    Serial1.printf("ID: %d, type: %d, size: %d\n", report_id, (int)report_type, bufsize);
-    Serial1.println(buffer[0], BIN);
-    numLock = (buffer[0] & 0b00000001);
-    capsLock = (buffer[0] & 0b00000010);
-    scrollLock = (buffer[0] & 0b00000100);
+      Serial1.printf("ID: %d, type: %d, size: %d\n", report_id, (int)report_type, bufsize);
+      Serial1.println(buffer[0], BIN);
+      numLock = (buffer[0] & 0b00000001);
+      capsLock = (buffer[0] & 0b00000010);
+      scrollLock = (buffer[0] & 0b00000100);
     }
   }
 };
+
+bool getCapsLockStatus() {
+  return capsLock;
+}
+bool getNumLockStatus() {
+  return numLock;
+}
+bool getScrollLockStatus() {
+  return scrollLock;
+}
 
 void initializeKeyboard() {
   keyboard.setBaseEP(3);

@@ -347,6 +347,36 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
         else execute = true;
       }
     }
+    else if (commands[i].instruction.equals("WAIT_FOR_CAPS_ON") && execute) {
+      while (!getCapsLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_CAPS_OFF") && execute) {
+      while (getCapsLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_CAPS_CHANGE") && execute) {
+      bool state = getCapsLockStatus();
+      while (state == getCapsLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_NUM_ON") && execute) {
+      while (!getNumLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_NUM_OFF") && execute) {
+      while (getNumLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_NUM_CHANGE") && execute) {
+      bool state = getNumLockStatus();
+      while (state == getNumLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_SCROLL_ON") && execute) {
+      while (!getScrollLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_SCROLL_OFF") && execute) {
+      while (getScrollLockStatus()) {}
+    }
+    else if (commands[i].instruction.equals("WAIT_FOR_SCROLL_CHANGE") && execute) {
+      bool state = getScrollLockStatus();
+      while (state == getScrollLockStatus()) {}
+    }
     else if (commands[i].instruction.equals("ATTACKMODE") && execute) {
       bool willRestart = false;
       if (commands[i].parameter.indexOf("MAN_") > -1) {
