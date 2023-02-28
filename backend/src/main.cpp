@@ -100,26 +100,15 @@ void setup() {
   
  
   if (startOnLineBoot>0) {
-    String cache = readFile( "/.cache.txt");
+    String cache = readFile( "/.cache.txt"); // cache file for rebooting
     resumeDuckyScript(cache, startOnLineBoot);
   } else {
-    String inject = readFile("/inject.txt");
+    String inject = readFile("/inject.txt"); //hotplug
     if (inject.length()) runOnBoot(inject);
   }
-
-
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
-  // delay(5000);
-  // if (startOnLineBoot == 0) {
-  //   String inject = readFile( "/inject.txt");
-  //   if (inject.length() > 0) {
-  //     vTaskDelay(pdMS_TO_TICKS(1000));
-  //     resumeDuckyScript(inject);
-  //   }
-  // }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
 }

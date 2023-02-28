@@ -22,7 +22,7 @@ double eval(String equation) {
 }
 
 bool compare(String equation) {
-  size_t comparators_t = 6;
+  size_t numComparators = 6;
   String comparators[] = {">=", "<=", "==", "!=", "<", ">"}; //longer ones must go first
   int comparatorSelected = -1;
   int comparatorIndex = -1;
@@ -30,7 +30,7 @@ bool compare(String equation) {
   if (equation[0] == '(') equation.remove(0,1);
   if (equation[equation.length()-1] == ')') equation.remove(equation.length()-1,1);
   equation.trim();
-  for (int i=0; i < comparators_t; i++) {
+  for (int i=0; i < numComparators; i++) {
     int _comparatorIndex = equation.indexOf(comparators[i]);
     if (_comparatorIndex > 0) {
       Serial1.println(comparators[i]);
@@ -156,7 +156,7 @@ DuckyCommand * splitByLine(String string, int * size) {
   return commands;
 }
 
-void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callbacks, int startOnBlock) {
+void duckyBlock(DuckyCommand commands[], size_t numCommands, DuckyCallbacks callbacks, int startOnBlock) {
   int blockStart[10];
   int nestedWhile = 0;
   int functionPlaceholder = -1;
@@ -186,7 +186,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       callbacks.delay(200);
       callbacks.keyboardKeyHold(heldKeys);
   }
-  while( i < commands_t ) {
+  while( i < numCommands ) {
     if (commands[i].instruction.equals("STRING") && execute) {
       String parameter = commands[i].parameter.substring(0, commands[i].parameter.length());
       parameter = replaceVariables(parameter, var, varCount);
