@@ -149,18 +149,24 @@ function highlightText(text: string) {
 function DuckyInput() {
     const [textBox, setTextBox] = useState("");
     const textDisplay = useRef(null);
+    const hiddenText = useRef(null);
+    function handleScroll() {
+        if (hiddenText.current) {
+            const hiddenDiv = hiddenText.current as HTMLDivElement;
+            const hiddenTextBox = hiddenDiv.childNodes[0] as HTMLDivElement;
+            const scrollPosition = hiddenTextBox.scrollTop;
+            if (textDisplay.current) {
+                const div = textDisplay.current as HTMLDivElement;
+                div.scrollTop = scrollPosition;
+            }
+        }
+    };
     useEffect(() => {
-        
         if (textDisplay.current) {
             const div = textDisplay.current as HTMLDivElement;
             const pre = div.childNodes[0] as HTMLDivElement;
             const html = highlightText(textBox);
             pre.innerHTML = html;
-
-
-            // pre.innerHTML
-            console.log(pre.innerHTML);
-            // textDisplay.current.innerHTML = textBox;
         }
         function handleTextChange(e: KeyboardEvent) {
             if (e.key === 'Tab') {
@@ -242,14 +248,17 @@ function DuckyInput() {
                 <button onClick={handleRecover}>Recover</button>
                 <button onClick={handleSave}>Save</button>
             </div>
-            {/* <pre>{JSON.stringify(json, null , 2)}</pre> */}
-            <textarea
-                    value={textBox}
-                    name="strip-length"
-                    onChange={(e) => {setTextBox(e.target.value)}}
-                    placeholder=""
-                    spellCheck={false}
-            />
+
+            <div className="hiddenText" ref={hiddenText}>
+                <textarea
+                        value={textBox}
+                        name="strip-length"
+                        onScroll={handleScroll}
+                        onChange={(e) => {setTextBox(e.target.value)}}
+                        placeholder=""
+                        spellCheck={false}
+                />
+            </div>
         </div>
     )
 }
