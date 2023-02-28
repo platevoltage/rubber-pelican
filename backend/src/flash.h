@@ -10,7 +10,7 @@
 
 extern RTC_DATA_ATTR bool flashActivated;
 void initializeFlash();
-void mountSystemDrive();
+void mountSystemDrive(bool stall = false);
 void writeFile(const char * path, const char * message);
 String readFile(const char * path);
 void deleteFile(const char * path);

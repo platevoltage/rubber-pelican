@@ -17,7 +17,7 @@ void initializeFlash() {
     }
 }
 
-void mountSystemDrive() {
+void mountSystemDrive(bool stall) {
 
     if (dev.init("/fat1", "ffat")) {
         if (dev.begin()) {
@@ -31,7 +31,7 @@ void mountSystemDrive() {
         }
         else Serial1.println("LUN 0 failed");
     }
-    while (1) { // wait for button push then restart
+    while (stall) { // wait for button push then restart
       changeLEDColor(0xFF00FF);
       delay(20);                                   //this delay acts as a debounce.
       if (digitalRead(13)) {                       //prevents button listening while button already pressed

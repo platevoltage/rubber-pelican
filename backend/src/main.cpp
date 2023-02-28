@@ -67,10 +67,12 @@ void setup() {
       break;
   }
   
+  Serial1.print("STORAGE ENABLED - ");
+  Serial1.println(flashActivated);
   pinMode(13, INPUT_PULLUP);
   initializeLED();
   if (!digitalRead(13) && startOnLineBoot == 0) {   //opens system drive if button pushed on boot
-    mountSystemDrive();                             //execution is halted until button is pushed again and system reboots
+    mountSystemDrive(true);                             //execution is halted until button is pushed again and system reboots
   }
 
   randomSeed(millis());
@@ -96,13 +98,25 @@ void setup() {
     }
   }
   
-  String cache = readFile( "/.cache.txt");
-  String inject = readFile( "/inject.txt");
-  if(startOnLineBoot>0) resumeDuckyScript(cache, startOnLineBoot);
-  else if (inject.length() > 0) resumeDuckyScript(inject, 0);
+ 
+  if (startOnLineBoot>0) {
+    String cache = readFile( "/.cache.txt");
+    resumeDuckyScript(cache, startOnLineBoot);
+  } else {
+    String inject = readFile("/inject.txt");
+    if (inject.length()) runOnBoot(inject);
+  }
+
 
   xTaskCreatePinnedToCore(serverTask, "Server Task", 10000, NULL, 1, NULL, 1); //webserver gets it's own task
-
+  // delay(5000);
+  // if (startOnLineBoot == 0) {
+  //   String inject = readFile( "/inject.txt");
+  //   if (inject.length() > 0) {
+  //     vTaskDelay(pdMS_TO_TICKS(1000));
+  //     resumeDuckyScript(inject);
+  //   }
+  // }
 }
 
 void loop() {

@@ -16,6 +16,7 @@ extern String password;
 extern String bonjourName;
 
 void serverTask(void *pvParameters);
+void runOnBoot(String body);
 void resumeDuckyScript(String string, int startOnLine);
 
 #endif

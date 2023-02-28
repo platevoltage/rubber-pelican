@@ -98,6 +98,18 @@ void resumeDuckyScript(String string, int startOnLine) {
     xTaskCreate(interpretDuckyScript, "duckyTask", 10000, &params, 2, NULL); // pass the address of param as pvParameters
 }
 
+void runOnBoot(String body) {
+  writeFile( "/.cache.txt", body.c_str());
+  int len = body.length() + 1;
+  char *buf = new char[len];
+  body.toCharArray(buf, len);
+
+  Serial1.println(body);
+  Serial1.println(buf);
+  TaskParameters params = {buf, 0};
+  xTaskCreate(interpretDuckyScript, "duckyTask", 10000, &params, 2, NULL); // pass the address of param as pvParameters
+}
+
 
 void startInterpretDuckyScript() {
   sendHeaders();
@@ -127,6 +139,15 @@ void handleRecover() {
   String body = readFile("/inject.txt");
 
   server.send(200, "text/plain", body);
+}
+
+void handleMountSystem() {
+  sendHeaders();
+  mountSystemDrive();
+  server.send(200, "text/plain", "Success");
+  delay(2000);
+  esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
+  esp_deep_sleep_start();
 }
 
 void serverStart() {
@@ -201,7 +222,7 @@ void serverStart() {
     server.on(F("/save"), HTTP_POST, handleSave);
     server.on(F("/upload"), HTTP_POST, handleFileUpload);
     server.on(F("/recover"), HTTP_GET, handleRecover);
-
+    server.on(F("/mountsystem"), HTTP_GET, handleMountSystem);
 
     server.onNotFound(handleNotFound);
     server.enableCORS(true);
@@ -216,7 +237,6 @@ void serverTask(void *pvParameters) {
   // int startOnLine = 1;
   // continueDuckyScript(string, startOnLine);
   serverStart();
-
   while (true) {
     server.handleClient();
     delay(1);

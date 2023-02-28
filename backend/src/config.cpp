@@ -93,12 +93,16 @@ bool buttonCallback() {
 bool enableHIDCallback() {
   bool willRestart = !keyboardActivated;
   keyboardActivated = true;
+    Serial1.print("HID ACTIVATED ");
+  Serial1.println(keyboardActivated);
   return willRestart;
 }
 
 bool enableFlashCallback() {
   bool willRestart = !flashActivated;
   flashActivated = true;
+  Serial1.print("FLASH ACTIVATED ");
+  Serial1.println(flashActivated);
   return willRestart;
 }
 

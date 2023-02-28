@@ -403,13 +403,13 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
       if (commands[i].parameter.indexOf("MAN_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("MAN_")+4;
         String temp = commands[i].parameter.substring(beginningIndex);
-        if (!willRestart) willRestart = callbacks.setUSBProperties(_MAN, temp);
+        willRestart = callbacks.setUSBProperties(_MAN, temp);
       }
       if (commands[i].parameter.indexOf("PROD_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("PROD_")+5;
         String temp = commands[i].parameter.substring(beginningIndex);
         temp = temp.substring(0, temp.indexOf(" ")) + '\0';
-        if (!willRestart) willRestart = callbacks.setUSBProperties(_PROD, temp);
+        willRestart = callbacks.setUSBProperties(_PROD, temp);
       }
       if (commands[i].parameter.indexOf("SERIAL_") > -1) {
         int beginningIndex = commands[i].parameter.indexOf("SERIAL_")+7;
@@ -420,32 +420,26 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
           temp = String(randomNumber) + String(randomNumber/2);
           temp = temp.substring(0, 12);
         } 
-        if (!willRestart) willRestart = callbacks.setUSBProperties(_SERIAL, temp);
+        willRestart = callbacks.setUSBProperties(_SERIAL, temp);
       }
       if (commands[i].parameter.indexOf("VID_") > -1) {
         String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("VID_")+4, commands[i].parameter.indexOf("VID_")+8);
         char* hexStringEnd;
-        if (!willRestart) willRestart = callbacks.setUSBProperties(_VID, temp);
+        willRestart = callbacks.setUSBProperties(_VID, temp);
       }
       if (commands[i].parameter.indexOf("PID_") > -1) {
         String temp = commands[i].parameter.substring(commands[i].parameter.indexOf("PID_")+4, commands[i].parameter.indexOf("PID_")+8);
         char* hexStringEnd;
-        if (!willRestart) willRestart = callbacks.setUSBProperties(_PID, temp);
+        willRestart = callbacks.setUSBProperties(_PID, temp);
       }
       if (commands[i].parameter.indexOf("OFF") > -1) {
-
-          if (!willRestart) willRestart = callbacks.disableUSB();
-        
+          willRestart = callbacks.disableUSB(); 
       }
       if (commands[i].parameter.indexOf("HID") > -1) {
-
-          if (!willRestart) willRestart = callbacks.enableHID();
- 
+          willRestart = callbacks.enableHID();
       }
       if (commands[i].parameter.indexOf("STORAGE") > -1) {
-
-          if (!willRestart) willRestart = callbacks.enableFlash();
-        
+          willRestart = callbacks.enableFlash();
       }
       if (willRestart) {
         callbacks.restart(varCount, nestedWhile, blockStart, var, heldKeys, i);
