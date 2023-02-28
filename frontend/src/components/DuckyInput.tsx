@@ -149,6 +149,7 @@ function highlightText(text: string) {
 function DuckyInput() {
     const [textBox, setTextBox] = useState("");
     const textDisplay = useRef(null);
+    const textArea = useRef(null);
     useEffect(() => {
         
         if (textDisplay.current) {
@@ -232,11 +233,9 @@ function DuckyInput() {
 
     return (
         <div className="DuckyInput">
-                <div className="overlay" ref={textDisplay}>
-                    <pre></pre>
-                </div>
-
-       
+            <div className="overlay" ref={textDisplay}>
+                <pre></pre>
+            </div>
             <div>
                 <button onClick={handleSubmit}>Run</button>
                 <button onClick={handleRecover}>Recover</button>
@@ -245,6 +244,7 @@ function DuckyInput() {
             {/* <pre>{JSON.stringify(json, null , 2)}</pre> */}
             <textarea
                     value={textBox}
+                    // ref = {textDisplay}
                     name="strip-length"
                     onChange={(e) => {setTextBox(e.target.value)}}
                     placeholder=""
