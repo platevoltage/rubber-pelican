@@ -112,9 +112,15 @@ void startInterpretDuckyScript() {
   Serial1.println(buf);
   TaskParameters params = {buf, 0};
   xTaskCreate(interpretDuckyScript, "duckyTask", 10000, &params, 2, NULL); // pass the address of param as pvParameters
-  
+  server.send(200, "text/plain", "success");
 }
+void handleSave() {
+  sendHeaders();
 
+  String body = server.arg("plain");
+  writeFile( "/inject.txt", body.c_str());
+  server.send(200, "text/plain", body);
+}
 
 void serverStart() {
 
@@ -185,6 +191,7 @@ void serverStart() {
 
     // server.on(F("/typestring"), *typeString);
     server.on(F("/duckyscript"), HTTP_POST, startInterpretDuckyScript);
+    server.on(F("/save"), HTTP_POST, handleSave);
     server.on(F("/upload"), HTTP_POST, handleFileUpload);
 
 

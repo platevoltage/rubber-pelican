@@ -466,7 +466,7 @@ void duckyBlock(DuckyCommand commands[], size_t commands_t, DuckyCallbacks callb
 
     i++;
   }
-    deleteFile("/.cache.txt");
+    // deleteFile("/.cache.txt");
     delete[] commands;
 }
 
