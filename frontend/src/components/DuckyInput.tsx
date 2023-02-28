@@ -104,42 +104,42 @@ function highlightText(text: string) {
     let html = text
     const commandColor = "#aaaaff";
     for (let word of commands) {
-        html = html.replace(`${word} `, `<span style='color: ${commandColor}'>${word}</span> `);
-        html = html.replace(`${word}\t`, `<span style='color: ${commandColor}'>${word}</span>\t`);
-        html = html.replace(`${word}\n`, `<span style='color: ${commandColor}'>${word}</span>\n`);
+        html = html.replaceAll(`${word} `, `<span style='color: ${commandColor}'>${word}</span> `);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${commandColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${commandColor}'>${word}</span>\n`);
         if (text.endsWith(word)) {
 
-            html = html.replace(`${word}`, `<span style='color: ${commandColor}'>${word}</span>`);
+            html = html.replaceAll(`${word}`, `<span style='color: ${commandColor}'>${word}</span>`);
         }
     }
     const nonPrintingColor = "#ffaaff";
     for (let word of nonPrintingKeys) {
-        html = html.replace(`${word} `, `<span style='color: ${nonPrintingColor}'>${word}</span> `);
-        html = html.replace(`${word}\t`, `<span style='color: ${nonPrintingColor}'>${word}</span>\t`);
-        html = html.replace(`${word}\n`, `<span style='color: ${nonPrintingColor}'>${word}</span>\n`);
+        html = html.replaceAll(`${word} `, `<span style='color: ${nonPrintingColor}'>${word}</span> `);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${nonPrintingColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${nonPrintingColor}'>${word}</span>\n`);
         if (text.endsWith(word)) {
 
-            html = html.replace(`${word}`, `<span style='color: ${nonPrintingColor}'>${word}</span>`);
+            html = html.replaceAll(`${word}`, `<span style='color: ${nonPrintingColor}'>${word}</span>`);
         }
     }
     const keywordColor = "#ffffaa";
     for (let word of otherKeyWords) {
-        html = html.replace(`${word} `, `<span style='color: ${keywordColor}'>${word}</span> `);
-        html = html.replace(`${word}\t`, `<span style='color: ${keywordColor}'>${word}</span>\t`);
-        html = html.replace(`${word}\n`, `<span style='color: ${keywordColor}'>${word}</span>\n`);
+        html = html.replaceAll(`${word} `, `<span style='color: ${keywordColor}'>${word}</span> `);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${keywordColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${keywordColor}'>${word}</span>\n`);
         if (text.endsWith(word)) {
 
-            html = html.replace(`${word}`, `<span style='color: ${keywordColor}'>${word}</span>`);
+            html = html.replaceAll(`${word}`, `<span style='color: ${keywordColor}'>${word}</span>`);
         }
     }
     const paramsColor = "#aaffaa";
     for (let word of params) {
-        html = html.replace(`${word} `, `<span style='color: ${paramsColor}'>${word}</span> `);
-        html = html.replace(`${word}\t`, `<span style='color: ${paramsColor}'>${word}</span>\t`);
-        html = html.replace(`${word}\n`, `<span style='color: ${paramsColor}'>${word}</span>\n`);
+        html = html.replaceAll(`${word} `, `<span style='color: ${paramsColor}'>${word}</span> `);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${paramsColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${paramsColor}'>${word}</span>\n`);
         if (text.endsWith(word) || word.endsWith("_")) {
 
-            html = html.replace(`${word}`, `<span style='color: ${paramsColor}'>${word}</span>`);
+            html = html.replaceAll(`${word}`, `<span style='color: ${paramsColor}'>${word}</span>`);
         }
     }
 
