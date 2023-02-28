@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import "./DuckyInput.css";
 
-const keyWords = [
+const commands = [
     "STRING",
     "STRINGLN",
     "DELAY",
@@ -37,18 +37,53 @@ const keyWords = [
     "WAIT_FOR_SCROLL_CHANGE",
     "ATTACKMODE"
 ]
+const params = [
+    "MAN_",
+    "PROD_",
+    "SERIAL_",
+    "VID_",
+    "PID_",
+    "HID",
+    "STORAGE"
+]
+const otherKeyWords = [
+    "TRUE",
+    "FALSE",
+]
 
 function highlightText(text: string) {
     let html = text
-    const color = "#aaaaff";
-    for (let word of keyWords) {
-        html = html.replace(`${word} `, `<span style='color: ${color}'>${word}</span> `);
-        html = html.replace(`${word}\n`, `<span style='color: ${color}'>${word}</span>\n`);
+    const commandColor = "#aaaaff";
+    for (let word of commands) {
+        html = html.replace(`${word} `, `<span style='color: ${commandColor}'>${word}</span> `);
+        html = html.replace(`${word}\t`, `<span style='color: ${commandColor}'>${word}</span>\t`);
+        html = html.replace(`${word}\n`, `<span style='color: ${commandColor}'>${word}</span>\n`);
         if (text.endsWith(word)) {
 
-            html = html.replace(`${word}`, `<span style='color: ${color}'>${word}</span>`);
+            html = html.replace(`${word}`, `<span style='color: ${commandColor}'>${word}</span>`);
         }
     }
+    const keywordColor = "#ffffaa";
+    for (let word of otherKeyWords) {
+        html = html.replace(`${word} `, `<span style='color: ${keywordColor}'>${word}</span> `);
+        html = html.replace(`${word}\t`, `<span style='color: ${keywordColor}'>${word}</span>\t`);
+        html = html.replace(`${word}\n`, `<span style='color: ${keywordColor}'>${word}</span>\n`);
+        if (text.endsWith(word)) {
+
+            html = html.replace(`${word}`, `<span style='color: ${keywordColor}'>${word}</span>`);
+        }
+    }
+    const paramsColor = "#aaffaa";
+    for (let word of params) {
+        html = html.replace(`${word} `, `<span style='color: ${paramsColor}'>${word}</span> `);
+        html = html.replace(`${word}\t`, `<span style='color: ${paramsColor}'>${word}</span>\t`);
+        html = html.replace(`${word}\n`, `<span style='color: ${paramsColor}'>${word}</span>\n`);
+        if (text.endsWith(word) || word.endsWith("_")) {
+
+            html = html.replace(`${word}`, `<span style='color: ${paramsColor}'>${word}</span>`);
+        }
+    }
+
     return html;
 }
 
