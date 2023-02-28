@@ -1,11 +1,31 @@
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import "./DuckyInput.css";
 
-
+function processText(text: string) {
+    let html = text
+    html = html.replace("STRING", "<span style='color: #ff0000'>STRING</span>");
+    return html;
+}
 
 function DuckyInput() {
     const [textBox, setTextBox] = useState("");
+    const textDisplay = useRef(null);
+    useEffect(() => {
+        
+        if (textDisplay.current) {
+            const div = textDisplay.current as HTMLDivElement;
+            const pre = div.childNodes[0] as HTMLDivElement;
+            const html = processText(textBox);
+            pre.innerHTML = html;
+
+            // pre.innerHTML
+            console.log(pre.innerHTML);
+            // textDisplay.current.innerHTML = textBox;
+        }
+        
+    },[textBox]);
+
     function handleSave() {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             // console.log(JSON.stringify(_json));
@@ -60,24 +80,26 @@ function DuckyInput() {
         setTextBox(body);
     }
 
-
     return (
         <div className="DuckyInput">
-            <textarea
-                value={textBox}
-                name="strip-length"
-                onChange={(e) => {setTextBox(e.target.value)}}
-                // type="text"
-                placeholder=""
-                spellCheck={false}
-                // height="40"
-            />
+                <div className="overlay" ref={textDisplay}>
+                    <pre></pre>
+                </div>
+
+       
             <div>
                 <button onClick={handleSubmit}>Run</button>
                 <button onClick={handleRecover}>Recover</button>
                 <button onClick={handleSave}>Save</button>
             </div>
             {/* <pre>{JSON.stringify(json, null , 2)}</pre> */}
+            <textarea
+                    value={textBox}
+                    name="strip-length"
+                    onChange={(e) => {setTextBox(e.target.value)}}
+                    placeholder=""
+                    spellCheck={false}
+            />
         </div>
     )
 }
