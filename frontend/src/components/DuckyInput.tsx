@@ -50,6 +50,55 @@ const otherKeyWords = [
     "TRUE",
     "FALSE",
 ]
+const nonPrintingKeys = [
+    "COMMAND",
+    "WINDOWS",
+    "GUI",
+    "CTRL",
+    "OPTION",
+    "ALT",
+    "SHIFT",
+    "ESCAPE",
+    "ENTER",
+    "SPACE",
+    "TAB",
+    "UPARROW",
+    "DOWNARROW",
+    "LEFTARROW",
+    "RIGHTARROW",
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+    "PAGEUP",
+    "PAGEDOWN",
+    "HOME",
+    "END",
+    "INSERT",
+    "DELETE",
+    "BACKSPACE",
+    "PAUSE",
+    "BREAK",
+    "PRINTSCREEN",
+    "MENU",
+    "APP",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "CAPSLOCK",
+    "NUMLOCK",
+    "SCROLLLOCK"
+
+]
 
 function highlightText(text: string) {
     let html = text
@@ -61,6 +110,16 @@ function highlightText(text: string) {
         if (text.endsWith(word)) {
 
             html = html.replace(`${word}`, `<span style='color: ${commandColor}'>${word}</span>`);
+        }
+    }
+    const nonPrintingColor = "#ffaaff";
+    for (let word of nonPrintingKeys) {
+        html = html.replace(`${word} `, `<span style='color: ${nonPrintingColor}'>${word}</span> `);
+        html = html.replace(`${word}\t`, `<span style='color: ${nonPrintingColor}'>${word}</span>\t`);
+        html = html.replace(`${word}\n`, `<span style='color: ${nonPrintingColor}'>${word}</span>\n`);
+        if (text.endsWith(word)) {
+
+            html = html.replace(`${word}`, `<span style='color: ${nonPrintingColor}'>${word}</span>`);
         }
     }
     const keywordColor = "#ffffaa";
