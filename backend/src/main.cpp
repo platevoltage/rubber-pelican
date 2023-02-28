@@ -71,7 +71,7 @@ void setup() {
   Serial1.println(flashActivated);
   pinMode(13, INPUT_PULLUP);
   initializeLED();
-  if (!digitalRead(13) && startOnLineBoot == 0) {   //opens system drive if button pushed on boot
+  if ((!digitalRead(13) && startOnLineBoot == 0) || systemDriveActivated) {   //opens system drive if button pushed on boot
     mountSystemDrive(true);                             //execution is halted until button is pushed again and system reboots
   }
 

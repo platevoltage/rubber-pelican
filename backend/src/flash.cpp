@@ -1,6 +1,7 @@
 #include "flash.h"
 
 bool RTC_DATA_ATTR flashActivated = false;
+bool RTC_DATA_ATTR systemDriveActivated = false;
 
 FlashUSB dev;
 FlashUSB dev0;
@@ -44,6 +45,8 @@ void mountSystemDrive(bool stall) {
           delay(100);
           color+=10;     
         }
+        systemDriveActivated = false;
+        flashActivated = false;
         esp_sleep_enable_timer_wakeup(5 * 100000); //restart
         esp_deep_sleep_start();
       }

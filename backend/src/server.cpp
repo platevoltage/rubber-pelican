@@ -141,13 +141,18 @@ void handleRecover() {
   server.send(200, "text/plain", body);
 }
 
+void restart(void *parameter) {
+  vTaskDelay(1000/portTICK_PERIOD_MS);
+  esp_sleep_enable_timer_wakeup(5 * 100000);
+  esp_deep_sleep_start();
+}
 void handleMountSystem() {
   sendHeaders();
-  mountSystemDrive();
   server.send(200, "text/plain", "Success");
-  delay(2000);
-  esp_sleep_enable_timer_wakeup(5 * 100000); // 10 seconds
-  esp_deep_sleep_start();
+  systemDriveActivated = true;
+  // esp_sleep_enable_timer_wakeup(5 * 100000); 
+  // esp_deep_sleep_start();
+  xTaskCreate(restart, "restart", 1000, NULL, 3, NULL); // pass the address of param as pvParameters
 }
 
 void serverStart() {
@@ -222,7 +227,7 @@ void serverStart() {
     server.on(F("/save"), HTTP_POST, handleSave);
     server.on(F("/upload"), HTTP_POST, handleFileUpload);
     server.on(F("/recover"), HTTP_GET, handleRecover);
-    server.on(F("/mountsystem"), HTTP_GET, handleMountSystem);
+    server.on(F("/mountsystem"), HTTP_POST, handleMountSystem);
 
     server.onNotFound(handleNotFound);
     server.enableCORS(true);

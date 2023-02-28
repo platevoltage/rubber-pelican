@@ -9,6 +9,7 @@
 
 
 extern RTC_DATA_ATTR bool flashActivated;
+extern RTC_DATA_ATTR bool systemDriveActivated;
 void initializeFlash();
 void mountSystemDrive(bool stall = false);
 void writeFile(const char * path, const char * message);
