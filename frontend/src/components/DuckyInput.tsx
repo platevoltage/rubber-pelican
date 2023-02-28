@@ -238,9 +238,9 @@ function DuckyInput() {
 
     return (
         <div className="DuckyInput">
-                <div className="overlay" ref={textDisplay}>
-                    <pre></pre>
-                </div>
+            <div className="overlay" ref={textDisplay}>
+                <pre></pre>
+            </div>
 
        
             <div>
