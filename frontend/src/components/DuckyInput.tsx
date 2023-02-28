@@ -38,7 +38,7 @@ const keyWords = [
     "ATTACKMODE"
 ]
 
-function processText(text: string) {
+function highlightText(text: string) {
     let html = text
     const color = "#aaaaff";
     for (let word of keyWords) {
@@ -60,7 +60,7 @@ function DuckyInput() {
         if (textDisplay.current) {
             const div = textDisplay.current as HTMLDivElement;
             const pre = div.childNodes[0] as HTMLDivElement;
-            const html = processText(textBox);
+            const html = highlightText(textBox);
             pre.innerHTML = html;
 
 
