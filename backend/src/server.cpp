@@ -122,6 +122,13 @@ void handleSave() {
   server.send(200, "text/plain", body);
 }
 
+void handleRecover() {
+  sendHeaders();
+  String body = readFile("/inject.txt");
+
+  server.send(200, "text/plain", body);
+}
+
 void serverStart() {
 
     WiFi.setAutoReconnect(true);
@@ -193,6 +200,7 @@ void serverStart() {
     server.on(F("/duckyscript"), HTTP_POST, startInterpretDuckyScript);
     server.on(F("/save"), HTTP_POST, handleSave);
     server.on(F("/upload"), HTTP_POST, handleFileUpload);
+    server.on(F("/recover"), HTTP_GET, handleRecover);
 
 
     server.onNotFound(handleNotFound);

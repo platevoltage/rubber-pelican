@@ -41,6 +41,25 @@ function DuckyInput() {
             });
         }
     }
+    async function handleRecover() {
+        let response;
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            // console.log(JSON.stringify(_json));
+            response = await fetch(`http://test.local/recover`, {
+                headers: {'Content-Type': 'text/plain'},
+                method: 'GET',
+            });
+        }
+        else {
+            response = await fetch(`/recover`, {
+                headers: {'Content-Type': 'text/plain'},
+                method: 'GET',
+            });
+        }
+        const body = await response.text();
+        setTextBox(body);
+    }
+
 
     return (
         <div className="DuckyInput">
@@ -54,7 +73,8 @@ function DuckyInput() {
                 // height="40"
             />
             <div>
-                <button onClick={handleSubmit}>Send</button>
+                <button onClick={handleSubmit}>Run</button>
+                <button onClick={handleRecover}>Recover</button>
                 <button onClick={handleSave}>Save</button>
             </div>
             {/* <pre>{JSON.stringify(json, null , 2)}</pre> */}
