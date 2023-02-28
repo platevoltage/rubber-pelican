@@ -6,8 +6,8 @@
 }
 
 textarea {
-    width: 1000px;
-    height: 500px;
+    width: calc(100vw - 200px);
+    height: calc(100vh - 200px);
     color: #ffffff;
     background-color: #000000;
     font-family: 'Roboto Mono', 'Droid Sans Mono', 'Lucida Console', Monaco, monospace;
