@@ -281,14 +281,14 @@ void duckyBlock(DuckyCommand commands[], size_t numCommands, DuckyCallbacks call
     else if (commands[i].instruction.equals("ELSE")) {
       execute = !execute;
     }
-    else if (commands[i].instruction.equals("ENDWHILE")) {
+    else if (commands[i].instruction.equals("END_WHILE")) {
       nestedWhile--;
       if (execute) i = blockStart[nestedWhile]-1;
       else {
         execute = true;
       } 
     }
-    else if (commands[i].instruction.equals("ENDIF")) {
+    else if (commands[i].instruction.equals("END_IF")) {
       execute = true;
     }
     else if (commands[i].instruction.equals("FUNCTION")) {

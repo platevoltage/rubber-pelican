@@ -3,15 +3,51 @@ import { useState, useEffect, useRef } from 'react';
 import "./DuckyInput.css";
 
 const keyWords = [
-    "STRING ",
-    "STRINGLN ",
-    "DELAY "
+    "STRING",
+    "STRINGLN",
+    "DELAY",
+    "REM",
+    "DEFINE",
+    "LED_R",
+    "LED_G",
+    "LED_B",
+    "LED_OFF",
+    "VAR",
+    "WHILE",
+    "IF",
+    "ELSE",
+    "THEN",
+    "END_WHILE",
+    "END_IF",
+    "FUNCTION",
+    "END_FUNCTION",
+    "RETURN",
+    "HOLD",
+    "RELEASE",
+    "INJECT_MOD",
+    "WAIT_FOR_BUTTON_PRESS",
+    "WAIT_FOR_CAPS_ON",
+    "WAIT_FOR_CAPS_OFF",
+    "WAIT_FOR_CAPS_CHANGE",
+    "WAIT_FOR_NUM_ON",
+    "WAIT_FOR_NUM_OFF",
+    "WAIT_FOR_NUM_CHANGE",
+    "WAIT_FOR_SCROLL_ON",
+    "WAIT_FOR_SCROLL_OFF",
+    "WAIT_FOR_SCROLL_CHANGE",
+    "ATTACKMODE"
 ]
 
 function processText(text: string) {
     let html = text
+    const color = "#aaaaff";
     for (let word of keyWords) {
-        html = html.replace(word, `<span style='color: #ff0000'>${word}</span>`);
+        html = html.replace(`${word} `, `<span style='color: ${color}'>${word}</span> `);
+        html = html.replace(`${word}\n`, `<span style='color: ${color}'>${word}</span>\n`);
+        if (text.endsWith(word)) {
+
+            html = html.replace(`${word}`, `<span style='color: ${color}'>${word}</span>`);
+        }
     }
     return html;
 }
@@ -27,12 +63,24 @@ function DuckyInput() {
             const html = processText(textBox);
             pre.innerHTML = html;
 
+
             // pre.innerHTML
             console.log(pre.innerHTML);
             // textDisplay.current.innerHTML = textBox;
         }
-        
+        function handleTextChange(e: KeyboardEvent) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                setTextBox(textBox + "\t");
+            }
+        }
+        window.addEventListener("keydown", handleTextChange);
+        return  () => {
+            window.removeEventListener("keydown", handleTextChange);
+        }
+
     },[textBox]);
+
 
     function handleSave() {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
