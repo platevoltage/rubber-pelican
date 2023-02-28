@@ -2,9 +2,17 @@
 import { useState, useEffect, useRef } from 'react';
 import "./DuckyInput.css";
 
+const keyWords = [
+    "STRING ",
+    "STRINGLN ",
+    "DELAY "
+]
+
 function processText(text: string) {
     let html = text
-    html = html.replace("STRING", "<span style='color: #ff0000'>STRING</span>");
+    for (let word of keyWords) {
+        html = html.replace(word, `<span style='color: #ff0000'>${word}</span>`);
+    }
     return html;
 }
 
