@@ -143,7 +143,7 @@ function highlightText(text: string) {
         }
     }
 
-    return html;
+    return html + "\n";
 }
 
 function DuckyInput() {
@@ -251,12 +251,12 @@ function DuckyInput() {
 
             <div className="hiddenText" ref={hiddenText}>
                 <textarea
-                        value={textBox}
-                        name="strip-length"
-                        onScroll={handleScroll}
-                        onChange={(e) => {setTextBox(e.target.value)}}
-                        placeholder=""
-                        spellCheck={false}
+                    value={textBox}
+                    name="strip-length"
+                    onScroll={handleScroll}
+                    onChange={(e) => {setTextBox(e.target.value)}}
+                    placeholder=""
+                    spellCheck={false}
                 />
             </div>
         </div>

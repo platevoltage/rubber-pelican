@@ -7,7 +7,7 @@
     background-color: rgb(16, 29, 29);
     width: calc(100vw - 200px);
     height: calc(100vh - 200px);
-    overflow-x: hidden;
+    overflow: hidden;
     
 }
 
@@ -54,6 +54,7 @@ textarea {
     resize: none;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    overscroll-behavior-y: none;
 
 
 }
