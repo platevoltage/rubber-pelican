@@ -180,22 +180,29 @@ function DuckyInput({textBox, setTextBox}: Props) {
             const html = highlightText(textBox);
             pre.innerHTML = html;
         }
+        let key = 0;
         function handleTextChange(e: KeyboardEvent) {
+            if (hiddenTextObject) {
+                const hiddenDiv = hiddenTextObject as HTMLDivElement;
+                hiddenTextBox = hiddenDiv.childNodes[0] as HTMLTextAreaElement;
+                cursor = hiddenTextBox.selectionEnd;
+            }
             if (e.key === 'Tab') {
-                if (hiddenTextObject) {
-                    e.preventDefault();
-                    const hiddenDiv = hiddenTextObject as HTMLDivElement;
-                    hiddenTextBox = hiddenDiv.childNodes[0] as HTMLTextAreaElement;
-                    cursor = hiddenTextBox.selectionEnd;
-                    setTextBox(`${textBox.substring(0, cursor)}\t${textBox.substring(cursor, textBox.length)}`);
-                }
+                e.preventDefault();
+                key = 4;
+                setTextBox(`${textBox.substring(0, cursor)}    ${textBox.substring(cursor, textBox.length)}`);
+            }
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+                key = -1;
+                setTextBox(`${textBox.substring(0, cursor-1)}${textBox.substring(cursor, textBox.length)}`);
             }
         }
         window.addEventListener("keydown", handleTextChange);
         return  () => {
             window.removeEventListener("keydown", handleTextChange);
             if (hiddenTextObject) {
-                hiddenTextBox?.setSelectionRange(cursor+1,cursor+1, "none");
+                if (key !== 0) hiddenTextBox?.setSelectionRange(cursor+key,cursor+key, "none");
             }
         }
     },[textBox]);
