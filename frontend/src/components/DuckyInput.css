@@ -20,7 +20,7 @@
     background-color: rgb(0, 0, 0);
     height: 100%;
     width: 100%;
-    margin: 6px 0 0 0px;
+    margin: 10px 0 0 0px;
     /* margin: 6px; */
     font-family: 'Roboto Mono', 'Droid Sans Mono', 'Lucida Console', Monaco, monospace;
     font-size: inherit;
@@ -61,7 +61,7 @@ textarea {
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-y: none;
-    margin: 6px;
+    padding: 12px 8px 8px 8px;
 
 
 }
