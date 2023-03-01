@@ -49,6 +49,8 @@ const params = [
 const otherKeyWords = [
     "TRUE",
     "FALSE",
+    "()",
+    
 ]
 const nonPrintingKeys = [
     "COMMAND",
@@ -153,9 +155,10 @@ interface Props {
 }
 
 function DuckyInput({textBox, setTextBox}: Props) {
-    // const [textBox, setTextBox] = useState("");
+
     const textDisplay = useRef(null);
     const hiddenText = useRef(null);
+    
     function handleScroll() {
         if (hiddenText.current) {
             const hiddenDiv = hiddenText.current as HTMLDivElement;
@@ -168,6 +171,9 @@ function DuckyInput({textBox, setTextBox}: Props) {
         }
     };
     useEffect(() => {
+        let hiddenTextObject = hiddenText.current;
+        let hiddenTextBox: HTMLTextAreaElement;
+        let cursor: number;
         if (textDisplay.current) {
             const div = textDisplay.current as HTMLDivElement;
             const pre = div.childNodes[0] as HTMLDivElement;
@@ -176,15 +182,22 @@ function DuckyInput({textBox, setTextBox}: Props) {
         }
         function handleTextChange(e: KeyboardEvent) {
             if (e.key === 'Tab') {
-                e.preventDefault();
-                setTextBox(textBox + "\t");
+                if (hiddenTextObject) {
+                    e.preventDefault();
+                    const hiddenDiv = hiddenTextObject as HTMLDivElement;
+                    hiddenTextBox = hiddenDiv.childNodes[0] as HTMLTextAreaElement;
+                    cursor = hiddenTextBox.selectionEnd;
+                    setTextBox(`${textBox.substring(0, cursor)}\t${textBox.substring(cursor, textBox.length)}`);
+                }
             }
         }
         window.addEventListener("keydown", handleTextChange);
         return  () => {
             window.removeEventListener("keydown", handleTextChange);
+            if (hiddenTextObject) {
+                hiddenTextBox?.setSelectionRange(cursor+1,cursor+1, "none");
+            }
         }
-
     },[textBox]);
 
     return (
