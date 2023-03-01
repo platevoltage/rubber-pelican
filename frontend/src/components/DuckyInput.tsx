@@ -117,6 +117,7 @@ function highlightText(text: string) {
         html = html.replaceAll(`${word} `, `<span style='color: ${nonPrintingColor}'>${word}</span> `);
         html = html.replaceAll(`${word}\t`, `<span style='color: ${nonPrintingColor}'>${word}</span>\t`);
         html = html.replaceAll(`${word}\n`, `<span style='color: ${nonPrintingColor}'>${word}</span>\n`);
+        html = html.replaceAll(`${word}-`, `<span style='color: ${nonPrintingColor}'>${word}</span>-`);
         if (text.endsWith(word)) {
 
             html = html.replaceAll(`${word}`, `<span style='color: ${nonPrintingColor}'>${word}</span>`);
