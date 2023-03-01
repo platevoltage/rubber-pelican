@@ -1,4 +1,4 @@
-import React from 'react'
+import "./ButtonBlock.css";
 
 
 interface Props {
@@ -61,7 +61,7 @@ export default function ButtonBlock({textBox, setTextBox}: Props) {
         setTextBox(body);
     }
     return (
-        <div>
+        <div className="button-block">
             <button onClick={handleSubmit}>Run</button>
             <button onClick={handleRecover}>Recover</button>
             <button onClick={handleSave}>Save</button>
