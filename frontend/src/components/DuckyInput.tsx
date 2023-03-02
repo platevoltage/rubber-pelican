@@ -49,8 +49,6 @@ const params = [
 const otherKeyWords = [
     "TRUE",
     "FALSE",
-    "()",
-    
 ]
 const nonPrintingKeys = [
     "COMMAND",
@@ -104,6 +102,25 @@ const nonPrintingKeys = [
 
 function highlightText(text: string) {
     let html = text
+    const functionColor = "#aaffff";
+    const funcList = html.match(/\b\w+\(\)/g) || [];
+    for (let word of funcList) {
+        html = html.replaceAll(`${word} `, `<span style='color: ${functionColor}'>${word}</span> `);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${functionColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${functionColor}'>${word}</span>\n`);
+        if (text.endsWith(word)) {
+            html = html.replaceAll(`${word}`, `<span style='color: ${functionColor}'>${word}</span>`);
+        }
+    }
+
+    const varColor = "#aaffaa";
+    const varList = html.match(/\$[\w]+/g) || [];
+    for (let word of varList) {
+        html = html.replaceAll(`${word}`, `<span style='color: ${varColor}'>${word}</span>`);
+        html = html.replaceAll(`${word}\t`, `<span style='color: ${varColor}'>${word}</span>\t`);
+        html = html.replaceAll(`${word}\n`, `<span style='color: ${varColor}'>${word}</span>\n`);
+    }
+
     const commandColor = "#aaaaff";
     for (let word of commands) {
         html = html.replaceAll(`${word} `, `<span style='color: ${commandColor}'>${word}</span> `);
