@@ -102,7 +102,7 @@ const nonPrintingKeys = [
 
 function highlightText(text: string) {
     let html = text
-    const functionColor = "#aaffff";
+    const functionColor = "#ffffaa";
     const funcList = html.match(/\b\w+\(\)/g) || [];
     for (let word of funcList) {
         html = html.replaceAll(`${word} `, `<span style='color: ${functionColor}'>${word}</span> `);
