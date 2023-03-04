@@ -4,6 +4,11 @@ The goal of this device is to be functionally equivalent to the USB rubberDucky 
 
 <img width="885" alt="Screenshot 2023-03-01 at 12 32 08 PM" src="https://user-images.githubusercontent.com/1414728/222258790-32551f9b-9aef-4b45-bd43-de908c0cf73a.png">
 
+## Roadmap
+* Evaluate functions when within a command parameter
+* Implement random numbers
+* Evaluate conditions when && or || is used
+
 
 ## Dependencies
 
